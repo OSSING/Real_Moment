@@ -15,7 +15,6 @@ import java.util.Date;
 public class Users {
 
     @Id
-    // 기본키 생성을 MySQL에 위임해서 AUTO_INCREMEMT를 통해 칼럼이 생성될 때마다 ID값을 1씩 자동으로 올림
     @GeneratedValue
     private Long userID;
 
