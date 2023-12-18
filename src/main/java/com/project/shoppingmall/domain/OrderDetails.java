@@ -13,17 +13,15 @@ import java.math.BigInteger;
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "OrderDetails")
 public class OrderDetails {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long orderDetID;
 
 //    private Long itemID;
 
     @ManyToOne
-    @JoinColumn(name = "orderID")
     private Orders orderID;
 
     private int fixedPrice;
