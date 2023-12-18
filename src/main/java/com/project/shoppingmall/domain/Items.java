@@ -18,7 +18,6 @@ public class Items {
     private Long itemID;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
     private Category category;
 
     @Column

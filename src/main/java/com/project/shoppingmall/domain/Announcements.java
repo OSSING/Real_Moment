@@ -18,7 +18,6 @@ public class Announcements {
     private Long noticeID;
 
     @ManyToOne
-    @JoinColumn(name = "admin_id")
     private Admins adminID;
 
     @Column
