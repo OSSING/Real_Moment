@@ -2,8 +2,6 @@ package com.project.shoppingmall.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Getter

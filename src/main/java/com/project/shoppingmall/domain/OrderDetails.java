@@ -1,16 +1,14 @@
 package com.project.shoppingmall.domain;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import java.math.BigInteger;
 
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 public class OrderDetails {
@@ -19,7 +17,8 @@ public class OrderDetails {
     @GeneratedValue
     private Long orderDetID;
 
-//    private Long itemID;
+    @ManyToOne
+    private Items itemID;
 
     @ManyToOne
     private Orders orderID;
