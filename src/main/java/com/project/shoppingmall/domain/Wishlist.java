@@ -13,15 +13,13 @@ import java.math.BigInteger;
 @ToString
 @NoArgsConstructor
 @Entity
-@Table(name = "Wishlist")
 public class Wishlist {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long wishlistID;
 
     @ManyToOne
-    @JoinColumn(name = "userID")
     private Users userID;
 
 //    private Long itemID;
