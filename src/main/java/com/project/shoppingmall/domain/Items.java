@@ -18,42 +18,29 @@ public class Items {
     private Long itemID;
 
     @ManyToOne
-    @JoinColumn(name = "category_id")
     private Category category;
 
-    @Column
     private String name;
 
-    @Column
     private String content;
 
-    @Column
     private int price;
 
-    @Column
     private int discountRate;
 
-    @Column
     private int sellPrice;
 
-    @Column
     private LocalDateTime createdDate;
 
-    @Column
     private LocalDateTime modifiedDate;
 
-    @Column
     private int stock;
 
-    @Column
     private boolean sellCheck;
 
-    @Column
     private boolean deleteCheck;
 
-    @Column
     private String mainImg;
 
-    @Column
     private String serveImg;
 }
