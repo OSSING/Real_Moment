@@ -14,10 +14,10 @@ public class Orders {
 
     @Id
     @GeneratedValue
-    private Long orderID;
+    private Long orderId;
 
     @ManyToOne
-    private Users userID;
+    private Users userId;
 
     private LocalDateTime orderedDate;
 

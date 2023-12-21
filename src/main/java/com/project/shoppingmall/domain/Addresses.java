@@ -13,10 +13,10 @@ public class Addresses {
 
     @Id
     @GeneratedValue
-    private Long addressID;
+    private Long addressId;
 
     @ManyToOne
-    private Users userID;
+    private Users userId;
 
     private String name;
 

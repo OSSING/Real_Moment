@@ -20,13 +20,13 @@ public class Reviews {
 
     @Id
     @GeneratedValue
-    private Long reviewID;
+    private Long reviewId;
 
     @ManyToOne
-    private Users userID;
+    private Users userId;
 
     @ManyToOne
-    private Items itemID;
+    private Items itemId;
 
     private String title;
 

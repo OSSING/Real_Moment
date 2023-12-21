@@ -3,6 +3,7 @@ package com.project.shoppingmall.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
@@ -12,17 +13,20 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
+@Table(name = "qa_comments")
 public class QAComments {
 
     @Id
     @GeneratedValue
-    private Long QACommentID;
+    @Column(name = "qa_comment_id")
+    private Long QACommentId;
 
     @ManyToOne
-    private Admins adminID;
+    private Admins adminId;
 
     @OneToOne
-    private QA QAID;
+    @PrimaryKeyJoinColumn(name = "qa_id")
+    private QA QAId;
 
     private String content;
 

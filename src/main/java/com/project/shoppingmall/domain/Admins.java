@@ -16,7 +16,7 @@ public class Admins {
 
     @Id
     @GeneratedValue
-    private Long adminID;
+    private Long adminId;
 
     @Column
     private String id;

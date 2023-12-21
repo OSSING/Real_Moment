@@ -16,15 +16,15 @@ public class Category {
 
     @Id
     @GeneratedValue
-    private Long categoryID;
+    private Long categoryId;
 
     @Column
     private String category;
 
 
     @ManyToOne
-    private Category parent;
+    private Category parentId;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parentId")
     private List<Category> child = new ArrayList<>();
 }

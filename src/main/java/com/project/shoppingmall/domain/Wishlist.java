@@ -13,11 +13,11 @@ public class Wishlist {
 
     @Id
     @GeneratedValue
-    private Long wishlistID;
+    private Long wishlistId;
 
     @ManyToOne
-    private Users userID;
+    private Users userId;
 
     @ManyToOne
-    private Items itemID;
+    private Items itemId;
 }

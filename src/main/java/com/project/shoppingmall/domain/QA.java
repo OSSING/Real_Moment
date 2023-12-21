@@ -1,10 +1,7 @@
 package com.project.shoppingmall.domain;
 
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.cglib.core.Local;
 
@@ -16,17 +13,19 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
+@Table(name = "qa")
 public class QA {
 
     @Id
     @GeneratedValue
-    private Long QAID;
+    @Column(name = "qa-id")
+    private Long QAId;
 
     @ManyToOne
-    private Items itemID;
+    private Items itemId;
 
     @ManyToOne
-    private Users userID;
+    private Users userId;
 
     private String title;
 

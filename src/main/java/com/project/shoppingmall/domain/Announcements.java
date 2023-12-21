@@ -15,10 +15,10 @@ public class Announcements {
 
     @Id
     @GeneratedValue
-    private Long noticeID;
+    private Long noticeId;
 
     @ManyToOne
-    private Admins adminID;
+    private Admins adminId;
 
     @Column
     private String title;
