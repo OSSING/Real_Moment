@@ -15,7 +15,7 @@ public class Items {
 
     @Id
     @GeneratedValue
-    private Long itemID;
+    private Long itemId;
 
     @ManyToOne
     private Category category;

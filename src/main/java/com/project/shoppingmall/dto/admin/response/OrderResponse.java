@@ -40,8 +40,8 @@ public class OrderResponse {
 
 
     public OrderResponse(Orders order){
-        orderID = order.getOrderID();
-        userID = order.getUserID();
+        orderID = order.getOrderId();
+        userID = order.getUserId();
         orderedDate = order.getOrderedDate();
         sippedDate = order.getSippedDate();
         price = order.getPrice();

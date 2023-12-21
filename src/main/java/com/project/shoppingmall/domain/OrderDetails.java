@@ -15,13 +15,13 @@ public class OrderDetails {
 
     @Id
     @GeneratedValue
-    private Long orderDetID;
+    private Long orderDetId;
 
     @ManyToOne
-    private Items itemID;
+    private Items itemId;
 
     @ManyToOne
-    private Orders orderID;
+    private Orders orderId;
 
     private int fixedPrice;
 

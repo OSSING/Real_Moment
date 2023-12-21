@@ -15,7 +15,7 @@ public class Grades {
 
     @Id
     @GeneratedValue
-    private int gradeID;
+    private int gradeId;
 
     private String grade = "WHITE";
 

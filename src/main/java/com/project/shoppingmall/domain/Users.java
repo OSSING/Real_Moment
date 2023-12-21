@@ -16,10 +16,10 @@ public class Users {
 
     @Id
     @GeneratedValue
-    private Long userID;
+    private Long userId;
 
     @OneToOne
-    private Grades gradeID;
+    private Grades gradeId;
 
     private String id;
 

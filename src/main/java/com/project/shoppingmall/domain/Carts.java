@@ -13,13 +13,13 @@ public class Carts {
 
     @Id
     @GeneratedValue
-    private Long CartID;
+    private Long CartId;
 
     @ManyToOne
-    private Users userID;
+    private Users userId;
 
     @ManyToOne
-    private Items itemID;
+    private Items itemId;
 
     private int stock;
 
