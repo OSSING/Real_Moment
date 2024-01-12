@@ -9,32 +9,32 @@ import java.time.LocalDateTime;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
+@Getter
 @ToString
-public class Announcements {
+public class Announcement {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "notice_id")
     private Long noticeId;
 
     @ManyToOne
-    private Admins adminId;
+    @JoinColumn(name = "admin_id")
+    private Admin adminId;
 
-    @Column
     private String title;
 
-    @Column
     private String content;
 
-    @Column
-    private boolean fix = false;
+    @Column(name = "is_fix")
+    private boolean isFix = false;
 
-    @Column
+    @Column(name = "view_count")
     private long viewCount;
 
-    @Column
+    @Column(name = "created_date")
     private LocalDateTime createdDate;
 
-    @Column
+    @Column(name = "modified_date")
     private LocalDateTime modifiedDate;
 }

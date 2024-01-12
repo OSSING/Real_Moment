@@ -9,21 +9,24 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Carts {
+public class Cart {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cart_id")
     private Long CartId;
 
     @ManyToOne
-    private Users userId;
+    @JoinColumn(name = "member_id")
+    private Member memberId;
 
     @ManyToOne
-    private Items itemId;
+    @JoinColumn(name = "item_id")
+    private Item itemId;
 
     private int stock;
 
     private int price;
 
-    private boolean checked;
+    private boolean checked = true;
 }
