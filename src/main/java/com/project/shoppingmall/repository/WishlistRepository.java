@@ -1,4 +1,4 @@
-package com.project.shoppingmall.repositroy;
+package com.project.shoppingmall.repository;
 
 import com.project.shoppingmall.domain.Wishlist;
 import org.springframework.data.jpa.repository.JpaRepository;

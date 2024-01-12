@@ -1,8 +1,7 @@
 package com.project.shoppingmall.dto.admin.response;
 
 import com.project.shoppingmall.domain.Orders;
-import com.project.shoppingmall.domain.Users;
-import jakarta.persistence.ManyToOne;
+import com.project.shoppingmall.domain.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -16,7 +15,7 @@ public class OrderResponse {
 
     private Long orderID;
 
-    private Users userID;
+    private Member userID;
 
     private LocalDateTime orderedDate;
 
@@ -39,19 +38,19 @@ public class OrderResponse {
     private String refundText;
 
 
-    public OrderResponse(Orders order){
-        orderID = order.getOrderId();
-        userID = order.getUserId();
-        orderedDate = order.getOrderedDate();
-        sippedDate = order.getSippedDate();
-        price = order.getPrice();
-        name = order.getName();
-        address = order.getAddress();
-        detAddress = order.getDetAddress();
-        request = order.getRequest();
-        tel = order.getTel();
-        status = order.getStatus();
-        refundText = order.getRefundText();
+    public OrderResponse(Orders orders){
+        orderID = orders.getOrderId();
+        userID = orders.getMemberId();
+        orderedDate = orders.getOrderedDate();
+        sippedDate = orders.getShippedDate();
+        price = orders.getPrice();
+        name = orders.getName();
+        address = orders.getAddress();
+        detAddress = orders.getDetAddress();
+        request = orders.getRequest();
+        tel = orders.getTel();
+        status = orders.getStatus();
+        refundText = orders.getRefundText();
     }
 
 }

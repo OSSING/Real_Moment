@@ -12,12 +12,15 @@ import lombok.*;
 public class Wishlist {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "wishlist_id")
     private Long wishlistId;
 
     @ManyToOne
-    private Users userId;
+    @JoinColumn(name = "member_id")
+    private Member memberId;
 
     @ManyToOne
-    private Items itemId;
+    @JoinColumn(name = "item_id")
+    private Item itemId;
 }

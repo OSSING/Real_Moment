@@ -1,35 +1,28 @@
 package com.project.shoppingmall.domain;
 
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
+@Getter
 @ToString
-public class Admins {
+public class Admin {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "admin_id")
     private Long adminId;
 
-    @Column
     private String id;
 
-    @Column
     private String password;
 
-    @Column
     private String email;
 
-    @Column
     private String name;
 
-    @Column
     private int grade = 1;
 }
