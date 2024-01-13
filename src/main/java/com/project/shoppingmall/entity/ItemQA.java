@@ -1,4 +1,4 @@
-package com.project.shoppingmall.domain;
+package com.project.shoppingmall.entity;
 
 
 import jakarta.persistence.*;
@@ -10,22 +10,25 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @ToString
-@Table(name = "qa_comment")
-public class QAComment {
+@Table(name = "item_qa")
+public class ItemQA {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "qa_comment_id")
-    private Long QACommentId;
+    @Column(name = "item_qa_id")
+    private Long itemQAId;
 
     @ManyToOne
-    @JoinColumn(name = "admin_id")
-    private Admin admin;
+    @JoinColumn(name = "item_id")
+    private Item item;
 
     @ManyToOne
-    @JoinColumn(name = "item_qa_id")
-    private ItemQA itemQA;
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    private String title;
 
     private String content;
 
@@ -34,4 +37,5 @@ public class QAComment {
 
     @Column(name = "edited_date")
     private LocalDateTime editedDate;
+
 }

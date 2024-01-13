@@ -1,4 +1,4 @@
-package com.project.shoppingmall.domain;
+package com.project.shoppingmall.entity;
 
 
 import jakarta.persistence.*;

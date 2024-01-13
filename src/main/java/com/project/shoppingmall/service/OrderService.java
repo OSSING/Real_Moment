@@ -1,8 +1,8 @@
-package com.project.shoppingmall.service.admin;
+package com.project.shoppingmall.service;
 
 
-import com.project.shoppingmall.domain.Orders;
-import com.project.shoppingmall.dto.admin.response.OrderResponse;
+import com.project.shoppingmall.entity.Orders;
+import com.project.shoppingmall.dto.OrderResponse;
 import com.project.shoppingmall.repository.OrdersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

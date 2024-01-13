@@ -1,5 +1,6 @@
-package com.project.shoppingmall.domain;
+package com.project.shoppingmall.entity;
 
+import com.project.shoppingmall.dto.RegisterDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +10,9 @@ import java.util.Date;
 @Getter
 @ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Entity
+@Builder
 public class Member {
 
     @Id
