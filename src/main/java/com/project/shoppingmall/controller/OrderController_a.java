@@ -1,8 +1,8 @@
-package com.project.shoppingmall.controller.admin;
+package com.project.shoppingmall.controller;
 
 
-import com.project.shoppingmall.dto.admin.response.OrderResponse;
-import com.project.shoppingmall.service.admin.OrderService;
+import com.project.shoppingmall.dto.OrderResponse;
+import com.project.shoppingmall.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

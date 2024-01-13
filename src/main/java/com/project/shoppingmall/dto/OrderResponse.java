@@ -1,7 +1,7 @@
-package com.project.shoppingmall.dto.admin.response;
+package com.project.shoppingmall.dto;
 
-import com.project.shoppingmall.domain.Orders;
-import com.project.shoppingmall.domain.Member;
+import com.project.shoppingmall.entity.Orders;
+import com.project.shoppingmall.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;

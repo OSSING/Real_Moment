@@ -1,4 +1,4 @@
-package com.project.shoppingmall.domain;
+package com.project.shoppingmall.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,12 +9,12 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-public class Cart {
+public class Wishlist {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "cart_id")
-    private Long CartId;
+    @Column(name = "wishlist_id")
+    private Long wishlistId;
 
     @ManyToOne
     @JoinColumn(name = "member_id")
@@ -23,10 +23,4 @@ public class Cart {
     @ManyToOne
     @JoinColumn(name = "item_id")
     private Item itemId;
-
-    private int stock;
-
-    private int price;
-
-    private boolean checked = true;
 }
