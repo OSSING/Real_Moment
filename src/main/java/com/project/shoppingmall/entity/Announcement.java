@@ -18,7 +18,7 @@ public class Announcement {
     @Column(name = "notice_id")
     private Long noticeId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_id")
     private Admin adminId;
 

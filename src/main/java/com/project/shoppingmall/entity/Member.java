@@ -13,14 +13,15 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Builder
-public class Member {
+// https://skatpdnjs.tistory.com/44
+public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long memberId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "level_id")
     private Level levelId;
 
@@ -57,4 +58,17 @@ public class Member {
 
     @Column(name = "is_login_status")
     private boolean isLoginStatus = false;
+
+//    // 회원가입 시 Entity -> Dto 변환
+//    public RegisterDto.RegisterRequest toDto() {
+//        return RegisterDto.RegisterRequest.builder()
+//                .id(id)
+//                .email(email)
+//                .password(password)
+//                .name(name)
+//                .tel(tel)
+//                .birthDate(birthDate)
+//                .gender(gender)
+//                .build();
+//    }
 }

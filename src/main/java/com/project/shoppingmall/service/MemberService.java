@@ -25,20 +25,16 @@ public class MemberService {
 
     // 회원가입시 요청받은 Dto를 Entity로 변환 후 저장
     @Transactional
-    public String save(RegisterDto.Request dto) {
+    public Member save(RegisterDto.RegisterRequest dto) {
+        log.info("RegisterRequest.toString() = {}", dto.toString());
+
         // 1. 요청받은 dto -> Entity로 변환
         Member member = dto.toEntity();
+        log.info("member.toString() = {}", member.toString());
 
-        // 2. 아이디 중복 확인
-        boolean byNickName = memberRepository.existsById(member.getId());
+        // 2. DB에 회원 저장
 
-        // 3. 아아디가 중복이라면 프론트에서 검증
-        if (byNickName) {
-            Member savedMember = memberRepository.save(member);
-            return null;
-        }
-
-        // 4. 아이디가 중복이 아니라면 save 후 Entity -> DTO 변환 후 반환
-        return null;
+        // 3. 저장한 회원 데이터를 Dto로 변환 후 반환
+        return memberRepository.save(member);
     }
 }
