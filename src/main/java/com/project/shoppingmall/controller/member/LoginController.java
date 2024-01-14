@@ -1,12 +1,12 @@
 package com.project.shoppingmall.controller.member;
 
 import com.project.shoppingmall.dto.RegisterDto;
+import com.project.shoppingmall.entity.Member;
 import com.project.shoppingmall.repository.AdminsRepository;
 import com.project.shoppingmall.repository.MemberRepository;
 import com.project.shoppingmall.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +28,12 @@ public class LoginController {
     }
 
 
-    // 회원가입
-    @PostMapping("/join")
-    public String join(@RequestBody RegisterDto.Request dto) {
-        return null;
+    // 회원가입 요청
+    @PostMapping("/user/join")
+    public ResponseEntity<Member> join(@RequestBody RegisterDto.RegisterRequest dto) {
+        log.info("RegisterDto.toString() = {}", dto.toString());
+
+        // Service단에 요청받은 회원 정보를 전송 후 반환받은 dto를 클라이언트에게 전송
+        return ResponseEntity.ok(memberService.save(dto));
     }
 }

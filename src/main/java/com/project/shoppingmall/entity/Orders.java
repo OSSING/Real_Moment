@@ -17,7 +17,7 @@ public class Orders {
     @Column(name = "order_id")
     private Long orderId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member memberId;
 

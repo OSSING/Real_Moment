@@ -26,7 +26,7 @@ public class RegisterDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class Request {
+    public static class RegisterRequest {
         @NotBlank(message = "아이디를 입력해주세요.")
         @Pattern(regexp = "^[a-zA-Z0-9]{5,20}$", message = "아이디는 특수문자를 제외한 5~20자를 사용하세요.")
         String id;
@@ -48,12 +48,11 @@ public class RegisterDto {
         String tel;
 
         @NotBlank(message = "생년월일을 입력해주세요.")
-        @Pattern(regexp = "^[0-9]{6}", message = "주민등록번호 앞 6자리를 입력해주세요.")
         Date birthDate;
 
         char gender;
 
-        // Dto -> Entity
+        // 회원가입 시 요청받은 Dto -> Entity 변환
         public Member toEntity() {
             return Member.builder()
                     .id(id)

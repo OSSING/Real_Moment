@@ -18,7 +18,7 @@ public class Item {
     @Column(name = "item_id")
     private Long itemId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category categoryId;
 

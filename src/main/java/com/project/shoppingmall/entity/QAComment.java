@@ -19,11 +19,11 @@ public class QAComment {
     @Column(name = "qa_comment_id")
     private Long QACommentId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_id")
     private Admin admin;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_qa_id")
     private ItemQA itemQA;
 
