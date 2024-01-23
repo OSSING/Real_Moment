@@ -55,4 +55,6 @@ public class Item {
 
     @Column(name = "serve_img")
     private String serveImg;
+
+    // 재고 변경 로직은 이 곳에서 구현 (Setter 말고 비즈니스 로직 메서드로 구현)
 }

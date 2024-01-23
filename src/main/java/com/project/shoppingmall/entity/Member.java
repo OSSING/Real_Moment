@@ -13,6 +13,7 @@ import java.util.Date;
 @AllArgsConstructor
 @Entity
 @Builder
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "id")})
 // https://skatpdnjs.tistory.com/44
 public class Member extends BaseTimeEntity {
 
@@ -42,7 +43,7 @@ public class Member extends BaseTimeEntity {
     private char gender;
 
     @Column(nullable = false)
-    private int point;
+    private int point = 0;
 
     @Column(name = "created_date")
     private LocalDateTime createdDate;
@@ -59,16 +60,21 @@ public class Member extends BaseTimeEntity {
     @Column(name = "is_login_status")
     private boolean isLoginStatus = false;
 
-//    // 회원가입 시 Entity -> Dto 변환
-//    public RegisterDto.RegisterRequest toDto() {
-//        return RegisterDto.RegisterRequest.builder()
-//                .id(id)
-//                .email(email)
-//                .password(password)
-//                .name(name)
-//                .tel(tel)
-//                .birthDate(birthDate)
-//                .gender(gender)
-//                .build();
-//    }
+    @Column(name = "member_role")
+    private String memberRole = "ROLE_MEMBER";
+
+    private boolean activated;
+
+    // 회원가입 시 Entity -> Dto 변환
+    public RegisterDto.RegisterRequest toDto() {
+        return RegisterDto.RegisterRequest.builder()
+                .id(id)
+                .email(email)
+                .password(password)
+                .name(name)
+                .tel(tel)
+                .birthDate(birthDate)
+                .gender(gender)
+                .build();
+    }
 }
