@@ -4,27 +4,50 @@
 #    username: sa
 #    password:
 #    driver-class-name: org.h2.Driver
-#
-#  jpa:
-#    hibernate:
-#      ddl-auto: create-drop
-#    defer-datasource-initialization: true
-#
-#  properties:
-#    hibernate:
-#      show_sql: true
-#      format_sql: true
-#
-#  logging.level:
-#    org.hibernate.SQL: debug
-#    org.hibernate.orm.jdbc.bind: trace
-#
-#  h2:
-#    console:
-#      enabled: true
-#      path: /h2-console
-#
-#server:
-#  servlet:
-#    encoding:
-#      force: true
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/firstproject_db
+    username: postgres
+    password: "!dhtjd17395"
+    driver-class-name: org.postgresql.Driver
+    generate-unique-name: false
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    database: postgresql
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      data-locations: classpath:/data.sql
+      mode: always
+
+  properties:
+    hibernate:
+      show_sql: true
+      format_sql: true
+
+  logging.level:
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+server:
+  servlet:
+    encoding:
+      force: true
+
+jwt:
+  header: Authorization
+  #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
+  #echo 'OSSING-spring-boot-jwt-secret-OSSING-spring-boot-jwt-secret-OSSING-spring-boot-jwt-secret' | base64
+  #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
+  secret: OSSING-spring-boot-jwt-secret-OSSING-spring-boot-jwt-secret-OSSING-spring-boot-jwt-secret
+  token-validity-in-seconds: 86400
