@@ -1,21 +1,24 @@
 package com.project.shoppingmall.service;
 
+import com.project.shoppingmall.config.exception.DuplicateMemberException;
 import com.project.shoppingmall.dto.RegisterDto;
 import com.project.shoppingmall.entity.Member;
-import com.project.shoppingmall.repository.AdminsRepository;
+import com.project.shoppingmall.repository.AdminRepository;
 import com.project.shoppingmall.repository.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-@Service
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final AdminsRepository adminsRepository;
+    private final AdminRepository adminRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public boolean checkIdDuplicate(String id) {
@@ -25,20 +28,37 @@ public class MemberService {
 
     // 회원가입시 요청받은 Dto를 Entity로 변환 후 저장
     @Transactional
-    public String save(RegisterDto.Request dto) {
-        // 1. 요청받은 dto -> Entity로 변환
-        Member member = dto.toEntity();
+    public RegisterDto.ResponseDto save(RegisterDto.RegisterRequest dto) {
 
-        // 2. 아이디 중복 확인
-        boolean byNickName = memberRepository.existsById(member.getId());
-
-        // 3. 아아디가 중복이라면 프론트에서 검증
-        if (byNickName) {
-            Member savedMember = memberRepository.save(member);
-            return null;
+        if (memberRepository.existsById(dto.getId())) {
+            throw new DuplicateMemberException("이미 가입되어 있는 유저입니다.");
         }
 
-        // 4. 아이디가 중복이 아니라면 save 후 Entity -> DTO 변환 후 반환
-        return null;
+        // 1. 요청받은 dto -> Entity로 변환
+        Member member = createMember(dto);
+
+        log.info("member.toString() = {}", member.toString());
+
+        // 2. DB에 회원 저장
+
+        // 3. 저장한 회원 데이터를 Dto로 변환 후 반환
+        Member savedMember = memberRepository.save(member);
+
+        return RegisterDto.ResponseDto.toDto(savedMember);
+    }
+
+    private Member createMember(RegisterDto.RegisterRequest dto) {
+
+        return Member.builder()
+                .id(dto.getId())
+                .email(dto.getEmail())
+                .password(passwordEncoder.encode(dto.getPassword()))
+                .name(dto.getName())
+                .tel(dto.getTel())
+                .birthDate(dto.getBirthDate())
+                .gender(dto.getGender())
+                .memberRole("ROLE_MEMBER")
+                .activated(true)
+                .build();
     }
 }

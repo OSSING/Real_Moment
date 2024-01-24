@@ -16,7 +16,7 @@ public class Addresses {
     @Column(name = "address_id")
     private Long addressId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member memberId;
 

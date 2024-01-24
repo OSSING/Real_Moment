@@ -4,11 +4,14 @@ package com.project.shoppingmall.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @ToString
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "id")})
 public class Admin {
 
     @Id
@@ -24,5 +27,12 @@ public class Admin {
 
     private String name;
 
-    private int grade = 1;
+    private boolean activated;
+
+    @ManyToMany
+    @JoinTable(
+            name = "admin_authority",
+            joinColumns = {@JoinColumn(name = "admin_id", referencedColumnName = "admin_id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+    private Set<Authority> authorities;
 }
