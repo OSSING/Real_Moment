@@ -5,6 +5,7 @@ import com.project.shoppingmall.entity.Member;
 import com.project.shoppingmall.repository.AdminRepository;
 import com.project.shoppingmall.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

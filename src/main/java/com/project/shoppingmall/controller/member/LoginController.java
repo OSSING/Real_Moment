@@ -3,7 +3,6 @@ package com.project.shoppingmall.controller.member;
 import com.project.shoppingmall.dto.LoginDto;
 import com.project.shoppingmall.dto.RegisterDto;
 import com.project.shoppingmall.dto.TokenDto;
-import com.project.shoppingmall.entity.Member;
 import com.project.shoppingmall.jwt.JwtFilter;
 import com.project.shoppingmall.jwt.TokenProvider;
 import com.project.shoppingmall.repository.AdminRepository;
@@ -29,8 +28,8 @@ public class LoginController {
     private final AdminRepository adminRepository;
     private final MemberRepository memberRepository;
     private final MemberService memberService;
-    private TokenProvider tokenProvider;
-    private AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final TokenProvider tokenProvider;
+    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     // 회원가입 도중 id 중복체크 (중복 o -> true, 중복 x -> false)
     @GetMapping("/{id}/exists")
@@ -51,6 +50,8 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<TokenDto> login(@RequestBody LoginDto dto) {
+
+        log.info("LoginDto = {}", dto.toString());
 
         // 요청받은 id와 password를 가지고 인증 전 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken =

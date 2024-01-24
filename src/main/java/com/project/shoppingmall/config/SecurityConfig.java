@@ -63,12 +63,13 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 )
 
+                // 세션을 사용하지 않기 때문에 STATELESS로 설정
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                // JwtFilter를 addFilterBefore로 등록했던 JwtSecurityConfig 적용
-                .apply(new JwtSecurityConfig(tokenProvider));
+                // JwtFilter를 addFilterBefore로 등록했던 JwtSecurityConfig도 적용 (SecurityConfig에 등록한 접근 허용 범위을 공유하게 됨)
+                .with(new JwtSecurityConfig(tokenProvider), customizer -> {});
 
         return httpSecurity.build();
     }
