@@ -18,7 +18,7 @@ public class Item {
     @Column(name = "item_id")
     private Long itemId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category categoryId;
 
@@ -55,4 +55,6 @@ public class Item {
 
     @Column(name = "serve_img")
     private String serveImg;
+
+    // 재고 변경 로직은 이 곳에서 구현 (Setter 말고 비즈니스 로직 메서드로 구현)
 }

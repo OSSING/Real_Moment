@@ -4,7 +4,6 @@ import com.project.shoppingmall.entity.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.Date;
@@ -26,34 +25,33 @@ public class RegisterDto {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class Request {
+    public static class RegisterRequest {
         @NotBlank(message = "아이디를 입력해주세요.")
         @Pattern(regexp = "^[a-zA-Z0-9]{5,20}$", message = "아이디는 특수문자를 제외한 5~20자를 사용하세요.")
-        String id;
+        private String id;
 
         @NotBlank(message = "이메일 주소를 입력해주세요.")
         @Email(message = "올바른 이메일 주소를 입력해주세요.")
-        String email;
+        private String email;
 
         @NotBlank(message = "비밀번호를 입력해주세요.")
         @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\\\W)(?=\\\\S+$).{8,16}", message = "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
-        String password;
+        private String password;
 
         @NotBlank(message = "성함을 입력해주세요.")
         @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z]{2,20}", message = "성함은 한글과 영문을 포함한 2~20자를 사용하세요.")
-        String name;
+        private String name;
 
         @NotBlank(message = "휴대폰 번호를 입력해주세요.")
         @Pattern(regexp = "(01[016789])(\\\\d{3,4})(\\\\d{4})", message = "올바른 휴대폰 번호를 입력해주세요.")
-        String tel;
+        private String tel;
 
         @NotBlank(message = "생년월일을 입력해주세요.")
-        @Pattern(regexp = "^[0-9]{6}", message = "주민등록번호 앞 6자리를 입력해주세요.")
-        Date birthDate;
+        private Date birthDate;
 
-        char gender;
+        private char gender;
 
-        // Dto -> Entity
+        // 회원가입 시 요청받은 Dto -> Entity 변환
         public Member toEntity() {
             return Member.builder()
                     .id(id)
@@ -70,13 +68,21 @@ public class RegisterDto {
 
 
     @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
     // 회원가입 성공 시 응답할 JSON 데이터
-    public static class Response {
-        String id;
+    public static class ResponseDto {
+
+        private String id;
 
         // Entity -> Dto
-        public Response(Member member) {
-            this.id = member.getId();
+        public static ResponseDto toDto(Member member) {
+            if (member == null) return null;
+
+            return ResponseDto.builder()
+                    .id(member.getId())
+                    .build();
         }
     }
 }
