@@ -1,25 +1,16 @@
 package com.project.Real_Moment.dto;
 
 import com.project.Real_Moment.entity.Orders;
-import com.project.Real_Moment.entity.Member;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.time.LocalDateTime;
+import jakarta.persistence.Id;
+import lombok.*;
 
 
 @Getter
+@Builder
+@ToString
 @AllArgsConstructor
-public class OrderResponse {
-
-    private Long orderID;
-
-    private Member userID;
-
-    private LocalDateTime orderedDate;
-
-    private LocalDateTime sippedDate;
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class OrdersListDto {
 
     private int price;
 
@@ -37,12 +28,8 @@ public class OrderResponse {
 
     private String refundText;
 
-
-    public OrderResponse(Orders orders){
-        orderID = orders.getOrderId();
-        userID = orders.getMemberId();
-        orderedDate = orders.getOrderedDate();
-        sippedDate = orders.getShippedDate();
+    // Entity -> DTO
+    public OrdersListDto(Orders orders) {
         price = orders.getPrice();
         name = orders.getName();
         address = orders.getAddress();
@@ -52,5 +39,4 @@ public class OrderResponse {
         status = orders.getStatus();
         refundText = orders.getRefundText();
     }
-
 }

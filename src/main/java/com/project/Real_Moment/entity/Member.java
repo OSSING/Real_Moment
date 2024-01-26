@@ -7,6 +7,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @ToString
@@ -27,6 +28,9 @@ public class Member extends BaseTimeEntity {
     @JoinColumn(name = "level_id")
     private Level levelId;
 
+    @OneToMany(mappedBy = "memberId")
+    private List<Orders> orders;
+
     private String id;
 
     private String email;
@@ -45,12 +49,6 @@ public class Member extends BaseTimeEntity {
 
     @Column(nullable = false)
     private int point = 0;
-
-//    @Column(name = "created_date")
-//    private LocalDateTime createdDate;
-//
-//    @Column(name = "modified_date")
-//    private LocalDateTime modifiedDate;
 
     @Column(name = "recently_login")
     private LocalDateTime recentlyLogin;

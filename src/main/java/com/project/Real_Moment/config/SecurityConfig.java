@@ -59,7 +59,8 @@ public class SecurityConfig {
                                 "/QAList",
                                 "/Announcements",
                                 "/Announcement",
-                                "/admin/login").permitAll()
+                                "/admin/login",
+                                "/member/{id}").permitAll()
                         .anyRequest().authenticated()
                 )
 

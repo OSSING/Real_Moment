@@ -1,6 +1,6 @@
 package com.project.Real_Moment.service;
 
-import com.project.Real_Moment.config.exception.DuplicateMemberException;
+import com.project.Real_Moment.exception.DuplicateMemberException;
 import com.project.Real_Moment.dto.RegisterDto;
 import com.project.Real_Moment.entity.Member;
 import com.project.Real_Moment.repository.AdminRepository;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MemberService {
+public class MemberJoinService {
 
     private final MemberRepository memberRepository;
     private final AdminRepository adminRepository;
