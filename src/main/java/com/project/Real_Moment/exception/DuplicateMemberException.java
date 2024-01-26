@@ -1,4 +1,4 @@
-package com.project.Real_Moment.config.exception;
+package com.project.Real_Moment.exception;
 
 public class DuplicateMemberException extends RuntimeException {
     public DuplicateMemberException() {

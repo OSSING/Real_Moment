@@ -1,15 +1,16 @@
 package com.project.Real_Moment.entity;
 
+import com.project.Real_Moment.dto.OrdersListDto;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
 
+@Entity
 @Getter
-@Setter
 @ToString
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 public class Orders {
 
     @Id

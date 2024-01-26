@@ -25,8 +25,8 @@ public class RegisterDto {
      */
     @Getter
     @Builder
-    @NoArgsConstructor
     @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class RegisterRequest {
         @NotBlank(message = "아이디를 입력해주세요.")
         @Pattern(regexp = "^[a-zA-Z0-9]{5,20}$", message = "아이디는 특수문자를 제외한 5~20자를 사용하세요.")
