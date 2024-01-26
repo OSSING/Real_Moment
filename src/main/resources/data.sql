@@ -5,10 +5,10 @@ INSERT INTO level (level, reward_rate) VALUES
 ('GOLD', 3);
 
 -- Member Table 더미데이터
-INSERT INTO member (level_id, id, email, password, name, tel, birth_date, gender, point, recently_login, is_member_status, is_login_status, member_role, activated) VALUES
-(1, 'user1', 'user1@example.com', 'password1', 'User 1', '010-2456-7890', '1998-01-01', 'M', 100, '2023-11-01 12:00:00', TRUE, FALSE, 'ROLE_USER', TRUE),
-(2, 'user2', 'user2@example.com', 'password2', 'User 2', '010-1654-3210', '1995-03-15', 'F', 50, '2023-10-02 09:30:00', TRUE, TRUE, 'ROLE_USER', TRUE),
-(1, 'user3', 'user3@example.com', 'password3', 'User 3', '010-5222-3333', '1988-07-20', 'M', 200, '2023-01-03 15:45:00', TRUE, FALSE, 'ROLE_USER', TRUE);
+INSERT INTO member (level_id, id, email, password, name, tel, birth_date, gender, point, recently_login, is_member_status, member_role, activated) VALUES
+(1, 'user1', 'user1@example.com', 'password1', 'User 1', '010-2456-7890', '19980101', 'M', 100, '2023-11-01 12:00:00', TRUE, 'ROLE_MEMBER', TRUE),
+(2, 'user2', 'user2@example.com', 'password2', 'User 2', '010-1654-3210', '19950315', 'F', 50, '2023-10-02 09:30:00', TRUE, 'ROLE_MEMBER', TRUE),
+(1, 'user3', 'user3@example.com', 'password3', 'User 3', '010-5222-3333', '19880720', 'M', 200, '2023-01-03 15:45:00', TRUE, 'ROLE_MEMBER', TRUE);
 
 -- Addresses Table 더미데이터
 INSERT INTO addresses (member_id, name, address, det_address, is_def_address) VALUES
@@ -42,11 +42,11 @@ INSERT INTO admin_authority (admin_id, authority_name) VALUES
 (5, 'ROLE_ADMIN3');
 
 -- Announcements Table 더미데이터
-INSERT INTO announcement (admin_id, title, content, is_fix, view_count, created_date, modified_date)
+INSERT INTO announcement (admin_id, title, content, is_fix, view_count)
 VALUES
-(1, 'Announcement title1', 'Announcement content1', TRUE, 100, '2023-01-05 10:00:00', '2023-01-05 11:30:00'),
-(2, 'Announcement title2', 'Announcement content2', FALSE, 50, '2023-01-06 09:30:00', '2023-01-06 10:45:00'),
-(4, 'Announcement title3', 'Announcement content3', TRUE, 75, '2023-01-07 14:15:00', '2023-01-07 15:20:00');
+(1, 'Announcement title1', 'Announcement content1', TRUE, 100),
+(2, 'Announcement title2', 'Announcement content2', FALSE, 50),
+(4, 'Announcement title3', 'Announcement content3', TRUE, 75);
 
 -- Category Table 더미데이터
 INSERT INTO category (category_name, parent_category) VALUES
@@ -85,25 +85,25 @@ VALUES
 (3, 3, 1000, 0, 1000, 3);
 
 -- QA Table 더미데이터
-INSERT INTO item_qa (item_id, member_id, title, content, written_date, edited_date)
+INSERT INTO item_qa (item_id, member_id, title, content)
 VALUES
-(1, 1, 'QA title1', 'QA content1', '2023-03-05 10:30:00', '2023-03-07 11:00:00'),
-(2, 2, 'QA title2', 'QA content2', '2023-07-06 11:00:00', NULL),
-(3, 3, 'QA title3', 'QA content3', '2023-09-07 15:00:00', '2023-09-15 15:30:00');
+(1, 1, 'QA title1', 'QA content1'),
+(2, 2, 'QA title2', 'QA content2'),
+(3, 3, 'QA title3', 'QA content3');
 
 -- QAComments Table 더미데이터
-INSERT INTO qa_comment (admin_id, item_qa_id, content, written_date, edited_date)
+INSERT INTO qa_comment (admin_id, item_qa_id, content)
 VALUES
-(1, 1, 'QA_comments content1', '2023-03-07 12:00:00', '2023-03-07 12:45:00'),
-(2, 2, 'QA_comments content2', '2023-07-07 14:30:00', NULL),
-(3, 3, 'QA_comments content3', '2023-09-08 11:45:00', '2023-09-08 12:30:00');
+(1, 1, 'QA_comments content1'),
+(2, 2, 'QA_comments content2'),
+(3, 3, 'QA_comments content3');
 
 -- Reviews Table 더미데이터
-INSERT INTO review (member_id, item_id, title, content, star, written_date, edited_date)
+INSERT INTO review (member_id, item_id, title, content, star)
 VALUES
-(1, 1, 'review title1', 'review content1', 5, '2023-01-05 11:30:00', '2023-01-05 12:00:00'),
-(2, 2, 'review title1', 'review content2', 4, '2023-01-06 10:45:00', NULL),
-(3, 3, 'review title1', 'review content3', 5, '2023-01-07 15:20:00', '2023-01-07 15:50:00');
+(1, 1, 'review title1', 'review content1', 5),
+(2, 2, 'review title1', 'review content2', 4),
+(3, 3, 'review title1', 'review content3', 5);
 
 -- Wishlist Table 더미데이터
 INSERT INTO wishlist (member_id, item_id)
