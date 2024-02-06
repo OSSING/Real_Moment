@@ -20,7 +20,7 @@ public class MyPageController {
 
     // 마이 페이지 (주문 목록)
     @GetMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_MEMBER')")
+    @PreAuthorize("hasAnyRole('MEMBER')")
     public ResponseEntity<List<OrdersListDto>> myPageMain(@PathVariable("id") Long id) {
 
         return ResponseEntity.ok(myPageService.findOrdersList(id));

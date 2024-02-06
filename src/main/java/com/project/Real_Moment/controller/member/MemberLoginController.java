@@ -58,6 +58,8 @@ public class MemberLoginController {
 
         String jwt = tokenProvider.createToken(authentication);
 
+        log.info("로그인 성공 후 생성된 JWT: {}", jwt);
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + jwt);
 
