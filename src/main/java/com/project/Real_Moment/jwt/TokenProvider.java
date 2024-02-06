@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 public class TokenProvider implements InitializingBean {
 
     private static final String AUTHORITIES_KEY = "AUTH";
-    private final String secret;
+    private final String secretKey;
     private final long tokenValidityInMilliseconds;
     private Key key;
 
@@ -35,16 +35,20 @@ public class TokenProvider implements InitializingBean {
             // application.yml에서 지정한 secret(64btye로 암호화)과 토큰 유지 시간을 가져옴
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
-        this.secret = Base64.getEncoder().encodeToString(secret.getBytes());
+        this.secretKey = secret;
         this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+
+        log.info("secret created: {}", this.secretKey);
     }
 
     // 64byte로 암호화된 secret을 복호화하고 그 값을 HMAC SHA 알고리즘을 적용한 키로 변환
     // 해당 키는 jwt 토큰을 서명하거나 검증할 때 사용
     @Override
     public void afterPropertiesSet() throws Exception {
-        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        byte[] keyBytes = Decoders.BASE64.decode(this.secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
+        log.info("keyBytes: {}", keyBytes);
+        log.info("Key created: {}", this.key);
     }
 
     // 토큰을 생성하는 메서드
@@ -62,7 +66,7 @@ public class TokenProvider implements InitializingBean {
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .signWith(this.key, SignatureAlgorithm.HS256)
                 .setExpiration(validity)
                 .compact();
     }
@@ -73,10 +77,12 @@ public class TokenProvider implements InitializingBean {
         // key로 토큰을 파싱하여 JWS로 변환 후 JWS의 본문(Claims) 객체 가져옴
         Claims claims = Jwts
                 .parserBuilder()
-                .setSigningKey(key)
+                .setSigningKey(this.key)
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+
+        log.info("jwt.getBody: {}", claims);
 
         // claims에 담긴 권한 정보를 추출 (","로 구분되었기에 split으로 각 권한을 나눠 List에 저장)
         Collection<? extends GrantedAuthority> authorities =
@@ -94,10 +100,13 @@ public class TokenProvider implements InitializingBean {
     // Token을 받아 파싱하여 나온 Exception을 catch하고 문제가 있다면 false, 정상이면 true 반환
     public boolean validateToken(String token) {
         try {
-            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+
+            Jwts.parserBuilder().setSigningKey(this.key).build().parseClaimsJws(token);
+
             return true;
+
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
-            log.info("잘못된 JWT 서명입니다.");
+            log.info("잘못된 JWT 서명입니다람쥐");
         } catch (ExpiredJwtException e) {
             log.info("만료된 JWT 토근입니다.");
         } catch (UnsupportedJwtException e) {

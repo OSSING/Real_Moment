@@ -2,7 +2,6 @@ package com.project.Real_Moment.config;
 
 import com.project.Real_Moment.jwt.JwtAccessDeniedHandler;
 import com.project.Real_Moment.jwt.JwtAuthenticationEntryPoint;
-import com.project.Real_Moment.jwt.JwtSecurityConfig;
 import com.project.Real_Moment.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -34,8 +33,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
                 // token을 사용하는 방식이기 때문에 csrf를 disable
                 .csrf(AbstractHttpConfigurer::disable)
 
@@ -59,8 +58,7 @@ public class SecurityConfig {
                                 "/QAList",
                                 "/Announcements",
                                 "/Announcement",
-                                "/admin/login",
-                                "/member/{id}").permitAll()
+                                "/admin/login").permitAll()
                         .anyRequest().authenticated()
                 )
 
@@ -69,10 +67,10 @@ public class SecurityConfig {
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                // JwtFilter를 addFilterBefore로 등록했던 JwtSecurityConfig도 적용 (SecurityConfig에 등록한 접근 허용 범위을 공유하게 됨)
+                // JwtFilter를 addFilterBefore로 등록했던 JwtSecurityConfig도 적용
                 .with(new JwtSecurityConfig(tokenProvider), customizer -> {});
 
-        return httpSecurity.build();
+        return http.build();
     }
 
     @Bean
