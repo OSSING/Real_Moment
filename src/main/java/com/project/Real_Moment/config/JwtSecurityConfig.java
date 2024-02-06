@@ -1,5 +1,7 @@
-package com.project.Real_Moment.jwt;
+package com.project.Real_Moment.config;
 
+import com.project.Real_Moment.jwt.JwtFilter;
+import com.project.Real_Moment.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -13,10 +15,10 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
 
     // SecurityConfigurerAdapter에서 configure를 상속받아 Spring Security 설정을 추가하거나 변경 가능
     @Override
-    public void configure(HttpSecurity httpSecurity) throws Exception {
+    public void configure(HttpSecurity http) throws Exception {
 
         // JwtFilter를 UsernamePasswordAuthenticationFilter 이전에 실행되도록 추가하여 사용자의 인증 여부 확인
-        httpSecurity.addFilterBefore(
+        http.addFilterBefore(
                 new JwtFilter(tokenProvider),
                 UsernamePasswordAuthenticationFilter.class
         );

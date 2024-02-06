@@ -5,6 +5,7 @@ import com.project.Real_Moment.entity.Member;
 import com.project.Real_Moment.repository.AdminRepository;
 import com.project.Real_Moment.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component("userDetailsService")
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
@@ -45,6 +47,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<GrantedAuthority> grantedAuthorities = admin.getAuthorities().stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
                 .collect(Collectors.toList());
+        log.info("admin's authority: {}", grantedAuthorities);
 
         return new org.springframework.security.core.userdetails.User(
                 admin.getId(),
@@ -59,6 +62,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         }
 
         GrantedAuthority authority = new SimpleGrantedAuthority(member.getMemberRole());
+        log.info("member's authority: {}", authority);
+
 
         return new org.springframework.security.core.userdetails.User(
                 member.getId(),
