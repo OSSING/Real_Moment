@@ -20,15 +20,20 @@ spring:
       ddl-auto: create
     defer-datasource-initialization: true
 
+  redis:
+    host: redis-11238.c290.ap-northeast-1-2.ec2.cloud.redislabs.com
+    post: 11238
+    password: pozlBGDI8pVFZfO1eUmyqllMHn9rB06o
+
   sql:
     init:
       data-locations: classpath:/data.sql
       mode: always
 
-  properties:
-    hibernate:
-      show_sql: true
-      format_sql: true
+#  properties:
+#    hibernate:
+#      show_sql: true
+#      format_sql: true
 
   logging.level:
     org.hibernate.SQL: debug
@@ -47,7 +52,10 @@ server:
 jwt:
   header: Authorization
   #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
-  #echo 'OSSING-spring-boot-jwt-secret-OSSING-spring-boot-jwt-secret-OSSING-spring-boot-jwt-secret' | base64
-  #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret'|base64
-  secret: OSSING-spring-boot-jwt-secret-OSSING-spring-boot-jwt-secret-OSSING-spring-boot-jwt-secret
+  #echo 'OSSING-spring-boot-jwt-secret-OSSING-spring-boot-jwt-secret'|base64
+  secret: T1NTSU5HLXNwcmluZy1ib290LWp3dC1zZWNyZXQtT1NTSU5HLXNwcmluZy1ib290LWp3dC1zZWNyZXQK
   token-validity-in-seconds: 86400
+
+logging:
+  level:
+    com.project: DEBUG
