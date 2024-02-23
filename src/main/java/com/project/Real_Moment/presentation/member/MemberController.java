@@ -82,4 +82,9 @@ public class MemberController {
 
         return ResponseEntity.ok(memberMyPageService.findOrdersList(id));
     }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(@RequestHeader("RefreshToken") String refreshToken) {
+        return ResponseEntity.ok().build();
+    }
 }

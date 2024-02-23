@@ -52,6 +52,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/member/join",
                                 "/member/login",
+                                "/member/logout",
                                 "/main",
                                 "/category",
                                 "/items",
