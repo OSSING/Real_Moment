@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final TokenProvider tokenProvider;
+    private static final String blacklistKey = "blacklist";
 
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
@@ -25,13 +26,16 @@ public class AuthService {
     // 클라이언트는 갱신된 Access Token 받아 이전 요청을 다시 수행
     public void reissueToken(HttpServletResponse response, String refreshToken) {
 
+        blacklistCheck(refreshToken);
+
         // Refresh Token 에서 User 객체 받아 옴
         Authentication authentication = tokenProvider.getAuthentication(refreshToken);
 
         String redisRefreshToken = redisTemplate.opsForValue().get(authentication.getName());
 
         // Redis 저장된 refresh, 요청받은 refresh 동일한지 체크
-        if (!redisRefreshToken.equals(refreshToken)) {
+        if (redisRefreshToken == null || !redisRefreshToken.equals(refreshToken)) {
+            log.info("일치하는 refreshToken이 없습니다!!!");
             throw new IllegalArgumentException();
         }
 
@@ -40,5 +44,23 @@ public class AuthService {
         response.setHeader(JwtFilter.REFRESHTOKEN_HEADER, refreshToken);
 
         log.info("====== AccessToken 재발급이 성공적으로 완료되었습니다!! ======");
+    }
+
+    public void addBlacklist(HttpServletResponse response, String refreshToken) {
+
+        redisTemplate.opsForSet().add(blacklistKey, refreshToken);
+        log.info("refreshToken - 블랙 리스트 등록 완료!!!");
+    }
+
+    public void blacklistCheck(String refreshToken) {
+        boolean isBlacklisted = redisTemplate.opsForSet().isMember(blacklistKey, refreshToken);
+
+        if (isBlacklisted) {
+            log.info("블랙리스트에 등록된 refreshToken 입니다!!!");
+            throw new IllegalArgumentException();
+
+        } else {
+            log.info("블랙리스트 체크 완료!!!");
+        }
     }
 }

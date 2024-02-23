@@ -49,12 +49,16 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
             // 받아온 유효 토큰의 authentication 객체를 SecurityContext에 등록
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.info("Security Conext에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
-        // access token을 갱신하기 위해 refresh token만 들어온 경우
+        // refresh token만 들어온 경우
         } else if (!StringUtils.hasText(accessToken) && StringUtils.hasText(refreshToken) && tokenProvider.validateToken(refreshToken)) {
             log.info("====== Refresh Token 요청 받음!! ======");
             log.info("요청받은 Refresh : {}", request.getHeader(REFRESHTOKEN_HEADER));
 
-            authService.reissueToken(response, refreshToken);
+            if (request.getRequestURI().equals("/auth/reissue")) {
+                authService.reissueToken(response, refreshToken);
+            } else {
+                authService.addBlacklist(response, refreshToken);
+            }
         }
 
         // 다음 필터를 실행하거나, 서블릿으로 전달
