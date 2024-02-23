@@ -1,11 +1,10 @@
 package com.project.Real_Moment.presentation.member;
 
-import com.project.Real_Moment.application.member.MemberMyPageService;
-import com.project.Real_Moment.presentation.dto.MeberDto;
+import com.project.Real_Moment.presentation.dto.MemberDto;
 import com.project.Real_Moment.auth.jwt.dto.TokenDto;
 import com.project.Real_Moment.auth.jwt.JwtFilter;
 import com.project.Real_Moment.auth.jwt.TokenProvider;
-import com.project.Real_Moment.application.member.MemberRegisterService;
+import com.project.Real_Moment.application.member.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -26,30 +25,29 @@ import java.util.List;
 @RequestMapping("/member")
 public class MemberController {
 
-    private final MemberRegisterService memberRegisterService;
+    private final MemberService memberService;
     private final TokenProvider tokenProvider;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
-    private final MemberMyPageService memberMyPageService;
 
     // 회원가입 도중 id 중복체크 (중복 o -> true, 중복 x -> false)
     @GetMapping("/{id}/exists")
     public ResponseEntity<Boolean> checkIdDuplicate(@PathVariable("id") String id) {
         log.info("controller.id = {}", id);
 //        return ResponseEntity.status(HttpStatus.OK).body(memberService.checkIdDuplicate(id));
-        return ResponseEntity.ok(memberRegisterService.checkIdDuplicate(id));
+        return ResponseEntity.ok(memberService.checkIdDuplicate(id));
     }
 
     // 회원가입 요청
     @PostMapping("/join")
-    public ResponseEntity<MeberDto.RegisterDto> join(@RequestBody MeberDto.RegisterRequest dto) {
+    public ResponseEntity<MemberDto.RegisterDto> join(@RequestBody MemberDto.RegisterRequest dto) {
         log.info("RegisterDto.toString() = {}", dto.toString());
 
         // Service에 요청받은 회원 정보를 전송 후 반환받은 dto를 클라이언트에게 전송
-        return ResponseEntity.ok(memberRegisterService.memberSave(dto));
+        return ResponseEntity.ok(memberService.memberSave(dto));
     }
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody MeberDto.MemberLoginDto dto) {
+    public ResponseEntity<TokenDto> login(@RequestBody MemberDto.MemberLoginDto dto) {
 
         log.info("LoginDto = {}", dto.toString());
 
@@ -78,13 +76,23 @@ public class MemberController {
     // 마이 페이지 (주문 목록)
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('MEMBER')")
-    public ResponseEntity<List<MeberDto.OrdersListDto>> myPageMain(@PathVariable("id") Long id) {
+    public ResponseEntity<List<MemberDto.OrdersListDto>> myPageMain(@PathVariable("id") Long id) {
 
-        return ResponseEntity.ok(memberMyPageService.findOrdersList(id));
+        return ResponseEntity.ok(memberService.findOrdersList(id));
     }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("RefreshToken") String refreshToken) {
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{id}/password")
+    public ResponseEntity<MemberDto.PasswordChangeResponse> changePassword(@PathVariable("id") Long id, @RequestBody MemberDto.PasswordRequest request) {
+        return ResponseEntity.ok().body(memberService.changePassword(id, request.getPassword()));
+    }
+
+    @PatchMapping("/{id}/email")
+    public ResponseEntity<MemberDto.EmailRequest> changeEmail(@PathVariable("id") Long id, @RequestBody MemberDto.EmailRequest request) {
+        return ResponseEntity.ok().body(memberService.changeEmail(id, request.getEmail()));
     }
 }
