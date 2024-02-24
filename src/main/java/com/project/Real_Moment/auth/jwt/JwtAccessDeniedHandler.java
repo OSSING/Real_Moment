@@ -25,5 +25,4 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
 // application - service
 // domain - entity, repository
 // infra - persistence(repositoryImpl), config
-
 // member, admin, wishList, carts, item, order, review, QA, announcement
