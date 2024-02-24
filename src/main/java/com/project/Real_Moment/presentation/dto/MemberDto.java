@@ -160,9 +160,83 @@ public class MemberDto {
     @ToString
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class EmailChangeResponse {
+        private String id;
+        private String email;
+        private String name;
+        private char gender;
+        private LocalDate birthDate;
+
+        public EmailChangeResponse(Member member) {
+            id = member.getId();
+            email = member.getEmail();
+            name = member.getName();
+            gender = member.getGender();
+            birthDate = member.getBirthDate();
+        }
+    }
+
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class EmailRequest {
         private String email;
     }
 
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class NameChangeResponse {
+        private String id;
+        private String email;
+        private String name;
+        private char gender;
+        private LocalDate birthDate;
 
+        public NameChangeResponse(Member member) {
+            id = member.getId();
+            email = member.getEmail();
+            name = member.getName();
+            gender = member.getGender();
+            birthDate = member.getBirthDate();
+        }
+    }
+
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class NameRequest {
+        private String name;
+    }
+
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class BirthDateChangeResponse {
+        private String id;
+        private String email;
+        private String name;
+        private char gender;
+        private LocalDate birthDate;
+
+        public BirthDateChangeResponse(Member member) {
+            id = member.getId();
+            email = member.getEmail();
+            name = member.getName();
+            gender = member.getGender();
+            birthDate = member.getBirthDate();
+        }
+    }
+
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class BirthDateRequest {
+        private LocalDate birthDate;
+    }
 }

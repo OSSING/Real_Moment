@@ -17,5 +17,4 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
     Optional<Member> findOneWithAuthoritiesById(String id);
 
-
 }
