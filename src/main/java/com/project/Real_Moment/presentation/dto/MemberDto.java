@@ -11,7 +11,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 
-public class MeberDto {
+public class MemberDto {
 
     // 회원가입 시 요청받을 JSON 데이터
 
@@ -78,17 +78,16 @@ public class MeberDto {
         private String id;
 
         // Entity -> Dto
-        public static MeberDto.RegisterDto toDto(Member member) {
+        public static MemberDto.RegisterDto toDto(Member member) {
             if (member == null) return null;
 
-            return MeberDto.RegisterDto.builder()
+            return MemberDto.RegisterDto.builder()
                     .id(member.getId())
                     .build();
         }
     }
 
     @Getter
-    @Builder
     @ToString
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -102,7 +101,6 @@ public class MeberDto {
     }
 
     @Getter
-    @Builder
     @ToString
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -129,4 +127,42 @@ public class MeberDto {
             refundText = orders.getRefundText();
         }
     }
+
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class PasswordChangeResponse {
+        private String id;
+        private String email;
+        private String name;
+        private char gender;
+        private LocalDate birthDate;
+
+        public PasswordChangeResponse(Member member) {
+            id = member.getId();
+            email = member.getEmail();
+            name = member.getName();
+            gender = member.getGender();
+            birthDate = member.getBirthDate();
+        }
+    }
+
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class PasswordRequest {
+        private String password;
+    }
+
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class EmailRequest {
+        private String email;
+    }
+
+
 }

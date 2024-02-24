@@ -3,12 +3,12 @@ package com.project.Real_Moment.domain.member.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Entity
 @Getter
 @Setter
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor
-@Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Addresses {
 
     @Id
