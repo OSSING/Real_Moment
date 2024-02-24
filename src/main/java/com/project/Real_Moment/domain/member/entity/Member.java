@@ -1,6 +1,6 @@
 package com.project.Real_Moment.domain.member.entity;
 
-import com.project.Real_Moment.presentation.dto.MeberDto;
+import com.project.Real_Moment.presentation.dto.MemberDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -46,6 +46,7 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private char gender;
 
+    @Builder.Default
     @Column(nullable = false)
     private int point = 0;
 
@@ -55,14 +56,15 @@ public class Member extends BaseTimeEntity {
     @Column(name = "is_member_status")
     private boolean isMemberStatus;
 
+    @Builder.Default
     @Column(name = "member_role")
     private String memberRole = "ROLE_MEMBER";
 
     private boolean activated;
 
     // 회원가입 시 Entity -> Dto 변환
-    public MeberDto.RegisterRequest toDto() {
-        return MeberDto.RegisterRequest.builder()
+    public MemberDto.RegisterRequest toDto() {
+        return MemberDto.RegisterRequest.builder()
                 .id(id)
                 .email(email)
                 .password(password)

@@ -2,7 +2,7 @@ package com.project.Real_Moment.presentation.admin;
 
 import com.project.Real_Moment.auth.jwt.JwtFilter;
 import com.project.Real_Moment.auth.jwt.TokenProvider;
-import com.project.Real_Moment.presentation.dto.MeberDto;
+import com.project.Real_Moment.presentation.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -27,7 +27,7 @@ public class AdminController {
     private final TokenProvider tokenProvider;
 
     @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody MeberDto.MemberLoginDto dto) {
+    public ResponseEntity<Void> login(@RequestBody MemberDto.MemberLoginDto dto) {
 
         log.info("LoginDto = {}", dto.toString());
 

@@ -1,20 +1,25 @@
 package com.project.Real_Moment.application.member;
 
-import com.project.Real_Moment.presentation.dto.MeberDto;
+import com.project.Real_Moment.domain.member.entity.Orders;
+import com.project.Real_Moment.domain.member.repository.OrdersRepository;
+import com.project.Real_Moment.presentation.dto.MemberDto;
 import com.project.Real_Moment.domain.member.entity.Member;
 import com.project.Real_Moment.domain.member.repository.MemberRepository;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MemberRegisterService {
+public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final OrdersRepository ordersRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -25,7 +30,7 @@ public class MemberRegisterService {
 
     // 회원가입시 요청받은 Dto를 Entity로 변환 후 저장
     @Transactional
-    public MeberDto.RegisterDto memberSave(MeberDto.RegisterRequest dto) {
+    public MemberDto.RegisterDto memberSave(MemberDto.RegisterRequest dto) {
 
         if (memberRepository.existsById(dto.getId())) {
 
@@ -41,10 +46,10 @@ public class MemberRegisterService {
         // 3. 저장한 회원 데이터를 Dto로 변환 후 반환
         Member savedMember = memberRepository.save(member);
 
-        return MeberDto.RegisterDto.toDto(savedMember);
+        return MemberDto.RegisterDto.toDto(savedMember);
     }
 
-    private Member createMember(MeberDto.RegisterRequest dto) {
+    private Member createMember(MemberDto.RegisterRequest dto) {
 
         return Member.builder()
                 .id(dto.getId())
@@ -57,5 +62,29 @@ public class MemberRegisterService {
                 .memberRole("ROLE_MEMBER")
                 .activated(true)
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<MemberDto.OrdersListDto> findOrdersList(Long id) {
+
+        List<Orders> ordersList = ordersRepository.findByMemberId_MemberId(id);
+
+        return ordersList.stream()
+                .map(MemberDto.OrdersListDto::new).toList();
+    }
+
+    @Transactional
+    public MemberDto.PasswordChangeResponse changePassword(Long id, String password) {
+        String encodedPassword = passwordEncoder.encode(password);
+        Member member = memberRepository.updatePasswordById(id, encodedPassword);
+
+        return new MemberDto.PasswordChangeResponse(member);
+    }
+
+    @Transactional
+    public MemberDto.EmailRequest changeEmail(Long id, String email) {
+        Member member = memberRepository.updateEmailById(id, email);
+
+        return new MemberDto.EmailRequest(email);
     }
 }
