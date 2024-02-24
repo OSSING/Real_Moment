@@ -5,6 +5,8 @@ import com.project.Real_Moment.domain.member.repository.custom.MemberRepositoryC
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+
 import static com.project.Real_Moment.domain.member.entity.QMember.member;
 
 @RequiredArgsConstructor
@@ -31,6 +33,34 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
         queryFactory
                 .update(member)
                 .set(member.email, email)
+                .where(member.memberId.eq(id))
+                .execute();
+
+        return queryFactory
+                .selectFrom(member)
+                .where(member.memberId.eq(id))
+                .fetchOne();
+    }
+
+    @Override
+    public Member updateNameById(Long id, String name) {
+        queryFactory
+                .update(member)
+                .set(member.name, name)
+                .where(member.memberId.eq(id))
+                .execute();
+
+        return queryFactory
+                .selectFrom(member)
+                .where(member.memberId.eq(id))
+                .fetchOne();
+    }
+
+    @Override
+    public Member updateBirthDateById(Long id, LocalDate birthDate) {
+        queryFactory
+                .update(member)
+                .set(member.birthDate, birthDate)
                 .where(member.memberId.eq(id))
                 .execute();
 
