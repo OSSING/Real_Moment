@@ -38,8 +38,13 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
 
         String requestURI = request.getRequestURI();
 
+        if (StringUtils.hasText(accessToken) && StringUtils.hasText(refreshToken) && tokenProvider.validateToken(accessToken) && tokenProvider.validateToken(refreshToken)) {
+            authService.addBlacklist(refreshToken);
+
+            Authentication authentication = tokenProvider.getAuthentication(accessToken);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         // access token만 들어온 경우
-        if (!StringUtils.hasText(refreshToken) && StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
+        } else if (!StringUtils.hasText(refreshToken) && StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
             log.info("====== Access Token 요청 받음!! ======");
             log.info("요청받은 Access : {}", request.getHeader(ACCESSTOKEN_HEADER));
 
@@ -57,7 +62,7 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
             if (request.getRequestURI().equals("/auth/reissue")) {
                 authService.reissueToken(response, refreshToken);
             } else {
-                authService.addBlacklist(response, refreshToken);
+                authService.addBlacklist(refreshToken);
             }
         }
 

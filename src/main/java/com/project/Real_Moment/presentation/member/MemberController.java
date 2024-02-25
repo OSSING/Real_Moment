@@ -105,4 +105,9 @@ public class MemberController {
     public ResponseEntity<MemberDto.BirthDateChangeResponse> changeBirthDate(@PathVariable("id") Long id, @RequestBody MemberDto.BirthDateRequest request) {
         return ResponseEntity.ok().body(memberService.changeBirthDate(id, request.getBirthDate()));
     }
+
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<Boolean> deleteMember(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(memberService.deleteMember(id));
+    }
 }

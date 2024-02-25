@@ -69,4 +69,19 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .where(member.memberId.eq(id))
                 .fetchOne();
     }
+
+    @Override
+    public Long updateActivatedById(Long id) {
+        return queryFactory
+                .update(member)
+                .set(member.activated, true)
+                .set(member.email, "")
+                .set(member.password, "")
+                .set(member.name, "")
+                .set(member.tel, "")
+                .set(member.birthDate, (LocalDate) null)
+                .set(member.gender, 'N')
+                .where(member.memberId.eq(id))
+                .execute();
+    }
 }

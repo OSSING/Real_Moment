@@ -13,4 +13,6 @@ public interface MemberRepositoryCustom {
     Member updateNameById(Long id, String name);
 
     Member updateBirthDateById(Long id, LocalDate birthDate);
+
+    Long updateActivatedById(Long id);
 }

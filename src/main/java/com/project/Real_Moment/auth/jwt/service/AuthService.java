@@ -46,7 +46,7 @@ public class AuthService {
         log.info("====== AccessToken 재발급이 성공적으로 완료되었습니다!! ======");
     }
 
-    public void addBlacklist(HttpServletResponse response, String refreshToken) {
+    public void addBlacklist(String refreshToken) {
 
         redisTemplate.opsForSet().add(blacklistKey, refreshToken);
         log.info("refreshToken - 블랙 리스트 등록 완료!!!");

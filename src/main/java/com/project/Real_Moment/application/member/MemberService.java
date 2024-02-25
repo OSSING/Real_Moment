@@ -102,4 +102,15 @@ public class MemberService {
 
         return new MemberDto.BirthDateChangeResponse(member);
     }
+
+    @Transactional
+    public Boolean deleteMember(Long id) {
+        if (memberRepository.updateActivatedById(id) > 0) {
+            log.info("회원 삭제가 성공적으로 처리되었습니다.");
+            return true;
+        } else {
+            log.info("회원 삭제에 실패했습니다.");
+            return false;
+        }
+    }
 }
