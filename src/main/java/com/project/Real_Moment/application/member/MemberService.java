@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -82,9 +83,34 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberDto.EmailRequest changeEmail(Long id, String email) {
+    public MemberDto.EmailChangeResponse changeEmail(Long id, String email) {
         Member member = memberRepository.updateEmailById(id, email);
 
-        return new MemberDto.EmailRequest(email);
+        return new MemberDto.EmailChangeResponse(member);
+    }
+
+    @Transactional
+    public MemberDto.NameChangeResponse changeName(Long id, String name) {
+        Member member = memberRepository.updateNameById(id, name);
+
+        return new MemberDto.NameChangeResponse(member);
+    }
+
+    @Transactional
+    public MemberDto.BirthDateChangeResponse changeBirthDate(Long id, LocalDate birthDate) {
+        Member member = memberRepository.updateBirthDateById(id, birthDate);
+
+        return new MemberDto.BirthDateChangeResponse(member);
+    }
+
+    @Transactional
+    public Boolean deleteMember(Long id) {
+        if (memberRepository.updateActivatedById(id) > 0) {
+            log.info("회원 삭제가 성공적으로 처리되었습니다.");
+            return true;
+        } else {
+            log.info("회원 삭제에 실패했습니다.");
+            return false;
+        }
     }
 }

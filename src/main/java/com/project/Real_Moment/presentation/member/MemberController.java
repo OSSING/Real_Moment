@@ -92,7 +92,22 @@ public class MemberController {
     }
 
     @PatchMapping("/{id}/email")
-    public ResponseEntity<MemberDto.EmailRequest> changeEmail(@PathVariable("id") Long id, @RequestBody MemberDto.EmailRequest request) {
+    public ResponseEntity<MemberDto.EmailChangeResponse> changeEmail(@PathVariable("id") Long id, @RequestBody MemberDto.EmailRequest request) {
         return ResponseEntity.ok().body(memberService.changeEmail(id, request.getEmail()));
+    }
+
+    @PatchMapping("/{id}/name")
+    public ResponseEntity<MemberDto.NameChangeResponse> changeName(@PathVariable("id") Long id, @RequestBody MemberDto.NameRequest request) {
+        return ResponseEntity.ok().body(memberService.changeName(id, request.getName()));
+    }
+
+    @PatchMapping("/{id}/birth")
+    public ResponseEntity<MemberDto.BirthDateChangeResponse> changeBirthDate(@PathVariable("id") Long id, @RequestBody MemberDto.BirthDateRequest request) {
+        return ResponseEntity.ok().body(memberService.changeBirthDate(id, request.getBirthDate()));
+    }
+
+    @DeleteMapping("/{id}/delete")
+    public ResponseEntity<Boolean> deleteMember(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(memberService.deleteMember(id));
     }
 }

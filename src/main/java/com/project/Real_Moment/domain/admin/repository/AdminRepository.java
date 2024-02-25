@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 public interface AdminRepository extends JpaRepository<Admin, Long> {
 
     @EntityGraph(attributePaths = "authorities") // admin필드의 authorities를 함께 가져옴

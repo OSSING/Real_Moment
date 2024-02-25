@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 public interface MemberRepository extends JpaRepository<Member, Long>, MemberRepositoryCustom {
 
 
@@ -16,6 +15,5 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
     boolean existsById(String id);
 
     Optional<Member> findOneWithAuthoritiesById(String id);
-
 
 }

@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter @Setter
+@Getter
 @ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category {
 
     @Id
