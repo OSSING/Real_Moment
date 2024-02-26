@@ -6,5 +6,4 @@ import java.util.List;
 
 public interface AddressRepositoryCustom {
 
-//    List<Addresses> findAddresses(Long id);
 }
