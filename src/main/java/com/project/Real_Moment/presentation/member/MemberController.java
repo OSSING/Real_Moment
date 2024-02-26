@@ -116,4 +116,10 @@ public class MemberController {
     public ResponseEntity<List<AddressDto.AddressListResponse>> findAddresses(@PathVariable("id") Long id) {
         return ResponseEntity.ok(memberService.findAddresses(id));
     }
+
+    @PostMapping("/{id}/addresses")
+    public ResponseEntity<Void> addAddress(@PathVariable("id") Long id, AddressDto.AddAddressRequest request) {
+        memberService.saveAddress(id, request);
+        return ResponseEntity.ok().build();
+    }
 }
