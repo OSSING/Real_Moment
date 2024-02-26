@@ -88,9 +88,8 @@ public class MemberDto {
     }
 
     @Getter
-    @ToString
     @AllArgsConstructor
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class MemberLoginDto {
 
         @NotBlank(message = "아이디를 입력해주세요.")
@@ -101,9 +100,8 @@ public class MemberDto {
     }
 
     @Getter
-    @ToString
     @AllArgsConstructor
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class OrdersListDto {
 
         private int price;
@@ -129,9 +127,8 @@ public class MemberDto {
     }
 
     @Getter
-    @ToString
     @AllArgsConstructor
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class PasswordChangeRequest {
 
         @NotBlank(message = "비밀번호를 입력해주세요.")
@@ -140,9 +137,8 @@ public class MemberDto {
     }
 
     @Getter
-    @ToString
     @AllArgsConstructor
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class MemberInfoUpdateResponse {
         private String id;
         private String email;
@@ -160,9 +156,8 @@ public class MemberDto {
     }
 
     @Getter
-    @ToString
     @AllArgsConstructor
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class EmailChangeRequest {
 
         @NotBlank(message = "이메일 주소를 입력해주세요.")
@@ -171,9 +166,8 @@ public class MemberDto {
     }
 
     @Getter
-    @ToString
     @AllArgsConstructor
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class NameChangeRequest {
 
         @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z]{2,20}", message = "성함은 한글과 영문을 포함한 2~20자를 사용하세요.")
@@ -181,9 +175,8 @@ public class MemberDto {
     }
 
     @Getter
-    @ToString
     @AllArgsConstructor
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    @NoArgsConstructor
     public static class BirthDateChangeRequest {
 
         @NotBlank(message = "생년월일을 입력해주세요.")
