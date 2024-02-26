@@ -70,6 +70,20 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
                 .fetchOne();
     }
 
+//    @Override
+//    public Member updateTelById(Long id, String tel) {
+//        queryFactory
+//                .update(member)
+//                .set(member.tel, tel)
+//                .where(member.memberId.eq(id))
+//                .execute();
+//
+//        return queryFactory
+//                .selectFrom(member)
+//                .where(member.memberId.eq(id))
+//                .fetchOne();
+//    }
+
     @Override
     public Long updateActivatedById(Long id) {
         return queryFactory

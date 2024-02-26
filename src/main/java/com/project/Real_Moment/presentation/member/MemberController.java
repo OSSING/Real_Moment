@@ -1,5 +1,6 @@
 package com.project.Real_Moment.presentation.member;
 
+import com.project.Real_Moment.presentation.dto.AddressDto;
 import com.project.Real_Moment.presentation.dto.MemberDto;
 import com.project.Real_Moment.auth.jwt.dto.TokenDto;
 import com.project.Real_Moment.auth.jwt.JwtFilter;
@@ -39,7 +40,7 @@ public class MemberController {
 
     // 회원가입 요청
     @PostMapping("/join")
-    public ResponseEntity<MemberDto.RegisterDto> join(@RequestBody MemberDto.RegisterRequest dto) {
+    public ResponseEntity<MemberDto.RegisterResponse> join(@RequestBody MemberDto.RegisterRequest dto) {
         log.info("RegisterDto.toString() = {}", dto.toString());
 
         // Service에 요청받은 회원 정보를 전송 후 반환받은 dto를 클라이언트에게 전송
@@ -87,27 +88,32 @@ public class MemberController {
     }
 
     @PatchMapping("/{id}/password")
-    public ResponseEntity<MemberDto.PasswordChangeResponse> changePassword(@PathVariable("id") Long id, @RequestBody MemberDto.PasswordRequest request) {
+    public ResponseEntity<MemberDto.MemberInfoUpdateResponse> changePassword(@PathVariable("id") Long id, @RequestBody MemberDto.PasswordChangeRequest request) {
         return ResponseEntity.ok().body(memberService.changePassword(id, request.getPassword()));
     }
 
     @PatchMapping("/{id}/email")
-    public ResponseEntity<MemberDto.EmailChangeResponse> changeEmail(@PathVariable("id") Long id, @RequestBody MemberDto.EmailRequest request) {
+    public ResponseEntity<MemberDto.MemberInfoUpdateResponse> changeEmail(@PathVariable("id") Long id, @RequestBody MemberDto.EmailChangeRequest request) {
         return ResponseEntity.ok().body(memberService.changeEmail(id, request.getEmail()));
     }
 
     @PatchMapping("/{id}/name")
-    public ResponseEntity<MemberDto.NameChangeResponse> changeName(@PathVariable("id") Long id, @RequestBody MemberDto.NameRequest request) {
+    public ResponseEntity<MemberDto.MemberInfoUpdateResponse> changeName(@PathVariable("id") Long id, @RequestBody MemberDto.NameChangeRequest request) {
         return ResponseEntity.ok().body(memberService.changeName(id, request.getName()));
     }
 
     @PatchMapping("/{id}/birth")
-    public ResponseEntity<MemberDto.BirthDateChangeResponse> changeBirthDate(@PathVariable("id") Long id, @RequestBody MemberDto.BirthDateRequest request) {
+    public ResponseEntity<MemberDto.MemberInfoUpdateResponse> changeBirthDate(@PathVariable("id") Long id, @RequestBody MemberDto.BirthDateChangeRequest request) {
         return ResponseEntity.ok().body(memberService.changeBirthDate(id, request.getBirthDate()));
     }
 
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<Boolean> deleteMember(@PathVariable("id") Long id) {
         return ResponseEntity.ok(memberService.deleteMember(id));
+    }
+
+    @GetMapping("/{id}/addresses")
+    public ResponseEntity<List<AddressDto.AddressListResponse>> findAddresses(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(memberService.findAddresses(id));
     }
 }
