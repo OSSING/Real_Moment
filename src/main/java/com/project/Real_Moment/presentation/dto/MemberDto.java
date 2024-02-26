@@ -46,10 +46,10 @@ public class MemberDto {
         private String name;
 
         @NotBlank(message = "휴대폰 번호를 입력해주세요.")
-        @Pattern(regexp = "(01[016789])(\\\\d{3,4})(\\\\d{4})", message = "올바른 휴대폰 번호를 입력해주세요.")
+        @Pattern(regexp = "^01(?:0|1|[6-9])-(?:\\d{3}|\\d{4})-\\d{4}$", message = "올바른 휴대폰 번호를 입력해주세요.")
         private String tel;
 
-        @NotNull(message = "생년월일을 입력해주세요.")
+        @NotBlank(message = "생년월일을 입력해주세요.")
         private LocalDate birthDate;
 
         private char gender;
@@ -73,15 +73,15 @@ public class MemberDto {
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     // 회원가입 성공 시 응답할 JSON 데이터
-    public static class RegisterDto {
+    public static class RegisterResponse {
 
         private String id;
 
         // Entity -> Dto
-        public static MemberDto.RegisterDto toDto(Member member) {
+        public static RegisterResponse toDto(Member member) {
             if (member == null) return null;
 
-            return MemberDto.RegisterDto.builder()
+            return RegisterResponse.builder()
                     .id(member.getId())
                     .build();
         }
@@ -132,27 +132,10 @@ public class MemberDto {
     @ToString
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class PasswordChangeResponse {
-        private String id;
-        private String email;
-        private String name;
-        private char gender;
-        private LocalDate birthDate;
+    public static class PasswordChangeRequest {
 
-        public PasswordChangeResponse(Member member) {
-            id = member.getId();
-            email = member.getEmail();
-            name = member.getName();
-            gender = member.getGender();
-            birthDate = member.getBirthDate();
-        }
-    }
-
-    @Getter
-    @ToString
-    @AllArgsConstructor
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class PasswordRequest {
+        @NotBlank(message = "비밀번호를 입력해주세요.")
+        @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\\\W)(?=\\\\S+$).{8,16}", message = "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
         private String password;
     }
 
@@ -160,14 +143,14 @@ public class MemberDto {
     @ToString
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class EmailChangeResponse {
+    public static class MemberInfoUpdateResponse {
         private String id;
         private String email;
         private String name;
         private char gender;
         private LocalDate birthDate;
 
-        public EmailChangeResponse(Member member) {
+        public MemberInfoUpdateResponse(Member member) {
             id = member.getId();
             email = member.getEmail();
             name = member.getName();
@@ -180,7 +163,10 @@ public class MemberDto {
     @ToString
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class EmailRequest {
+    public static class EmailChangeRequest {
+
+        @NotBlank(message = "이메일 주소를 입력해주세요.")
+        @Email(message = "올바른 이메일 주소를 입력해주세요.")
         private String email;
     }
 
@@ -188,27 +174,9 @@ public class MemberDto {
     @ToString
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class NameChangeResponse {
-        private String id;
-        private String email;
-        private String name;
-        private char gender;
-        private LocalDate birthDate;
+    public static class NameChangeRequest {
 
-        public NameChangeResponse(Member member) {
-            id = member.getId();
-            email = member.getEmail();
-            name = member.getName();
-            gender = member.getGender();
-            birthDate = member.getBirthDate();
-        }
-    }
-
-    @Getter
-    @ToString
-    @AllArgsConstructor
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class NameRequest {
+        @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z]{2,20}", message = "성함은 한글과 영문을 포함한 2~20자를 사용하세요.")
         private String name;
     }
 
@@ -216,27 +184,18 @@ public class MemberDto {
     @ToString
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class BirthDateChangeResponse {
-        private String id;
-        private String email;
-        private String name;
-        private char gender;
+    public static class BirthDateChangeRequest {
+
+        @NotBlank(message = "생년월일을 입력해주세요.")
         private LocalDate birthDate;
 
-        public BirthDateChangeResponse(Member member) {
-            id = member.getId();
-            email = member.getEmail();
-            name = member.getName();
-            gender = member.getGender();
-            birthDate = member.getBirthDate();
-        }
     }
 
-    @Getter
-    @ToString
-    @AllArgsConstructor
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class BirthDateRequest {
-        private LocalDate birthDate;
-    }
+//    @Getter
+//    @ToString
+//    @AllArgsConstructor
+//    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+//    public static class TelChangeRequest {
+//        private String tel;
+//    }
 }

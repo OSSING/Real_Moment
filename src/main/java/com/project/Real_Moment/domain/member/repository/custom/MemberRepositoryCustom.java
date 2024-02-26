@@ -14,5 +14,8 @@ public interface MemberRepositoryCustom {
 
     Member updateBirthDateById(Long id, LocalDate birthDate);
 
+//    Member updateTelById(Long id, String tel);
+
     Long updateActivatedById(Long id);
+
 }
