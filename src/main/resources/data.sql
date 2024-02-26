@@ -12,9 +12,12 @@ INSERT INTO member (level_id, id, email, password, name, tel, birth_date, gender
 
 -- Addresses Table 더미데이터
 INSERT INTO addresses (member_id, name, address, det_address, is_def_address) VALUES
-(1, 'address1', '대전 유성구', '101동 503호', TRUE),
-(2, 'address2', '대전 서구', '503동 203호', FALSE),
-(3, 'address3', '대전 중구', '509호', FALSE);
+(1, 'address1', '대전 유성구', '101동 502호', TRUE),
+(1, 'address2', '대전 유성구', '101동 503호', FALSE),
+(2, 'address3', '대전 서구', '503동 203호', TRUE),
+(2, 'address4', '대전 서구', '503동 204호', FALSE),
+(3, 'address5', '대전 중구', '508호', TRUE),
+(3, 'address6', '대전 중구', '509호', FALSE);
 
 -- Authority Table 더미데이터
 INSERT INTO authority (authority_name) VALUES

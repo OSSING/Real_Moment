@@ -28,5 +28,5 @@ public class Addresses {
     private String detAddress;
 
     @Column(name = "is_def_address")
-    private boolean isDefAddress = false;
+    private Boolean isDefAddress = false;
 }
