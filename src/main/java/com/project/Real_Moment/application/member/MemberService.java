@@ -124,7 +124,8 @@ public class MemberService {
 
     @Transactional
     public void saveAddress(Long id, AddressDto.AddAddressRequest addressRequest) {
-        Addresses address = addressRequest.toEntity();
-        Addresses save = addressesRepository.save(address);
+        Member member = memberRepository.findById(id).orElse(null);
+        Addresses address = addressRequest.toEntity(member);
+        addressesRepository.save(address);
     }
 }

@@ -117,8 +117,9 @@ public class MemberController {
         return ResponseEntity.ok(memberService.findAddresses(id));
     }
 
-    @PostMapping("/{id}/addresses")
-    public ResponseEntity<Void> addAddress(@PathVariable("id") Long id, AddressDto.AddAddressRequest request) {
+    @PostMapping("/{id}/address")
+    public ResponseEntity<Void> addAddress(@PathVariable("id") Long id, @RequestBody AddressDto.AddAddressRequest request) {
+        log.info("AddressDto.AddAddressRequest.toString() = {}", request.toString());
         memberService.saveAddress(id, request);
         return ResponseEntity.ok().build();
     }
