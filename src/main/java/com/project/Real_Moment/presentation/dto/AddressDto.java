@@ -32,15 +32,10 @@ public class AddressDto {
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class AddAddressRequest {
-        private Long memberId;
         private String name;
         private String address;
         private String detAddress;
         private Boolean isDefAddress;
-
-        public AddAddressRequest(Long id) {
-            this.memberId = id;
-        }
 
 //        public AddAddressRequest fromEntity(Addresses address) {
 //            return AddAddressRequest.builder()
@@ -51,13 +46,13 @@ public class AddressDto {
 //                    .build();
 //        }
 
-        public Addresses toEntity(Long id) {
+        public Addresses toEntity(Member member) {
             return Addresses.builder()
                     .name(this.name)
                     .address(this.address)
                     .detAddress(this.detAddress)
                     .isDefAddress(this.isDefAddress)
-                    .memberId(new AddAddressRequest(id))
+                    .memberId(member)
                     .build();
         }
     }
