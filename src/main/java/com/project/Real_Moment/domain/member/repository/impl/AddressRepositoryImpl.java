@@ -17,11 +17,4 @@ public class AddressRepositoryImpl implements AddressRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-//    @Override
-//    public List<Addresses> findAddresses(Long id) {
-//        return queryFactory
-//                .selectFrom(addresses)
-//                .where(addresses.memberId.memberId.eq(id))
-//                .fetch();
-//    }
 }

@@ -9,7 +9,7 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/firstproject_db
     username: postgres
-    password: "!dhtjd17395"
+    password: "dhtjd183"
     driver-class-name: org.postgresql.Driver
     generate-unique-name: false
 

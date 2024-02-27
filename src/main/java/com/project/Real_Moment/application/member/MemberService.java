@@ -1,5 +1,6 @@
 package com.project.Real_Moment.application.member;
 
+import com.project.Real_Moment.domain.member.entity.Addresses;
 import com.project.Real_Moment.domain.member.repository.AddressesRepository;
 import com.project.Real_Moment.domain.member.repository.OrdersRepository;
 import com.project.Real_Moment.presentation.dto.AddressesDto;
@@ -36,9 +37,9 @@ public class MemberService {
     @Transactional
     public MemberDto.RegisterResponse memberSave(MemberDto.RegisterRequest dto) {
 
-        if (memberRepository.existsById(dto.getId())) {
-
-        }
+//        if (memberRepository.existsById(dto.getId())) {
+//
+//        }
 
         // 1. 요청받은 dto -> Entity로 변환
         Member member = createMember(dto);
@@ -119,5 +120,11 @@ public class MemberService {
     public List<AddressesDto.AddressListResponse> findAddresses(Long id) {
         return addressesRepository.findAddressesByMemberId_MemberId(id).stream()
                 .map(AddressesDto.AddressListResponse::new).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void saveAddress(Long id, AddressDto.AddAddressRequest addressRequest) {
+        Addresses address = addressRequest.toEntity();
+        Addresses save = addressesRepository.save(address);
     }
 }

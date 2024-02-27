@@ -118,5 +118,12 @@ public class MemberController {
     }
 
     @PostMapping("/{id}/addresses")
+<<<<<<< HEAD
     public List<AddressesDto.AddAddressResponse>
+=======
+    public ResponseEntity<Void> addAddress(@PathVariable("id") Long id, AddressDto.AddAddressRequest request) {
+        memberService.saveAddress(id, request);
+        return ResponseEntity.ok().build();
+    }
+>>>>>>> main
 }
