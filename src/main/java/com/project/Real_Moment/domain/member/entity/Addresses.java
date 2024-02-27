@@ -26,6 +26,7 @@ public class Addresses {
     @Column(name = "det_address")
     private String detAddress;
 
+    @Builder.Default
     @Column(name = "is_def_address")
     private Boolean isDefAddress = false;
 }
