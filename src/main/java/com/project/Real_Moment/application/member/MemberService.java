@@ -3,7 +3,7 @@ package com.project.Real_Moment.application.member;
 import com.project.Real_Moment.domain.member.entity.Addresses;
 import com.project.Real_Moment.domain.member.repository.AddressesRepository;
 import com.project.Real_Moment.domain.member.repository.OrdersRepository;
-import com.project.Real_Moment.presentation.dto.AddressDto;
+import com.project.Real_Moment.presentation.dto.AddressesDto;
 import com.project.Real_Moment.presentation.dto.MemberDto;
 import com.project.Real_Moment.domain.member.entity.Member;
 import com.project.Real_Moment.domain.member.repository.MemberRepository;
@@ -117,15 +117,24 @@ public class MemberService {
     }
 
     @Transactional
-    public List<AddressDto.AddressListResponse> findAddresses(Long id) {
+    public List<AddressesDto.AddressListResponse> findAddresses(Long id) {
         return addressesRepository.findAddressesByMemberId_MemberId(id).stream()
-                .map(AddressDto.AddressListResponse::new).collect(Collectors.toList());
+                .map(AddressesDto.AddressListResponse::new).collect(Collectors.toList());
     }
 
     @Transactional
-    public void saveAddress(Long id, AddressDto.AddAddressRequest addressRequest) {
+    public void saveAddress(Long id, AddressesDto.SaveAddressRequest dto) {
         Member member = memberRepository.findById(id).orElse(null);
-        Addresses address = addressRequest.toEntity(member);
+        Addresses address = dto.toEntity(member);
         addressesRepository.save(address);
+    }
+
+    @Transactional
+    public AddressesDto.AddressResponse updateAddress(AddressesDto.AddressRequest dto) {
+//        Member member = memberRepository.findById(id).orElse(null);
+//        Addresses address = dto.toEntity(member);
+        Addresses updatedAddress = addressesRepository.shivar(dto);
+
+        return new AddressesDto.AddressResponse(updatedAddress);
     }
 }

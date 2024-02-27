@@ -4,7 +4,7 @@ import com.project.Real_Moment.domain.member.entity.Addresses;
 import com.project.Real_Moment.domain.member.entity.Member;
 import lombok.*;
 
-public class AddressDto {
+public class AddressesDto {
 
     @Getter
     @ToString
@@ -31,20 +31,11 @@ public class AddressDto {
     @ToString
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class AddAddressRequest {
+    public static class SaveAddressRequest {
         private String name;
         private String address;
         private String detAddress;
         private Boolean isDefAddress;
-
-//        public AddAddressRequest fromEntity(Addresses address) {
-//            return AddAddressRequest.builder()
-//                    .name(address.getName())
-//                    .address(address.getAddress())
-//                    .detAddress(address.getDetAddress())
-//                    .isDefAddress(address.getIsDefAddress())
-//                    .build();
-//        }
 
         public Addresses toEntity(Member member) {
             return Addresses.builder()
@@ -54,6 +45,38 @@ public class AddressDto {
                     .isDefAddress(this.isDefAddress)
                     .memberId(member)
                     .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class AddressRequest {
+        private Long addressId;
+        private String name;
+        private String address;
+        private String detAddress;
+        private Boolean isDefAddress;
+    }
+
+    @Getter
+    @Builder
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class AddressResponse {
+        private String name;
+        private String address;
+        private String detAddress;
+        private Boolean isDefAddress;
+
+        public AddressResponse(Addresses address) {
+            this.name = address.getName();
+            this.address = address.getAddress();
+            this.detAddress = address.getDetAddress();
+            this.isDefAddress = address.getIsDefAddress();
         }
     }
 }
