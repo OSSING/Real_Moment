@@ -4,6 +4,7 @@ import com.project.Real_Moment.auth.jwt.JwtAccessDeniedHandler;
 import com.project.Real_Moment.auth.jwt.JwtAuthenticationEntryPoint;
 import com.project.Real_Moment.auth.jwt.TokenProvider;
 import com.project.Real_Moment.auth.jwt.service.AuthService;
+import com.project.Real_Moment.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,6 +24,7 @@ public class SecurityConfig {
 
     private final TokenProvider tokenProvider;
     private final AuthService authService;
+    private final MemberRepository memberRepository;
     private final CorsFilter corsFilter;
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
     private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
@@ -72,7 +74,7 @@ public class SecurityConfig {
                 )
 
                 // JwtFilter를 addFilterBefore로 등록했던 JwtSecurityConfig도 적용
-                .with(new JwtSecurityConfig(tokenProvider, authService), customizer -> {});
+                .with(new JwtSecurityConfig(tokenProvider, authService, memberRepository), customizer -> {});
 
         return http.build();
     }

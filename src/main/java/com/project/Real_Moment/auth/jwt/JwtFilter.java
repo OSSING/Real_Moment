@@ -1,6 +1,10 @@
 package com.project.Real_Moment.auth.jwt;
 
 import com.project.Real_Moment.auth.jwt.service.AuthService;
+import com.project.Real_Moment.domain.member.entity.Member;
+import com.project.Real_Moment.domain.member.repository.MemberRepository;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +24,7 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
 
     private final TokenProvider tokenProvider;
     private final AuthService authService;
+    private final MemberRepository memberRepository;
 
     public static final String ACCESSTOKEN_HEADER = "AccessToken";
     public static final String REFRESHTOKEN_HEADER = "RefreshToken";
@@ -43,6 +48,7 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
 
             Authentication authentication = tokenProvider.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
         // access token만 들어온 경우
         } else if (!StringUtils.hasText(refreshToken) && StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
             log.info("====== Access Token 요청 받음!! ======");
@@ -50,6 +56,12 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
 
             // 토큰이 유효하다면 getAuthentication 메서드를 통해 authentication 객체를 받아옴
             Authentication authentication = tokenProvider.getAuthentication(accessToken);
+            log.info("authentication.getName : {}", authentication.getName());
+
+            // AccessToken의 회원 ID와 URI의 회원 ID가 같은지 검증
+            if (requestURI.startsWith("/member/")) {
+                validateMemberAuthorization(request, response, authentication);
+            }
 
             // 받아온 유효 토큰의 authentication 객체를 SecurityContext에 등록
             SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -59,7 +71,7 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
             log.info("====== Refresh Token 요청 받음!! ======");
             log.info("요청받은 Refresh : {}", request.getHeader(REFRESHTOKEN_HEADER));
 
-            if (request.getRequestURI().equals("/auth/reissue")) {
+            if (requestURI.equals("/auth/reissue")) {
                 authService.reissueToken(response, refreshToken);
             } else {
                 authService.addBlacklist(refreshToken);
@@ -79,5 +91,28 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
         }
 
         return null;
+    }
+
+    private void validateMemberAuthorization(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        String[] urlSegments = request.getRequestURI().split("/");
+
+        String memberId = getMemberIdByAccessToken(authentication);
+
+        for (String segment : urlSegments) {
+            if (memberId.equals(segment)) {
+                log.info("URL segment check : {}", segment);
+                log.info("URL 검증 완료!!!");
+                return;
+            }
+        }
+
+        log.info("해당 URL에 대한 권한이 없습니다.");
+        throw new IllegalArgumentException();
+    }
+
+    private String getMemberIdByAccessToken(Authentication authentication) {
+        Member member = memberRepository.findById(authentication.getName()).orElseThrow(IllegalArgumentException::new);
+        log.info("member : {}", member.getMemberId());
+        return String.valueOf(member.getMemberId());
     }
 }
