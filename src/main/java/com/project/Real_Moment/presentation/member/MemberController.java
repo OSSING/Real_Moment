@@ -154,4 +154,6 @@ public class MemberController {
         memberService.deleteWish(id);
         return ResponseEntity.ok().build();
     }
+
 }
+

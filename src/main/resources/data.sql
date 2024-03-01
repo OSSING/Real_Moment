@@ -11,13 +11,13 @@ INSERT INTO member (level_id, id, email, password, name, tel, birth_date, gender
 (1, 'user3', 'user3@example.com', 'password3', 'User 3', '010-5222-3333', '19880720', 'M', 200, '2023-01-03 15:45:00', TRUE, 'ROLE_MEMBER', TRUE);
 
 -- Addresses Table 더미데이터
-INSERT INTO addresses (member_id, name, address, det_address, is_def_address) VALUES
-(1, 'address1', '대전 유성구', '101동 502호', TRUE),
-(1, 'address2', '대전 유성구', '101동 503호', FALSE),
-(2, 'address3', '대전 서구', '503동 203호', TRUE),
-(2, 'address4', '대전 서구', '503동 204호', FALSE),
-(3, 'address5', '대전 중구', '508호', TRUE),
-(3, 'address6', '대전 중구', '509호', FALSE);
+INSERT INTO address (member_id, name, tel, main_address, det_address, is_def_address) VALUES
+(1, 'address1', '010-3187-4011', '대전 유성구', '101동 502호', TRUE),
+(1, 'address2', '010-1234-5678', '대전 유성구', '101동 503호', FALSE),
+(2, 'address3', '010-4321-7654', '대전 서구', '503동 203호', TRUE),
+(2, 'address4', '010-3187-4022', '대전 서구', '503동 204호', FALSE),
+(3, 'address5', '010-3187-5352', '대전 중구', '508호', TRUE),
+(3, 'address6', '010-1287-4871', '대전 중구', '509호', FALSE);
 
 -- Authority Table 더미데이터
 INSERT INTO authority (authority_name) VALUES
@@ -61,11 +61,11 @@ INSERT INTO category (category_name, parent_category) VALUES
 ('child4', 2);
 
 -- Items Table 더미데이터
-INSERT INTO item (category_id, name, content, price, discount_rate, sell_price, stock, is_sell_check, is_delete_check, created_date, modified_date, main_img, serve_img)
+INSERT INTO item (category_id, name, content, price, discount_rate, discount_price, sell_price, stock, is_sell_check, is_delete_check, created_date, modified_date, main_img, serve_img)
 VALUES
-(3, 'item1', 'item content1', 800, 10, 720, 50, TRUE, FALSE, '2023-08-29 10:00:00', '2023-09-02 11:30:00', 'main1.jpg', 'serve1.jpg'),
-(4, 'item2', 'item content2', 1200, 5, 1140, 30, TRUE, FALSE, '2023-05-02 09:30:00', '2023-05-06 10:45:00', 'main2.jpg', 'serve2.jpg'),
-(5, 'item3', 'item content3', 1000, 0, 1000, 100, TRUE, FALSE, '2023-01-02 09:30:00', '2023-01-07 10:45:00', 'main3.jpg', 'serve3.jpg');
+(3, 'item1', 'item content1', 800, 10, 80, 720, 50, TRUE, FALSE, '2023-08-29 10:00:00', '2023-09-02 11:30:00', 'main1.jpg', 'serve1.jpg'),
+(4, 'item2', 'item content2', 1200, 5, 60, 1140, 30, TRUE, FALSE, '2023-05-02 09:30:00', '2023-05-06 10:45:00', 'main2.jpg', 'serve2.jpg'),
+(5, 'item3', 'item content3', 1000, 0, 0, 1000, 100, TRUE, FALSE, '2023-01-02 09:30:00', '2023-01-07 10:45:00', 'main3.jpg', 'serve3.jpg');
 
 -- Carts Table 더미데이터
 INSERT INTO cart (member_id, item_id, stock, price, checked) VALUES
@@ -109,7 +109,7 @@ VALUES
 (3, 3, 'review title1', 'review content3', 5);
 
 -- Wishlist Table 더미데이터
-INSERT INTO wishlist (member_id, item_id)
+INSERT INTO wish (member_id, item_id)
 VALUES
 (1, 2),
 (2, 3),

@@ -30,6 +30,9 @@ public class Item extends BaseTimeEntity {
     @Column(nullable = false, name = "discount_rate")
     private int discountRate;
 
+    @Column(nullable = false, name = "discount_price")
+    private int discountPrice;
+
     @Column(nullable = false, name = "sell_price")
     private int sellPrice;
 
