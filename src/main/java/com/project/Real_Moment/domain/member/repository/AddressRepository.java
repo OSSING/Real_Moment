@@ -8,5 +8,6 @@ import java.util.List;
 
 public interface AddressRepository extends JpaRepository<Address, Long>, AddressRepositoryCustom {
 
-    List<Address> findAddressesByMemberId_MemberId(Long memberId);
+    List<Address> findAddressByMemberId_MemberId(Long memberId);
+
 }

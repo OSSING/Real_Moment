@@ -21,7 +21,10 @@ public class Address {
 
     private String name;
 
-    private String address;
+    private String tel;
+
+    @Column(name = "main_address")
+    private String mainAddress;
 
     @Column(name = "det_address")
     private String detAddress;

@@ -13,14 +13,16 @@ public class AddressDto {
     public static class AddressListResponse {
         private Long addressId;
         private String name;
-        private String address;
+        private String tel;
+        private String mainAddress;
         private String detAddress;
         private Boolean isDefAddress;
 
         public AddressListResponse(Address address) {
             addressId = address.getAddressId();
             name = address.getName();
-            this.address = address.getAddress();
+            tel = address.getTel();
+            this.mainAddress = address.getMainAddress();
             detAddress = address.getDetAddress();
             isDefAddress = address.getIsDefAddress();
         }
@@ -31,29 +33,34 @@ public class AddressDto {
     @ToString
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class AddAddressRequest {
+    public static class SaveAddressRequest {
         private String name;
-        private String address;
+        private String tel;
+        private String mainAddress;
         private String detAddress;
         private Boolean isDefAddress;
-
-//        public AddAddressRequest fromEntity(Addresses address) {
-//            return AddAddressRequest.builder()
-//                    .name(address.getName())
-//                    .address(address.getAddress())
-//                    .detAddress(address.getDetAddress())
-//                    .isDefAddress(address.getIsDefAddress())
-//                    .build();
-//        }
 
         public Address toEntity(Member member) {
             return Address.builder()
                     .name(this.name)
-                    .address(this.address)
+                    .tel(this.tel)
+                    .mainAddress(this.mainAddress)
                     .detAddress(this.detAddress)
                     .isDefAddress(this.isDefAddress)
                     .memberId(member)
                     .build();
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AddressRequest {
+        private Long addressId;
+        private String name;
+        private String tel;
+        private String mainAddress;
+        private String detAddress;
+        private Boolean isDefAddress;
     }
 }
