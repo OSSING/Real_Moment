@@ -1,6 +1,6 @@
 package com.project.Real_Moment.presentation.dto;
 
-import com.project.Real_Moment.domain.member.entity.Addresses;
+import com.project.Real_Moment.domain.member.entity.Address;
 import com.project.Real_Moment.domain.member.entity.Member;
 import lombok.*;
 
@@ -17,12 +17,12 @@ public class AddressDto {
         private String detAddress;
         private Boolean isDefAddress;
 
-        public AddressListResponse(Addresses addresses) {
-            addressId = addresses.getAddressId();
-            name = addresses.getName();
-            address = addresses.getAddress();
-            detAddress = addresses.getDetAddress();
-            isDefAddress = addresses.getIsDefAddress();
+        public AddressListResponse(Address address) {
+            addressId = address.getAddressId();
+            name = address.getName();
+            this.address = address.getAddress();
+            detAddress = address.getDetAddress();
+            isDefAddress = address.getIsDefAddress();
         }
     }
 
@@ -46,8 +46,8 @@ public class AddressDto {
 //                    .build();
 //        }
 
-        public Addresses toEntity(Member member) {
-            return Addresses.builder()
+        public Address toEntity(Member member) {
+            return Address.builder()
                     .name(this.name)
                     .address(this.address)
                     .detAddress(this.detAddress)

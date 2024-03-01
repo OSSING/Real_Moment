@@ -1,7 +1,7 @@
 package com.project.Real_Moment.application.member;
 
-import com.project.Real_Moment.domain.member.entity.Addresses;
-import com.project.Real_Moment.domain.member.repository.AddressesRepository;
+import com.project.Real_Moment.domain.member.entity.Address;
+import com.project.Real_Moment.domain.member.repository.AddressRepository;
 import com.project.Real_Moment.domain.member.repository.OrdersRepository;
 import com.project.Real_Moment.presentation.dto.AddressDto;
 import com.project.Real_Moment.presentation.dto.MemberDto;
@@ -24,7 +24,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final OrdersRepository ordersRepository;
-    private final AddressesRepository addressesRepository;
+    private final AddressRepository addressRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -118,14 +118,14 @@ public class MemberService {
 
     @Transactional
     public List<AddressDto.AddressListResponse> findAddresses(Long id) {
-        return addressesRepository.findAddressesByMemberId_MemberId(id).stream()
+        return addressRepository.findAddressesByMemberId_MemberId(id).stream()
                 .map(AddressDto.AddressListResponse::new).collect(Collectors.toList());
     }
 
     @Transactional
     public void saveAddress(Long id, AddressDto.AddAddressRequest addressRequest) {
         Member member = memberRepository.findById(id).orElse(null);
-        Addresses address = addressRequest.toEntity(member);
-        addressesRepository.save(address);
+        Address address = addressRequest.toEntity(member);
+        addressRepository.save(address);
     }
 }
