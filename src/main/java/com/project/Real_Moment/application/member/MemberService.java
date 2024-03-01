@@ -1,12 +1,13 @@
 package com.project.Real_Moment.application.member;
 
-import com.project.Real_Moment.domain.member.entity.Addresses;
-import com.project.Real_Moment.domain.member.repository.AddressesRepository;
-import com.project.Real_Moment.domain.member.repository.OrdersRepository;
-import com.project.Real_Moment.presentation.dto.AddressesDto;
+import com.project.Real_Moment.domain.member.entity.Address;
+import com.project.Real_Moment.domain.member.entity.Item;
+import com.project.Real_Moment.domain.member.entity.Wish;
+import com.project.Real_Moment.domain.member.repository.*;
+import com.project.Real_Moment.presentation.dto.AddressDto;
 import com.project.Real_Moment.presentation.dto.MemberDto;
 import com.project.Real_Moment.domain.member.entity.Member;
-import com.project.Real_Moment.domain.member.repository.MemberRepository;
+import com.project.Real_Moment.presentation.dto.WishDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -24,7 +26,10 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final OrdersRepository ordersRepository;
-    private final AddressesRepository addressesRepository;
+    private final WishRepository wishRepository;
+    private final AddressRepository addressRepository;
+    private final ItemRepository itemRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -117,24 +122,51 @@ public class MemberService {
     }
 
     @Transactional
-    public List<AddressesDto.AddressListResponse> findAddresses(Long id) {
-        return addressesRepository.findAddressesByMemberId_MemberId(id).stream()
-                .map(AddressesDto.AddressListResponse::new).collect(Collectors.toList());
+    public List<AddressDto.AddressListResponse> findAddress(Long id) {
+        return addressRepository.findAddressByMemberId_MemberId(id).stream()
+                .map(AddressDto.AddressListResponse::new).collect(Collectors.toList());
     }
 
     @Transactional
-    public void saveAddress(Long id, AddressesDto.SaveAddressRequest dto) {
+    public void saveAddress(Long id, AddressDto.SaveAddressRequest dto) {
         Member member = memberRepository.findById(id).orElse(null);
-        Addresses address = dto.toEntity(member);
-        addressesRepository.save(address);
+        Address address = dto.toEntity(member);
+        addressRepository.save(address);
     }
 
     @Transactional
-    public AddressesDto.AddressResponse updateAddress(AddressesDto.AddressRequest dto) {
-//        Member member = memberRepository.findById(id).orElse(null);
-//        Addresses address = dto.toEntity(member);
-        Addresses updatedAddress = addressesRepository.shivar(dto);
+    public void updateAddress(AddressDto.AddressRequest dto) {
 
-        return new AddressesDto.AddressResponse(updatedAddress);
+        // update 쿼리 수행 전 예외처리
+        addressRepository.findById(dto.getAddressId()).orElseThrow(IllegalArgumentException::new);
+
+        addressRepository.updateAddress(dto);
+    }
+
+    @Transactional
+    public void deleteAddress(Long id) {
+        Address address = addressRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        addressRepository.delete(address);
+    }
+
+    @Transactional
+    public List<WishDto.WishListResponse> getWishList(Long id) {
+        return wishRepository.findWishByMemberId(id);
+    }
+
+    @Transactional
+    public void saveWish(Long id, WishDto.saveWish dto) {
+
+        // save 수행 전 예외처리
+        Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        Item item = itemRepository.findById(dto.getItemId()).orElseThrow(IllegalArgumentException::new);
+
+        Wish wish = dto.toEntity(member, item);
+        wishRepository.save(wish);
+    }
+
+    public void deleteWish(Long id) {
+        Wish wish = wishRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        wishRepository.delete(wish);
     }
 }

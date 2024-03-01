@@ -5,7 +5,6 @@ import com.project.Real_Moment.domain.member.entity.Member;
 import com.project.Real_Moment.domain.member.entity.Orders;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
 

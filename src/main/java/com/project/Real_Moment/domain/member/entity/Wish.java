@@ -3,18 +3,18 @@ package com.project.Real_Moment.domain.member.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Entity
 @Getter
-@Setter
+@Builder
 @ToString
 @AllArgsConstructor
-@NoArgsConstructor
-@Entity
-public class Wishlist {
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Wish {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "wishlist_id")
-    private Long wishlistId;
+    private Long wishId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
