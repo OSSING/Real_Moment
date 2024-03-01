@@ -1,11 +1,12 @@
 package com.project.Real_Moment.presentation.member;
 
-import com.project.Real_Moment.presentation.dto.AddressesDto;
+import com.project.Real_Moment.presentation.dto.AddressDto;
 import com.project.Real_Moment.presentation.dto.MemberDto;
 import com.project.Real_Moment.auth.jwt.dto.TokenDto;
 import com.project.Real_Moment.auth.jwt.JwtFilter;
 import com.project.Real_Moment.auth.jwt.TokenProvider;
 import com.project.Real_Moment.application.member.MemberService;
+import com.project.Real_Moment.presentation.dto.WishDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -112,20 +113,45 @@ public class MemberController {
         return ResponseEntity.ok(memberService.deleteMember(id));
     }
 
-    @GetMapping("/{id}/addresses")
-    public ResponseEntity<List<AddressesDto.AddressListResponse>> findAddresses(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(memberService.findAddresses(id));
+    @GetMapping("/{id}/address")
+    public ResponseEntity<List<AddressDto.AddressListResponse>> findAddress(@PathVariable("id") Long id) {
+        return ResponseEntity.ok(memberService.findAddress(id));
     }
 
     @PostMapping("/{id}/address")
-    public ResponseEntity<Void> saveAddress(@PathVariable("id") Long id, @RequestBody AddressesDto.SaveAddressRequest request) {
+    public ResponseEntity<Void> saveAddress(@PathVariable("id") Long id, @RequestBody AddressDto.SaveAddressRequest request) {
         log.info("AddressDto.AddAddressRequest.toString() = {}", request.toString());
         memberService.saveAddress(id, request);
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{id}/address")
-    public ResponseEntity<AddressesDto.AddressResponse> updateAddress(@RequestBody AddressesDto.AddressRequest request) {
-        return ResponseEntity.ok().body(memberService.updateAddress(request));
+    public ResponseEntity<Void> updateAddress(@RequestBody AddressDto.AddressRequest request) {
+        memberService.updateAddress(request);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/address")
+    public ResponseEntity<Void> deleteAddress(@RequestParam("addressId") Long id) {
+        memberService.deleteAddress(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/wishList")
+    public ResponseEntity<List<WishDto.WishListResponse>> getWishList(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(memberService.getWishList(id));
+    }
+
+    @PostMapping("/{id}/wish")
+    public ResponseEntity<Void> saveWish(@PathVariable("id") Long id, @RequestBody WishDto.saveWish dto) {
+        memberService.saveWish(id, dto);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/wish")
+    public ResponseEntity<Void> deleteWish(@RequestParam("wishId") Long id) {
+        memberService.deleteWish(id);
+        return ResponseEntity.ok().build();
     }
 }

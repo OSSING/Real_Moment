@@ -8,7 +8,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Addresses {
+public class Address {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,10 @@ public class Addresses {
 
     private String name;
 
-    private String address;
+    private String tel;
+
+    @Column(name = "main_address")
+    private String mainAddress;
 
     @Column(name = "det_address")
     private String detAddress;
