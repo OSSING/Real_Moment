@@ -160,8 +160,14 @@ public class MemberService {
     public void saveWish(Long id, WishDto.saveWish dto) {
 
         // save 수행 전 예외처리
-        Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         Item item = itemRepository.findById(dto.getItemId()).orElseThrow(IllegalArgumentException::new);
+        Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        // 중복 데이터 체크
+        if (wishRepository.existsByItemIdAndMemberId(item, member)) {
+            log.info("이미 찜 목록에 존재하는 상품입니다.");
+            throw new IllegalArgumentException();
+        }
 
         Wish wish = dto.toEntity(member, item);
         wishRepository.save(wish);
