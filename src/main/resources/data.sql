@@ -62,11 +62,11 @@ INSERT INTO category (category_name, parent_category) VALUES
 ('child4', 2);
 
 -- Items Table 더미데이터
-INSERT INTO item (category_id, name, content, price, discount_rate, discount_price, sell_price, stock, is_sell_check, is_delete_check, created_date, modified_date, main_img, serve_img)
+INSERT INTO item (category_id, name, content, price, discount_rate, discount_price, sell_price, stock, is_sell_check, is_delete_check, main_img, serve_img)
 VALUES
-(3, 'item1', 'item content1', 800, 10, 80, 720, 50, TRUE, FALSE, '2023-08-29 10:00:00', '2023-09-02 11:30:00', 'main1.jpg', 'serve1.jpg'),
-(4, 'item2', 'item content2', 1200, 5, 60, 1140, 30, TRUE, FALSE, '2023-05-02 09:30:00', '2023-05-06 10:45:00', 'main2.jpg', 'serve2.jpg'),
-(5, 'item3', 'item content3', 1000, 0, 0, 1000, 100, TRUE, FALSE, '2023-01-02 09:30:00', '2023-01-07 10:45:00', 'main3.jpg', 'serve3.jpg');
+(3, 'item1', 'item content1', 800, 10, 80, 720, 50, TRUE, FALSE, 'main1.jpg', 'serve1.jpg'),
+(4, 'item2', 'item content2', 1200, 5, 60, 1140, 30, TRUE, FALSE, 'main2.jpg', 'serve2.jpg'),
+(5, 'item3', 'item content3', 1000, 0, 0, 1000, 100, TRUE, FALSE, 'main3.jpg', 'serve3.jpg');
 
 -- Carts Table 더미데이터
 INSERT INTO cart (member_id, item_id, stock, price, is_check) VALUES
