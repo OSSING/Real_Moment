@@ -5,10 +5,10 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Getter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
-@ToString
 public class Item extends AuditingUserEntity {
 
     @Id

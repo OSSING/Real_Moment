@@ -1,6 +1,7 @@
 package com.project.Real_Moment.presentation.member;
 
 import com.project.Real_Moment.presentation.dto.AddressDto;
+import com.project.Real_Moment.presentation.dto.CartDto;
 import com.project.Real_Moment.presentation.dto.MemberDto;
 import com.project.Real_Moment.auth.jwt.dto.TokenDto;
 import com.project.Real_Moment.auth.jwt.JwtFilter;
@@ -155,5 +156,9 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/{id}/carList")
+    public ResponseEntity<List<CartDto.CartListResponse>> getCartList(@PathVariable("id") Long id) {
+        return ResponseEntity.ok().body(memberService.getCartList(id));
+    }
 }
 
