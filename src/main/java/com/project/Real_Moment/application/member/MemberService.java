@@ -5,6 +5,7 @@ import com.project.Real_Moment.domain.member.entity.Item;
 import com.project.Real_Moment.domain.member.entity.Wish;
 import com.project.Real_Moment.domain.member.repository.*;
 import com.project.Real_Moment.presentation.dto.AddressDto;
+import com.project.Real_Moment.presentation.dto.CartDto;
 import com.project.Real_Moment.presentation.dto.MemberDto;
 import com.project.Real_Moment.domain.member.entity.Member;
 import com.project.Real_Moment.presentation.dto.WishDto;
@@ -28,6 +29,7 @@ public class MemberService {
     private final WishRepository wishRepository;
     private final AddressRepository addressRepository;
     private final ItemRepository itemRepository;
+    private final CartRepository cartRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -168,5 +170,9 @@ public class MemberService {
     public void deleteWish(Long id) {
         Wish wish = wishRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         wishRepository.delete(wish);
+    }
+
+    public List<CartDto.CartListResponse> getCartList(long id) {
+        return cartRepository.findCartListByMemberId(id);
     }
 }
