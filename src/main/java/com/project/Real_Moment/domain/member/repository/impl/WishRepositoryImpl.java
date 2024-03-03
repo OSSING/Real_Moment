@@ -29,7 +29,7 @@ public class WishRepositoryImpl implements WishRepositoryCustom {
                 .fetch()
                 .stream()
                 .map(wish -> new WishDto.WishListResponse(
-                        wish.getWishId(),
+                        wish.getId(),
                         new ItemDto.ItemResponse(
                                 wish.getItemId().getId(),
                                 wish.getItemId().getName(),
