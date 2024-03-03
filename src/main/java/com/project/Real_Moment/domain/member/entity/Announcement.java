@@ -10,7 +10,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Announcement extends BaseTimeEntity {
+public class Announcement extends AuditingUserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
