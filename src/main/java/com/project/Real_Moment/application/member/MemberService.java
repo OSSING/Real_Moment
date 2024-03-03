@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final OrdersRepository ordersRepository;
     private final WishRepository wishRepository;
     private final AddressRepository addressRepository;
     private final ItemRepository itemRepository;
@@ -33,18 +32,14 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public boolean checkIdDuplicate(String id) {
-        log.info("service.id = {}", id);
-        return memberRepository.existsById(id);
+    public boolean checkIdDuplicate(String loginId) {
+        log.info("service.id = {}", loginId);
+        return memberRepository.existsByLoginId(loginId);
     }
 
     // 회원가입시 요청받은 Dto를 Entity로 변환 후 저장
     @Transactional
     public MemberDto.RegisterResponse memberSave(MemberDto.RegisterRequest dto) {
-
-//        if (memberRepository.existsById(dto.getId())) {
-//
-//        }
 
         // 1. 요청받은 dto -> Entity로 변환
         Member member = createMember(dto);
@@ -62,24 +57,23 @@ public class MemberService {
     private Member createMember(MemberDto.RegisterRequest dto) {
 
         return Member.builder()
-                .id(dto.getId())
+                .loginId(dto.getLoginId())
                 .email(dto.getEmail())
-                .password(passwordEncoder.encode(dto.getPassword()))
+                .loginPassword(passwordEncoder.encode(dto.getLoginPassword()))
                 .name(dto.getName())
                 .tel(dto.getTel())
                 .birthDate(dto.getBirthDate())
                 .gender(dto.getGender())
-                .memberRole("ROLE_MEMBER")
-                .activated(true)
+                .roles("ROLE_MEMBER")
                 .build();
     }
 
-    @Transactional(readOnly = true)
-    public List<MemberDto.OrdersListDto> findOrdersList(Long id) {
-
-        return ordersRepository.findByMemberId_MemberId(id).stream()
-                .map(MemberDto.OrdersListDto::new).toList();
-    }
+//    @Transactional(readOnly = true)
+//    public List<MemberDto.OrdersListDto> findOrdersList(Long id) {
+//
+//        return ordersRepository.findByMemberId_Id(id).stream()
+//                .map(MemberDto.OrdersListDto::new).toList();
+//    }
 
     @Transactional
     public MemberDto.MemberInfoUpdateResponse changePassword(Long id, String password) {
@@ -123,7 +117,7 @@ public class MemberService {
 
     @Transactional
     public List<AddressDto.AddressListResponse> findAddress(Long id) {
-        return addressRepository.findAddressByMemberId_MemberId(id).stream()
+        return addressRepository.findAddressByMemberId_Id(id).stream()
                 .map(AddressDto.AddressListResponse::new).collect(Collectors.toList());
     }
 

@@ -3,18 +3,18 @@ package com.project.Real_Moment.domain.member.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+
+@Entity
 @Getter
-@Setter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
 public class Cart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "cart_id")
-    private Long CartId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -28,5 +28,5 @@ public class Cart {
 
     private int price;
 
-    private boolean checked = true;
+    private boolean isCheck = true;
 }

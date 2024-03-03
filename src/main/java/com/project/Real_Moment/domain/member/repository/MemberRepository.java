@@ -12,10 +12,10 @@ public interface MemberRepository extends JpaRepository<Member, Long>, MemberRep
 
 
     // 닉네임(Member - id필드) 중복 체크
-    boolean existsById(String id);
+    boolean existsByLoginId(String loginId);
 
-    Optional<Member> findOneWithAuthoritiesById(String id);
+    Optional<Member> findOneWithAuthoritiesByLoginId(String loginId);
 
-    Optional<Member> findById(String id);
+    Optional<Member> findByLoginId(String loginId);
 
 }

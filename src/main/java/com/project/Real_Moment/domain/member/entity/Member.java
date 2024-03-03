@@ -4,8 +4,8 @@ import com.project.Real_Moment.presentation.dto.MemberDto;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Timestamp;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -14,27 +14,29 @@ import java.util.List;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "id")})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "loginId")})
 // https://skatpdnjs.tistory.com/44
 public class Member extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
-    private Long memberId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "level_id")
-    private Level levelId;
+    @JoinColumn(name = "grade_id")
+    private Grade GradeId;
 
     @OneToMany(mappedBy = "memberId")
-    private List<Orders> orders;
+    private List<Order> orders;
 
-    private String id;
+    @Column(name = "login_id")
+    private String loginId;
+
+    @Column(name = "login_password")
+    private String loginPassword;
 
     private String email;
-
-    private String password;
 
     private String name;
 
@@ -50,24 +52,25 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private int point = 0;
 
-    @Column(name = "recently_login")
-    private LocalDateTime recentlyLogin;
+    @Builder.Default
+    private int thisYearPay = 0;
 
-    @Column(name = "is_member_status")
-    private boolean isMemberStatus;
+    @Column(name = "recently_login")
+    private Timestamp recentlyLogin;
 
     @Builder.Default
-    @Column(name = "member_role")
-    private String memberRole = "ROLE_MEMBER";
+    @Column(name = "is_delete")
+    private boolean isDelete = false;
 
-    private boolean activated;
+    @Builder.Default
+    private String roles = "ROLE_MEMBER";
 
     // 회원가입 시 Entity -> Dto 변환
     public MemberDto.RegisterRequest toDto() {
         return MemberDto.RegisterRequest.builder()
-                .id(id)
+                .loginId(loginId)
                 .email(email)
-                .password(password)
+                .loginPassword(loginPassword)
                 .name(name)
                 .tel(tel)
                 .birthDate(birthDate)

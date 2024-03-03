@@ -5,17 +5,16 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
+@Getter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
-@ToString
 public class Review extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
-    private Long reviewId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -27,8 +26,8 @@ public class Review extends BaseTimeEntity {
 
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(nullable = false)
     private int star;
 }

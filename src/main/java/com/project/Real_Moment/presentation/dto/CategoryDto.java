@@ -15,9 +15,9 @@ public class CategoryDto {
         private Long parentCategory;
 
         public CategoryListRes(Category category) {
-            categoryId = category.getCategoryId();
+            categoryId = category.getId();
             categoryName = category.getCategoryName();
-            parentCategory = category.getParentCategory() != null ? category.getParentCategory().getCategoryId() : null;
+            parentCategory = category.getParentCategory() != null ? category.getParentCategory().getId() : null;
         }
     }
 }

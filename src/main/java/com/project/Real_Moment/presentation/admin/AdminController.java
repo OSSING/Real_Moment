@@ -33,7 +33,7 @@ public class AdminController {
 
         // 요청받은 id와 password를 가지고 인증 전 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(dto.getId(), dto.getPassword());
+                new UsernamePasswordAuthenticationToken(dto.getLoginId(), dto.getLoginPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);

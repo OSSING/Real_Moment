@@ -2,7 +2,7 @@ package com.project.Real_Moment.presentation.dto;
 
 
 import com.project.Real_Moment.domain.member.entity.Member;
-import com.project.Real_Moment.domain.member.entity.Orders;
+import com.project.Real_Moment.domain.member.entity.Order;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -30,7 +30,7 @@ public class MemberDto {
     public static class RegisterRequest {
         @NotBlank(message = "아이디를 입력해주세요.")
         @Pattern(regexp = "^[a-zA-Z0-9]{5,20}$", message = "아이디는 특수문자를 제외한 5~20자를 사용하세요.")
-        private String id;
+        private String loginId;
 
         @NotBlank(message = "이메일 주소를 입력해주세요.")
         @Email(message = "올바른 이메일 주소를 입력해주세요.")
@@ -38,7 +38,7 @@ public class MemberDto {
 
         @NotBlank(message = "비밀번호를 입력해주세요.")
         @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\\\W)(?=\\\\S+$).{8,16}", message = "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
-        private String password;
+        private String loginPassword;
 
         @NotBlank(message = "성함을 입력해주세요.")
         @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-zA-Z]{2,20}", message = "성함은 한글과 영문을 포함한 2~20자를 사용하세요.")
@@ -56,9 +56,9 @@ public class MemberDto {
         // 회원가입 시 요청받은 Dto -> Entity 변환
         public Member toEntity() {
             return Member.builder()
-                    .id(id)
+                    .loginId(loginId)
                     .email(email)
-                    .password(password)
+                    .loginPassword(loginPassword)
                     .name(name)
                     .tel(tel)
                     .birthDate(birthDate)
@@ -74,14 +74,14 @@ public class MemberDto {
     // 회원가입 성공 시 응답할 JSON 데이터
     public static class RegisterResponse {
 
-        private String id;
+        private String loginId;
 
         // Entity -> Dto
         public static RegisterResponse toDto(Member member) {
             if (member == null) return null;
 
             return RegisterResponse.builder()
-                    .id(member.getId())
+                    .loginId(member.getLoginId())
                     .build();
         }
     }
@@ -92,38 +92,38 @@ public class MemberDto {
     public static class MemberLoginDto {
 
         @NotBlank(message = "아이디를 입력해주세요.")
-        private String id;
+        private String loginId;
 
         @NotBlank(message = "비밀번호를 입력해주세요.")
-        private String password;
+        private String loginPassword;
     }
 
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class OrdersListDto {
-
-        private int price;
-        private String name;
-        private String address;
-        private String detAddress;
-        private String request;
-        private String tel;
-        private String status;
-        private String refundText;
-
-        // Entity -> DTO
-        public OrdersListDto(Orders orders) {
-            price = orders.getPrice();
-            name = orders.getName();
-            address = orders.getAddress();
-            detAddress = orders.getDetAddress();
-            request = orders.getRequest();
-            tel = orders.getTel();
-            status = orders.getStatus();
-            refundText = orders.getRefundText();
-        }
-    }
+//    @Getter
+//    @AllArgsConstructor
+//    @NoArgsConstructor
+//    public static class OrdersListDto {
+//
+//        private int price;
+//        private String name;
+//        private String address;
+//        private String detAddress;
+//        private String request;
+//        private String tel;
+//        private String status;
+//        private String refundText;
+//
+//        // Entity -> DTO
+//        public OrdersListDto(Order order) {
+//            price = order.getPrice();
+//            name = order.getName();
+//            address = order.getAddress();
+//            detAddress = order.getDetAddress();
+//            request = order.getRequest();
+//            tel = order.getTel();
+//            status = order.getStatus();
+//            refundText = order.getRefundText();
+//        }
+//    }
 
     @Getter
     @AllArgsConstructor
@@ -132,21 +132,21 @@ public class MemberDto {
 
         @NotBlank(message = "비밀번호를 입력해주세요.")
         @Pattern(regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\\\W)(?=\\\\S+$).{8,16}", message = "비밀번호는 8~16자 영문 대 소문자, 숫자, 특수문자를 사용하세요.")
-        private String password;
+        private String loginPassword;
     }
 
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class MemberInfoUpdateResponse {
-        private String id;
+        private String loginId;
         private String email;
         private String name;
         private char gender;
         private LocalDate birthDate;
 
         public MemberInfoUpdateResponse(Member member) {
-            id = member.getId();
+            loginId = member.getLoginId();
             email = member.getEmail();
             name = member.getName();
             gender = member.getGender();

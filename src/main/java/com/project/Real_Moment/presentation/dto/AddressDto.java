@@ -19,7 +19,7 @@ public class AddressDto {
         private Boolean isDefAddress;
 
         public AddressListResponse(Address address) {
-            addressId = address.getAddressId();
+            addressId = address.getId();
             name = address.getName();
             tel = address.getTel();
             this.mainAddress = address.getMainAddress();

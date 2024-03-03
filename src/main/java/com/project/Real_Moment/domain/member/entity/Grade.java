@@ -3,20 +3,21 @@ package com.project.Real_Moment.domain.member.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Entity
 @Getter
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Level {
+public class Grade {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "level_id")
-    private Long levelId;
+    @Column(name = "grade_id")
+    private Long id;
 
-    private String level = "WHITE";
+    private String gradeName;
 
-    @Column(nullable = false, name = "reward_rate")
     private int rewardRate = 1;
+
+    private int gradePrice;
 }

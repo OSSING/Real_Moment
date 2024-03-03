@@ -6,16 +6,16 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Announcement extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notice_id")
-    private Long noticeId;
+    @Column(name = "announcement_id")
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "admin_id")
@@ -23,17 +23,11 @@ public class Announcement extends BaseTimeEntity {
 
     private String title;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
-    @Column(name = "is_fix")
     private boolean isFix = false;
 
-    @Column(name = "view_count")
-    private long viewCount;
+    private Long viewCount;
 
-//    @Column(name = "created_date")
-//    private LocalDateTime createdDate;
-//
-//    @Column(name = "modified_date")
-//    private LocalDateTime modifiedDate;
 }

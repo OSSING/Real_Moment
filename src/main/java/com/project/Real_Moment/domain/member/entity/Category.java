@@ -10,16 +10,15 @@ import java.util.List;
 @Entity
 @Getter
 @ToString
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "category_id")
-    private Long categoryId;
+    private Long id;
 
-    @Column(name = "category_name")
     private String categoryName;
 
     @ManyToOne(fetch = FetchType.LAZY)

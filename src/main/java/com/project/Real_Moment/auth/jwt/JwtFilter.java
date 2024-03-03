@@ -38,7 +38,7 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
         String accessToken = resolveToken(request.getHeader(ACCESSTOKEN_HEADER));
         String refreshToken = resolveToken(request.getHeader(REFRESHTOKEN_HEADER));
 
-//        // resloveToken 메서드를 통해 Request에서 AccessToken 정보를 가져옴
+        // resloveToken 메서드를 통해 Request에서 AccessToken 정보를 가져옴
 //        String jwt = resolveToken(request);
 
         String requestURI = request.getRequestURI();
@@ -111,8 +111,8 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
     }
 
     private String getMemberIdByAccessToken(Authentication authentication) {
-        Member member = memberRepository.findById(authentication.getName()).orElseThrow(IllegalArgumentException::new);
-        log.info("member : {}", member.getMemberId());
-        return String.valueOf(member.getMemberId());
+        Member member = memberRepository.findByLoginId(authentication.getName()).orElseThrow(IllegalArgumentException::new);
+        log.info("member : {}", member.getId());
+        return String.valueOf(member.getId());
     }
 }
