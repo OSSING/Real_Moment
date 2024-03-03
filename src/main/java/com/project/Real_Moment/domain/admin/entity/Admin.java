@@ -2,18 +2,19 @@ package com.project.Real_Moment.domain.admin.entity;
 
 
 import com.project.Real_Moment.domain.member.entity.Authority;
+import com.project.Real_Moment.domain.member.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Set;
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = "loginId")})
-public class Admin {
+public class Admin extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
