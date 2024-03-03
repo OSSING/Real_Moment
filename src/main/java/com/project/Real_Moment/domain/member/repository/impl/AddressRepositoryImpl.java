@@ -23,7 +23,7 @@ public class AddressRepositoryImpl implements AddressRepositoryCustom {
                 .set(address.mainAddress, dto.getMainAddress())
                 .set(address.detAddress, dto.getDetAddress())
                 .set(address.isDefAddress, dto.getIsDefAddress())
-                .where(address.addressId.eq(dto.getAddressId()))
+                .where(address.id.eq(dto.getAddressId()))
                 .execute();
     }
 }

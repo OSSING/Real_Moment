@@ -10,5 +10,5 @@ import java.util.Optional;
 public interface AdminRepository extends JpaRepository<Admin, Long> {
 
     @EntityGraph(attributePaths = "authorities") // admin필드의 authorities를 함께 가져옴
-    Optional<Admin> findOneWithAuthoritiesById(String id);
+    Optional<Admin> findOneWithAuthoritiesByLoginId(String loginId);
 }

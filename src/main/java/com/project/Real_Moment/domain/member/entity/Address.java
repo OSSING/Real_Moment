@@ -13,7 +13,7 @@ public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "address_id")
-    private Long addressId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -23,13 +23,10 @@ public class Address {
 
     private String tel;
 
-    @Column(name = "main_address")
     private String mainAddress;
 
-    @Column(name = "det_address")
     private String detAddress;
 
     @Builder.Default
-    @Column(name = "is_def_address")
     private Boolean isDefAddress = false;
 }

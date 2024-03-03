@@ -28,13 +28,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String id) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String loginId) throws UsernameNotFoundException {
 
-        return adminRepository.findOneWithAuthoritiesById(id)
-                .map(admin -> createAdmin(id, admin))
-                .orElseGet(() -> memberRepository.findOneWithAuthoritiesById(id)
-                        .map(member -> createMember(id, member))
-                        .orElseThrow(() -> new UsernameNotFoundException(id + " -> 데이터베이스에서 찾을 수 없습니다.")));
+        return adminRepository.findOneWithAuthoritiesByLoginId(loginId)
+                .map(admin -> createAdmin(loginId, admin))
+                .orElseGet(() -> memberRepository.findOneWithAuthoritiesByLoginId(loginId)
+                        .map(member -> createMember(loginId, member))
+                        .orElseThrow(() -> new UsernameNotFoundException(loginId + " -> 데이터베이스에서 찾을 수 없습니다.")));
     }
 
     // DB에서 가져온 정보를 기준으로 Admin이 activated 상태라면 Admin의 권한 정보와 이름, 비밀번호를 담아 userdetails.User 객체를 return
@@ -49,23 +49,23 @@ public class CustomUserDetailsService implements UserDetailsService {
         log.info("admin's authority: {}", grantedAuthorities);
 
         return new org.springframework.security.core.userdetails.User(
-                admin.getId(),
-                admin.getPassword(),
+                admin.getLoginId(),
+                admin.getLoginPassword(),
                 grantedAuthorities);
     }
 
     // DB에 가져온 정보를 기준으로 Member가 activated 상태라면 Member의 권한 정보와 이름, 비밀번호를 담아 userdetails.User 객체를 return
     private org.springframework.security.core.userdetails.User createMember(String MemberName, Member member) {
-        if (!member.isActivated()) {
+        if (member.isDelete()) {
             throw new RuntimeException(MemberName + " -> 활성화 되어 있지 않습니다.");
         }
 
-        GrantedAuthority authority = new SimpleGrantedAuthority(member.getMemberRole());
+        GrantedAuthority authority = new SimpleGrantedAuthority(member.getRoles());
         log.info("member's authority: {}", authority);
 
         return new org.springframework.security.core.userdetails.User(
-                member.getId(),
-                member.getPassword(),
+                member.getLoginId(),
+                member.getLoginPassword(),
                 Collections.singletonList(authority));
     }
 }
