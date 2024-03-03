@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter @Setter
 @ToString
-public class Item extends BaseTimeEntity {
+public class Item extends AuditingUserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

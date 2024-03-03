@@ -10,7 +10,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class QAComment extends BaseTimeEntity {
+public class QAComment extends AuditingUserEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
