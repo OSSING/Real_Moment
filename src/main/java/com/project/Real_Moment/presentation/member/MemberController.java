@@ -55,7 +55,7 @@ public class MemberController {
 
         // 요청받은 id와 password를 가지고 인증 전 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(dto.getId(), dto.getPassword());
+                new UsernamePasswordAuthenticationToken(dto.getLoginId(), dto.getLoginPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -76,12 +76,12 @@ public class MemberController {
     }
 
     // 마이 페이지 (주문 목록)
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('MEMBER')")
-    public ResponseEntity<List<MemberDto.OrdersListDto>> myPageMain(@PathVariable("id") Long id) {
-
-        return ResponseEntity.ok(memberService.findOrdersList(id));
-    }
+//    @GetMapping("/{id}")
+//    @PreAuthorize("hasAnyRole('MEMBER')")
+//    public ResponseEntity<List<MemberDto.OrdersListDto>> myPageMain(@PathVariable("id") Long id) {
+//
+//        return ResponseEntity.ok(memberService.findOrdersList(id));
+//    }
 
     @PostMapping("/logout")
     public ResponseEntity<?> logout(@RequestHeader("RefreshToken") String refreshToken) {
@@ -90,7 +90,7 @@ public class MemberController {
 
     @PatchMapping("/{id}/password")
     public ResponseEntity<MemberDto.MemberInfoUpdateResponse> changePassword(@PathVariable("id") Long id, @RequestBody MemberDto.PasswordChangeRequest request) {
-        return ResponseEntity.ok().body(memberService.changePassword(id, request.getPassword()));
+        return ResponseEntity.ok().body(memberService.changePassword(id, request.getLoginPassword()));
     }
 
     @PatchMapping("/{id}/email")

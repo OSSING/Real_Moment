@@ -12,17 +12,17 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @ToString
-@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "id")})
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = "loginId")})
 public class Admin {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "admin_id")
-    private Long adminId;
+    private Long id;
 
-    private String id;
+    private String loginId;
 
-    private String password;
+    private String loginPassword;
 
     private String email;
 

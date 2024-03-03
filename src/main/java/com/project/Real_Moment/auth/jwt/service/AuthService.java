@@ -53,7 +53,7 @@ public class AuthService {
     }
 
     public void blacklistCheck(String refreshToken) {
-        boolean isBlacklisted = redisTemplate.opsForSet().isMember(blacklistKey, refreshToken);
+        boolean isBlacklisted = Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(blacklistKey, refreshToken));
 
         if (isBlacklisted) {
             log.info("블랙리스트에 등록된 refreshToken 입니다!!!");

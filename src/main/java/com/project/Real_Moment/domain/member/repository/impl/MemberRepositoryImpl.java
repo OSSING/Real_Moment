@@ -18,13 +18,13 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     public Member updatePasswordById(Long id, String password) {
         queryFactory
                 .update(member)
-                .set(member.password, password)
-                .where(member.memberId.eq(id))
+                .set(member.loginPassword, password)
+                .where(member.id.eq(id))
                 .execute();
 
         return queryFactory
                 .selectFrom(member)
-                .where(member.memberId.eq(id))
+                .where(member.id.eq(id))
                 .fetchOne();
     }
 
@@ -33,12 +33,12 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
         queryFactory
                 .update(member)
                 .set(member.email, email)
-                .where(member.memberId.eq(id))
+                .where(member.id.eq(id))
                 .execute();
 
         return queryFactory
                 .selectFrom(member)
-                .where(member.memberId.eq(id))
+                .where(member.id.eq(id))
                 .fetchOne();
     }
 
@@ -47,12 +47,12 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
         queryFactory
                 .update(member)
                 .set(member.name, name)
-                .where(member.memberId.eq(id))
+                .where(member.id.eq(id))
                 .execute();
 
         return queryFactory
                 .selectFrom(member)
-                .where(member.memberId.eq(id))
+                .where(member.id.eq(id))
                 .fetchOne();
     }
 
@@ -61,12 +61,12 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
         queryFactory
                 .update(member)
                 .set(member.birthDate, birthDate)
-                .where(member.memberId.eq(id))
+                .where(member.id.eq(id))
                 .execute();
 
         return queryFactory
                 .selectFrom(member)
-                .where(member.memberId.eq(id))
+                .where(member.id.eq(id))
                 .fetchOne();
     }
 
@@ -75,12 +75,12 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 //        queryFactory
 //                .update(member)
 //                .set(member.tel, tel)
-//                .where(member.memberId.eq(id))
+//                .where(member.id.eq(id))
 //                .execute();
 //
 //        return queryFactory
 //                .selectFrom(member)
-//                .where(member.memberId.eq(id))
+//                .where(member.id.eq(id))
 //                .fetchOne();
 //    }
 
@@ -88,14 +88,14 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     public Long updateActivatedById(Long id) {
         return queryFactory
                 .update(member)
-                .set(member.activated, true)
+                .set(member.isDelete, true)
                 .set(member.email, "")
-                .set(member.password, "")
+                .set(member.loginPassword, "")
                 .set(member.name, "")
                 .set(member.tel, "")
                 .set(member.birthDate, (LocalDate) null)
                 .set(member.gender, 'N')
-                .where(member.memberId.eq(id))
+                .where(member.id.eq(id))
                 .execute();
     }
 }

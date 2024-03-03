@@ -3,19 +3,16 @@ package com.project.Real_Moment.domain.member.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+@Entity
 @Getter
-@Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "order_detail")
 public class OrderDetail {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_det_id")
-    private Long orderDetId;
+    @Column(name = "order_detail_id")
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
@@ -23,17 +20,17 @@ public class OrderDetail {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
-    private Orders ordersId;
+    private Order orderId;
 
-    @Column(nullable = false, name = "fixed_price")
-    private int fixedPrice;
+    private int price;
 
-    @Column(nullable = false, name = "discount_rate")
     private int discountRate;
 
-    @Column(nullable = false, name = "sell_price")
+    private int discountPrice;
+
     private int sellPrice;
 
-    @Column(nullable = false)
-    private int count;
+    private int itemCount;
+
+    private int totalPrice;
 }
