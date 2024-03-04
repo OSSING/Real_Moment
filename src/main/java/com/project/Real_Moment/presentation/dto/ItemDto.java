@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 public class ItemDto {
 
     @Getter
+    @AllArgsConstructor
     @NoArgsConstructor
     public static class ItemResponse {
         private Long itemId;
@@ -19,18 +20,6 @@ public class ItemDto {
         private int sellPrice;
         private boolean isSellCheck;
         private String mainImg;
-
-        @QueryProjection
-        public ItemResponse(Long itemId, String name, int price, int discountRate, int discountPrice, int sellPrice, boolean isSellCheck, String mainImg) {
-            this.itemId = itemId;
-            this.name = name;
-            this.price = price;
-            this.discountRate = discountRate;
-            this.discountPrice = discountPrice;
-            this.sellPrice = sellPrice;
-            this.isSellCheck = isSellCheck;
-            this.mainImg = mainImg;
-        }
 
         public ItemResponse(Item item) {
             this.itemId = item.getId();

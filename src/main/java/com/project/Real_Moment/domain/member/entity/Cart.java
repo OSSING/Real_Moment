@@ -6,9 +6,9 @@ import lombok.*;
 
 @Entity
 @Getter
-@ToString
+@Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Cart {
 
     @Id
@@ -27,4 +27,5 @@ public class Cart {
     private int stock;
 
     private int price;
+
 }

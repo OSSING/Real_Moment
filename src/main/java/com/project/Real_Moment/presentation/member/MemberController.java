@@ -140,7 +140,7 @@ public class MemberController {
 
     @GetMapping("/{id}/wishList")
     public ResponseEntity<WishDto.WishListResponseWrapper> getWishList(@PathVariable("id") Long id, @RequestParam("nowPage") int nowPage) {
-        return ResponseEntity.ok().body(memberService.getWishList(id, nowPage, 1));
+        return ResponseEntity.ok().body(memberService.getWishList(id, nowPage));
     }
 
     @PostMapping("/{id}/wish")
@@ -156,9 +156,22 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{id}/carList")
+    @GetMapping("/{id}/cartList")
     public ResponseEntity<List<CartDto.CartListResponse>> getCartList(@PathVariable("id") Long id) {
+        log.info("memberController.getCartList 실행!!!");
         return ResponseEntity.ok().body(memberService.getCartList(id));
+    }
+
+    @PostMapping("/{id}/cart")
+    public ResponseEntity<Void> saveCart(@PathVariable("id") Long id, @RequestBody CartDto.SaveCartRequest dto) {
+        memberService.saveCart(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/cart")
+    public ResponseEntity<Void> deleteCart(@RequestParam("cartId") Long cartId) {
+        memberService.deleteCart(cartId);
+        return ResponseEntity.ok().build();
     }
 }
 
