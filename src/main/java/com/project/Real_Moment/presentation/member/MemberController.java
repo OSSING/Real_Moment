@@ -139,8 +139,8 @@ public class MemberController {
     }
 
     @GetMapping("/{id}/wishList")
-    public ResponseEntity<List<WishDto.WishListResponse>> getWishList(@PathVariable("id") Long id) {
-        return ResponseEntity.ok().body(memberService.getWishList(id));
+    public ResponseEntity<WishDto.WishListResponseWrapper> getWishList(@PathVariable("id") Long id, @RequestParam("nowPage") int nowPage) {
+        return ResponseEntity.ok().body(memberService.getWishList(id, nowPage, 1));
     }
 
     @PostMapping("/{id}/wish")
