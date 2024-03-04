@@ -1,13 +1,10 @@
 package com.project.Real_Moment.application.member;
 
-import com.project.Real_Moment.domain.member.entity.Address;
-import com.project.Real_Moment.domain.member.entity.Item;
-import com.project.Real_Moment.domain.member.entity.Wish;
+import com.project.Real_Moment.domain.member.entity.*;
 import com.project.Real_Moment.domain.member.repository.*;
 import com.project.Real_Moment.presentation.dto.AddressDto;
 import com.project.Real_Moment.presentation.dto.CartDto;
 import com.project.Real_Moment.presentation.dto.MemberDto;
-import com.project.Real_Moment.domain.member.entity.Member;
 import com.project.Real_Moment.presentation.dto.WishDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -117,8 +113,8 @@ public class MemberService {
         }
     }
 
-    @Transactional
 
+    @Transactional(readOnly = true)
     public List<AddressDto.AddressListResponse> findAddress(Long id) {
         return addressRepository.findAddressByMemberId_Id(id).stream()
                 .map(AddressDto.AddressListResponse::new).collect(Collectors.toList());
@@ -147,9 +143,9 @@ public class MemberService {
         addressRepository.delete(address);
     }
 
-    @Transactional
-    public List<WishDto.WishListResponse> getWishList(Long id) {
-        return wishRepository.findWishByMemberId(id);
+    @Transactional(readOnly = true)
+    public WishDto.WishListResponseWrapper getWishList(Long id, int nowPage) {
+        return wishRepository.findWishByMemberId(id, nowPage);
     }
 
     @Transactional
@@ -169,13 +165,51 @@ public class MemberService {
         wishRepository.save(wish);
     }
 
+    @Transactional
     public void deleteWish(Long id) {
         Wish wish = wishRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         wishRepository.delete(wish);
 
     }
 
-    public List<CartDto.CartListResponse> getCartList(long id) {
-        return cartRepository.findCartListByMemberId(id);
+    @Transactional(readOnly = true)
+    public List<CartDto.CartListResponse> getCartList(Long id) {
+        log.info("memberService.getCartList 실행!!!");
+        List<Cart> cartList = cartRepository.findByMemberId_Id(id);
+
+        return cartList.stream()
+                .map(CartDto.CartListResponse::new)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void saveCart(Long id, CartDto.SaveCartRequest dto) {
+
+        // 예외 처리
+        Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        Item item = itemRepository.findById(dto.getItemId()).orElseThrow(IllegalArgumentException::new);
+
+        // 중복 체크
+        if (cartRepository.existsByItemIdAndMemberId(item, member)) {
+            log.info("이미 장바구니 목록에 존재하는 상품입니다.");
+            throw new IllegalArgumentException();
+        }
+
+        // Dto -> Entity
+        Cart cart = dto.toEntity(member, item, dto.getStock());
+
+        cartRepository.save(cart);
+    }
+
+    @Transactional
+    public void deleteCart(Long cartId) {
+        Cart cart = cartRepository.findById(cartId).orElseThrow(IllegalArgumentException::new);
+        cartRepository.delete(cart);
+    }
+
+    @Transactional
+    public void changeCartCount(Long cartId, int stock) {
+        Cart cart = cartRepository.findById(cartId).orElseThrow(IllegalArgumentException::new);
+        cartRepository.updateByStock(cartId, stock);
     }
 }

@@ -34,9 +34,9 @@ public class Item extends AuditingUserEntity {
 
     private int stock;
 
-    private boolean isSellCheck;
+    private boolean isSell;
 
-    private boolean isDeleteCheck;
+    private boolean isDelete;
 
     private String mainImg;
 
