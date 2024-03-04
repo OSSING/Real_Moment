@@ -143,8 +143,8 @@ public class MemberService {
     }
 
     @Transactional
-    public WishDto.WishListResponseWrapper getWishList(Long id, int nowPage, int size) {
-        return wishRepository.findWishByMemberId(id, nowPage, size);
+    public WishDto.WishListResponseWrapper getWishList(Long id, int nowPage) {
+        return wishRepository.findWishByMemberId(id, nowPage);
     }
 
     @Transactional
@@ -169,11 +169,35 @@ public class MemberService {
         wishRepository.delete(wish);
     }
 
-    public List<CartDto.CartListResponse> getCartList(long id) {
+    public List<CartDto.CartListResponse> getCartList(Long id) {
+        log.info("memberService.getCartList 실행!!!");
         List<Cart> cartList = cartRepository.findByMemberId_Id(id);
 
         return cartList.stream()
                 .map(CartDto.CartListResponse::new)
                 .collect(Collectors.toList());
+    }
+
+    public void saveCart(Long id, CartDto.SaveCartRequest dto) {
+
+        // 예외 처리
+        Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        Item item = itemRepository.findById(dto.getItemId()).orElseThrow(IllegalArgumentException::new);
+
+        // 중복 체크
+        if (cartRepository.existsByItemIdAndMemberId(item, member)) {
+            log.info("이미 장바구니 목록에 존재하는 상품입니다.");
+            throw new IllegalArgumentException();
+        }
+
+        // Dto -> Entity
+        Cart cart = dto.toEntity(member, item, dto.getStock());
+
+        cartRepository.save(cart);
+    }
+
+    public void deleteCart(Long cartId) {
+        Cart cart = cartRepository.findById(cartId).orElseThrow(IllegalArgumentException::new);
+        cartRepository.delete(cart);
     }
 }
