@@ -1,5 +1,6 @@
 package com.project.Real_Moment.presentation.dto;
 
+import com.project.Real_Moment.domain.member.entity.Item;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +30,17 @@ public class ItemDto {
             this.sellPrice = sellPrice;
             this.isSellCheck = isSellCheck;
             this.mainImg = mainImg;
+        }
+
+        public ItemResponse(Item item) {
+            this.itemId = item.getId();
+            this.name = item.getName();
+            this.price = item.getPrice();
+            this.discountRate = item.getDiscountRate();
+            this.discountPrice = item.getDiscountPrice();
+            this.sellPrice = item.getSellPrice();
+            this.isSellCheck = item.isSellCheck();
+            this.mainImg = item.getMainImg();
         }
     }
 }
