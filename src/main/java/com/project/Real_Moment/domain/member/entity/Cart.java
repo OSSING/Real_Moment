@@ -27,6 +27,4 @@ public class Cart {
     private int stock;
 
     private int price;
-
-    private boolean isCheck = true;
 }

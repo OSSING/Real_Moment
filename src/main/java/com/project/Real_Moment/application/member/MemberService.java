@@ -1,13 +1,10 @@
 package com.project.Real_Moment.application.member;
 
-import com.project.Real_Moment.domain.member.entity.Address;
-import com.project.Real_Moment.domain.member.entity.Item;
-import com.project.Real_Moment.domain.member.entity.Wish;
+import com.project.Real_Moment.domain.member.entity.*;
 import com.project.Real_Moment.domain.member.repository.*;
 import com.project.Real_Moment.presentation.dto.AddressDto;
 import com.project.Real_Moment.presentation.dto.CartDto;
 import com.project.Real_Moment.presentation.dto.MemberDto;
-import com.project.Real_Moment.domain.member.entity.Member;
 import com.project.Real_Moment.presentation.dto.WishDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -146,8 +143,8 @@ public class MemberService {
     }
 
     @Transactional
-    public List<WishDto.WishListResponse> getWishList(Long id) {
-        return wishRepository.findWishByMemberId(id);
+    public WishDto.WishListResponseWrapper getWishList(Long id, int nowPage, int size) {
+        return wishRepository.findWishByMemberId(id, nowPage, size);
     }
 
     @Transactional
@@ -173,6 +170,10 @@ public class MemberService {
     }
 
     public List<CartDto.CartListResponse> getCartList(long id) {
-        return cartRepository.findCartListByMemberId(id);
+        List<Cart> cartList = cartRepository.findByMemberId_Id(id);
+
+        return cartList.stream()
+                .map(CartDto.CartListResponse::new)
+                .collect(Collectors.toList());
     }
 }

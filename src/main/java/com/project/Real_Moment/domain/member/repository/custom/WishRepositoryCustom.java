@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface WishRepositoryCustom {
 
-    List<WishDto.WishListResponse> findWishByMemberId(Long id);
+    WishDto.WishListResponseWrapper findWishByMemberId(Long id, int nowPage, int size);
 }

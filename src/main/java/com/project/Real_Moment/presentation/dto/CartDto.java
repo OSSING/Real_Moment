@@ -1,5 +1,6 @@
 package com.project.Real_Moment.presentation.dto;
 
+import com.project.Real_Moment.domain.member.entity.Cart;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +16,12 @@ public class CartDto {
         private ItemDto.ItemResponse item;
         private int stock;
         private int price;
-        private boolean isCheck;
+
+        public CartListResponse(Cart cart) {
+            this.cartId = cart.getId();
+            this.item = new ItemDto.ItemResponse(cart.getItemId());
+            this.stock = cart.getStock();
+            this.price = cart.getPrice();
+        }
     }
 }
