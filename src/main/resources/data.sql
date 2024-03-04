@@ -62,7 +62,7 @@ INSERT INTO category (category_name, parent_category) VALUES
 ('child4', 2);
 
 -- Items Table 더미데이터
-INSERT INTO item (category_id, name, content, price, discount_rate, discount_price, sell_price, stock, is_sell_check, is_delete_check, main_img, serve_img)
+INSERT INTO item (category_id, name, content, price, discount_rate, discount_price, sell_price, stock, is_sell, is_delete, main_img, serve_img)
 VALUES
 (3, 'item1', 'item content1', 800, 10, 80, 720, 50, TRUE, FALSE, 'main1.jpg', 'serve1.jpg'),
 (4, 'item2', 'item content2', 1200, 5, 60, 1140, 30, TRUE, FALSE, 'main2.jpg', 'serve2.jpg'),

@@ -1,10 +1,11 @@
 package com.project.Real_Moment.presentation.dto;
 
 import com.project.Real_Moment.domain.member.entity.Item;
-import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 public class ItemDto {
 
@@ -18,7 +19,7 @@ public class ItemDto {
         private int discountRate;
         private int discountPrice;
         private int sellPrice;
-        private boolean isSellCheck;
+        private boolean isSell;
         private String mainImg;
 
         public ItemResponse(Item item) {
@@ -28,8 +29,29 @@ public class ItemDto {
             this.discountRate = item.getDiscountRate();
             this.discountPrice = item.getDiscountPrice();
             this.sellPrice = item.getSellPrice();
-            this.isSellCheck = item.isSellCheck();
+            this.isSell = item.isSell();
             this.mainImg = item.getMainImg();
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ItemCondRequest {
+        private String itemSort;
+        private Long categoryId;
+        private String itemName;
+        private Boolean isDelete;
+        private int nowPage;
+
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ItemCondResponse {
+        private List<ItemDto.ItemResponse> item;
+        private long totalPage;
+        private long nowPage;
     }
 }
