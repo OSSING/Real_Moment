@@ -1,13 +1,16 @@
 package com.project.Real_Moment.domain.member.repository.impl;
 
+import com.project.Real_Moment.domain.member.entity.Wish;
 import com.project.Real_Moment.domain.member.repository.custom.WishRepositoryCustom;
 import com.project.Real_Moment.presentation.dto.ItemDto;
 import com.project.Real_Moment.presentation.dto.WishDto;
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.project.Real_Moment.domain.member.entity.QItem.item;
 import static com.project.Real_Moment.domain.member.entity.QWish.wish;
@@ -19,15 +22,19 @@ public class WishRepositoryImpl implements WishRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<WishDto.WishListResponse> findWishByMemberId(Long id) {
+    public WishDto.WishListResponseWrapper findWishByMemberId(Long id, int nowPage) {
 
-        return queryFactory
-                .select(wish)
-                .from(wish)
+        Pageable pageable = PageRequest.of(nowPage - 1, 10);
+
+        QueryResults<Wish> results = queryFactory
+                .selectFrom(wish)
                 .join(wish.itemId, item)
                 .where(wish.memberId.id.eq(id))
-                .fetch()
-                .stream()
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetchResults();
+
+        List<WishDto.WishListResponse> wishList = results.getResults().stream()
                 .map(wish -> new WishDto.WishListResponse(
                         wish.getId(),
                         new ItemDto.ItemResponse(
@@ -37,10 +44,13 @@ public class WishRepositoryImpl implements WishRepositoryCustom {
                                 wish.getItemId().getDiscountRate(),
                                 wish.getItemId().getDiscountPrice(),
                                 wish.getItemId().getSellPrice(),
-                                wish.getItemId().isSellCheck(),
+                                wish.getItemId().isSell(),
                                 wish.getItemId().getMainImg()
                         )
                 ))
-                .collect(Collectors.toList());
+                .toList();
+
+        return new WishDto.WishListResponseWrapper(wishList, results.getTotal(), nowPage);
+
     }
 }
