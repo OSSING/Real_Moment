@@ -13,4 +13,5 @@ public interface CartRepository extends JpaRepository<Cart, Long>, CartRepositor
     List<Cart> findByMemberId_Id(long id);
 
     boolean existsByItemIdAndMemberId(Item item, Member member);
+
 }

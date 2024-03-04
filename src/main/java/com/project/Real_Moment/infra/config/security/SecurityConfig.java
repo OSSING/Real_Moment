@@ -57,7 +57,7 @@ public class SecurityConfig {
                                 "/member/logout",
                                 "/main",
                                 "/category",
-                                "/items",
+                                "/itemList",
                                 "/item",
                                 "/reviews",
                                 "/QAList",

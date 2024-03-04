@@ -11,7 +11,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.project.Real_Moment.domain.member.entity.QItem.item;
 import static com.project.Real_Moment.domain.member.entity.QWish.wish;
@@ -45,7 +44,7 @@ public class WishRepositoryImpl implements WishRepositoryCustom {
                                 wish.getItemId().getDiscountRate(),
                                 wish.getItemId().getDiscountPrice(),
                                 wish.getItemId().getSellPrice(),
-                                wish.getItemId().isSellCheck(),
+                                wish.getItemId().isSell(),
                                 wish.getItemId().getMainImg()
                         )
                 ))

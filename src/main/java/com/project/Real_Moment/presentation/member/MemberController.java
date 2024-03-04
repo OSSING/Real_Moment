@@ -173,4 +173,10 @@ public class MemberController {
         memberService.deleteCart(cartId);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/{id}/cart/count")
+    public ResponseEntity<Void> changeCartCount(@RequestParam("cartId") Long cartId, @RequestParam("stock") int stock) {
+        memberService.changeCartCount(cartId, stock);
+        return ResponseEntity.ok().build();
+    }
 }

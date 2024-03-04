@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -114,7 +113,7 @@ public class MemberService {
         }
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<AddressDto.AddressListResponse> findAddress(Long id) {
         return addressRepository.findAddressByMemberId_Id(id).stream()
                 .map(AddressDto.AddressListResponse::new).collect(Collectors.toList());
@@ -142,7 +141,7 @@ public class MemberService {
         addressRepository.delete(address);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public WishDto.WishListResponseWrapper getWishList(Long id, int nowPage) {
         return wishRepository.findWishByMemberId(id, nowPage);
     }
@@ -164,11 +163,13 @@ public class MemberService {
         wishRepository.save(wish);
     }
 
+    @Transactional
     public void deleteWish(Long id) {
         Wish wish = wishRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         wishRepository.delete(wish);
     }
 
+    @Transactional(readOnly = true)
     public List<CartDto.CartListResponse> getCartList(Long id) {
         log.info("memberService.getCartList 실행!!!");
         List<Cart> cartList = cartRepository.findByMemberId_Id(id);
@@ -178,6 +179,7 @@ public class MemberService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public void saveCart(Long id, CartDto.SaveCartRequest dto) {
 
         // 예외 처리
@@ -196,8 +198,15 @@ public class MemberService {
         cartRepository.save(cart);
     }
 
+    @Transactional
     public void deleteCart(Long cartId) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(IllegalArgumentException::new);
         cartRepository.delete(cart);
+    }
+
+    @Transactional
+    public void changeCartCount(Long cartId, int stock) {
+        Cart cart = cartRepository.findById(cartId).orElseThrow(IllegalArgumentException::new);
+        cartRepository.updateByStock(cartId, stock);
     }
 }
