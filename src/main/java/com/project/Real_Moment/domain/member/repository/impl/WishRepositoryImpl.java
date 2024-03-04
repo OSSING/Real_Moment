@@ -23,9 +23,9 @@ public class WishRepositoryImpl implements WishRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public WishDto.WishListResponseWrapper findWishByMemberId(Long id, int nowPage, int size) {
+    public WishDto.WishListResponseWrapper findWishByMemberId(Long id, int nowPage) {
 
-        Pageable pageable = PageRequest.of(nowPage - 1, size);
+        Pageable pageable = PageRequest.of(nowPage - 1, 10);
 
         QueryResults<Wish> results = queryFactory
                 .selectFrom(wish)
