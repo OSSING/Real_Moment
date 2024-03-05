@@ -189,7 +189,13 @@ public class MemberController {
     }
 
     @GetMapping("/{id}/review/data")
-    public ResponseEntity<ReviewDto.editReviewClickResponse> editReview(@PathVariable("id") Long id, @RequestParam("reviewId") Long reviewId) {
-        return ResponseEntity.ok().body(memberService.editReview(id, reviewId));
+    public ResponseEntity<ReviewDto.editReviewClick> editReviewClick(@PathVariable("id") Long id, @RequestParam("reviewId") Long reviewId) {
+        return ResponseEntity.ok().body(memberService.editReviewClick(id, reviewId));
+    }
+
+    @PatchMapping("/{id}/review")
+    public ResponseEntity<Void> editReview(@PathVariable("id") Long id, @RequestBody ReviewDto.editReviewClick dto) {
+        memberService.editReview(id, dto);
+        return ResponseEntity.ok().build();
     }
 }

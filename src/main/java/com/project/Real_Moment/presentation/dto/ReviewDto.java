@@ -81,13 +81,13 @@ public class ReviewDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class editReviewClickResponse {
+    public static class editReviewClick {
         private Long reviewId;
         private String title;
         private String content;
         private int star;
 
-        public editReviewClickResponse(Review review) {
+        public editReviewClick(Review review) {
             reviewId = review.getId();
             title = review.getTitle();
             content = review.getContent();

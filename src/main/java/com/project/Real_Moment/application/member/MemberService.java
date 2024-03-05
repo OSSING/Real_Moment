@@ -155,8 +155,7 @@ public class MemberService {
 
         // 중복 데이터 체크
         if (wishRepository.existsByItemIdAndMemberId(item, member)) {
-            log.info("이미 찜 목록에 존재하는 상품입니다.");
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("이미 찜 목록에 존재하는 상품입니다.");
         }
 
         Wish wish = dto.toEntity(member, item);
@@ -188,8 +187,7 @@ public class MemberService {
 
         // 중복 체크
         if (cartRepository.existsByItemIdAndMemberId(item, member)) {
-            log.info("이미 장바구니 목록에 존재하는 상품입니다.");
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("이미 장바구니 목록에 존재하는 상품입니다.");
         }
 
         // Dto -> Entity
@@ -222,24 +220,33 @@ public class MemberService {
         Item item = itemRepository.findById(dto.getItemId()).orElseThrow(IllegalArgumentException::new);
 
         if (reviewRepository.existsByMemberIdAndItemId(member, item)) {
-            log.info("이미 해당 상품에 대해 작성한 리뷰가 있습니다.");
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("이미 해당 상품에 대해 작성한 리뷰가 있습니다.");
         }
 
         reviewRepository.save(dto.toEntity(member, item));
     }
 
     @Transactional(readOnly = true)
-    public ReviewDto.editReviewClickResponse editReview(Long id, Long reviewId) {
+    public ReviewDto.editReviewClick editReviewClick(Long id, Long reviewId) {
         Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
 
         if (!reviewRepository.existsByIdAndMemberId(reviewId, member)) {
-            log.info("존재하지 않는 리뷰입니다.");
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("존재하지 않는 리뷰입니다.");
         }
 
         Review review = reviewRepository.findById(reviewId).orElseThrow(IllegalArgumentException::new);
 
-        return new ReviewDto.editReviewClickResponse(review);
+        return new ReviewDto.editReviewClick(review);
+    }
+
+    @Transactional
+    public void editReview(Long id, ReviewDto.editReviewClick dto) {
+        Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        if (!reviewRepository.existsByIdAndMemberId(dto.getReviewId(), member)) {
+            throw new IllegalArgumentException("존재하지 않는 리뷰입니다.");
+        }
+
+        reviewRepository.updateReview(dto);
     }
 }
