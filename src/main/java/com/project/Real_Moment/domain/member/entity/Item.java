@@ -22,6 +22,7 @@ public class Item extends AuditingUserEntity {
 
     private String name;
 
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     private int price;

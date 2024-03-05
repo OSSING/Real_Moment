@@ -6,6 +6,7 @@ import lombok.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -56,7 +57,7 @@ public class Member extends BaseTimeEntity {
     private int thisYearPay = 0;
 
     @Column(name = "recently_login")
-    private Timestamp recentlyLogin;
+    private LocalDateTime recentlyLogin;
 
     @Builder.Default
     @Column(name = "is_delete")

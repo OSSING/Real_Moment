@@ -20,10 +20,10 @@ public abstract class BaseTimeEntity {
     @CreatedDate
     @Column(updatable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
-    private Timestamp createdDate;
+    private LocalDateTime createdDate;
 
     @LastModifiedDate
 //    @Column(nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
-    private Timestamp lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 }
