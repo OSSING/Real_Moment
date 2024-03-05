@@ -58,7 +58,7 @@ public class ItemDto {
         private int discountRate;
         private int discountPrice;
         private int sellPrice;
-        private boolean isSell;
+        private Boolean isSell;
         private String mainImg;
 
         public ItemResponse(Item item) {
