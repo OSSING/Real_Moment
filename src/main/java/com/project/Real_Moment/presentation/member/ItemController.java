@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +17,13 @@ public class ItemController {
     private final ItemService itemService;
 
     @GetMapping("/itemList")
-    public ResponseEntity<ItemDto.ItemCondResponse> getItemList(@RequestBody ItemDto.ItemCondRequest dto) {
-        return ResponseEntity.ok().body(itemService.getItemList(dto));
+    public ResponseEntity<ItemDto.ItemCondResponse> getItemList(
+            @RequestParam(value = "itemSort", required = false) String itemSort,
+            @RequestParam(value = "categoryId", required = false) Long categoryId,
+            @RequestParam(value = "itemName", required = false) String itemName,
+            @RequestParam(value = "isDelete", required = false) Boolean isDelete,
+            @RequestParam("nowPage") int nowPage) {
+        return ResponseEntity.ok().body(itemService.getItemList(itemSort, categoryId, itemName, isDelete, nowPage));
     }
 
     @GetMapping("/item")

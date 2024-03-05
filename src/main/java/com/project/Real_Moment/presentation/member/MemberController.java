@@ -179,4 +179,6 @@ public class MemberController {
         memberService.changeCartCount(cartId, stock);
         return ResponseEntity.ok().build();
     }
+
+//    @GetMapping("/{id}/reviewList")
 }
