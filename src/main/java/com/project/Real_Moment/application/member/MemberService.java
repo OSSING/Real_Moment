@@ -24,6 +24,8 @@ public class MemberService {
     private final ItemRepository itemRepository;
     private final CartRepository cartRepository;
     private final ReviewRepository reviewRepository;
+    private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -212,5 +214,18 @@ public class MemberService {
     public ReviewDto.MyReviewListResponse getMyReviewList(Long id, int nowPage) {
         Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         return reviewRepository.findMyReviewListByMemberId(member, nowPage);
+    }
+
+    @Transactional
+    public void saveReview(Long id, ReviewDto.SaveReviewRequest dto) {
+        Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        Item item = itemRepository.findById(dto.getItemId()).orElseThrow(IllegalArgumentException::new);
+
+        if (reviewRepository.existsByMemberIdAndItemId(member, item)) {
+            log.info("이미 해당 상품에 대해 작성한 리뷰가 있습니다.");
+            throw new IllegalArgumentException();
+        }
+
+        reviewRepository.save(dto.toEntity(member, item));
     }
 }

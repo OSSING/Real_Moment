@@ -1,7 +1,6 @@
 package com.project.Real_Moment.domain.member.repository.impl;
 
 import com.project.Real_Moment.domain.member.entity.Member;
-import com.project.Real_Moment.domain.member.entity.QReview;
 import com.project.Real_Moment.domain.member.entity.Review;
 import com.project.Real_Moment.domain.member.repository.custom.ReviewRepositoryCustom;
 import com.project.Real_Moment.presentation.dto.ItemDto;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.project.Real_Moment.domain.member.entity.QReview.review;
 

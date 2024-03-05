@@ -181,4 +181,10 @@ public class MemberController {
     public ResponseEntity<ReviewDto.MyReviewListResponse> getMyReviewList(@PathVariable("id") Long id, @RequestParam("nowPage") int nowPage) {
         return ResponseEntity.ok().body(memberService.getMyReviewList(id, nowPage));
     }
+
+    @PostMapping("/{id}/review")
+    public ResponseEntity<Void> saveReview(@PathVariable("id") Long id, @RequestBody ReviewDto.SaveReviewRequest dto) {
+        memberService.saveReview(id, dto);
+        return ResponseEntity.ok().build();
+    }
 }
