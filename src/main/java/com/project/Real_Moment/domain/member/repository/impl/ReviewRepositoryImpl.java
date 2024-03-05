@@ -89,7 +89,8 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 ))
                 .toList();
 
-        Long total = queryFactory.select(review.count())
+        Long total = queryFactory
+                .select(review.count())
                 .from(review)
                 .where(review.memberId.eq(member))
                 .fetchOne();
