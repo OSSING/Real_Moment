@@ -30,16 +30,21 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 .selectFrom(review)
                 .where(review.itemId.id.eq(id));
 
+        JPAQuery<Long> countQuery = queryFactory
+                .select(review.count())
+                .from(review)
+                .where(review.itemId.id.eq(id));
+
         if (star != null) {
             query.where(review.star.eq(star));
+            countQuery.where(review.star.eq(star));
         }
 
-        QueryResults<Review> results = query
+        List<ReviewDto.ReviewListResponse> results = query
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetchResults();
-
-        List<ReviewDto.ReviewListResponse> reviewList = results.getResults().stream()
+                .fetch()
+                .stream()
                 .map(review -> new ReviewDto.ReviewListResponse(
                         review.getId(),
                         review.getMemberId().getLoginId(),
@@ -51,8 +56,22 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 ))
                 .toList();
 
-        int totalPages = (int) Math.ceil((double) results.getTotal() / pageable.getPageSize());
-        return new ReviewDto.ItemDetReviewResponse(reviewList, totalPages, nowPage);
+        Long total = countQuery.fetchOne();
+
+//        List<ReviewDto.ReviewListResponse> reviewList = results.getResults().stream()
+//                .map(review -> new ReviewDto.ReviewListResponse(
+//                        review.getId(),
+//                        review.getMemberId().getLoginId(),
+//                        review.getTitle(),
+//                        review.getContent(),
+//                        review.getStar(),
+//                        review.getCreatedDate(),
+//                        review.getLastModifiedDate()
+//                ))
+//                .toList();
+
+        int totalPages = (int) Math.ceil((double) total / pageable.getPageSize());
+        return new ReviewDto.ItemDetReviewResponse(results, totalPages, nowPage);
 
     }
 
