@@ -1,5 +1,8 @@
 package com.project.Real_Moment.presentation.dto;
 
+import com.project.Real_Moment.domain.member.entity.Item;
+import com.project.Real_Moment.domain.member.entity.Member;
+import com.project.Real_Moment.domain.member.entity.Review;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -53,5 +56,26 @@ public class ReviewDto {
         private List<ReviewDto.MyReview> reviewList;
         private long totalPage;
         private long nowPage;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SaveReviewRequest {
+        private Long orderId;
+        private Long itemId;
+        private String title;
+        private String content;
+        private int star;
+
+        public Review toEntity(Member member, Item item) {
+            return Review.builder()
+                    .memberId(member)
+                    .itemId(item)
+                    .title(title)
+                    .content(content)
+                    .star(star)
+                    .build();
+        }
     }
 }
