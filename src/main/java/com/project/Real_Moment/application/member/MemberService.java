@@ -228,4 +228,18 @@ public class MemberService {
 
         reviewRepository.save(dto.toEntity(member, item));
     }
+
+    @Transactional(readOnly = true)
+    public ReviewDto.editReviewClickResponse editReview(Long id, Long reviewId) {
+        Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        if (!reviewRepository.existsByIdAndMemberId(reviewId, member)) {
+            log.info("존재하지 않는 리뷰입니다.");
+            throw new IllegalArgumentException();
+        }
+
+        Review review = reviewRepository.findById(reviewId).orElseThrow(IllegalArgumentException::new);
+
+        return new ReviewDto.editReviewClickResponse(review);
+    }
 }
