@@ -21,26 +21,26 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public ItemDto.ItemCondResponse findItemListByCond(ItemDto.ItemCondRequest dto) {
-        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 10);
+    public ItemDto.ItemCondResponse findItemListByCond(String itemSort, Long categoryId, String itemName, Boolean isDelete, int nowPage) {
+        Pageable pageable = PageRequest.of(nowPage - 1, 10);
         JPAQuery<Item> query = queryFactory.selectFrom(item);
 
-        if (dto.getCategoryId() != null) {
-            query.where(item.categoryId.id.eq(dto.getCategoryId()));
+        if (categoryId != null) {
+            query.where(item.categoryId.id.eq(categoryId));
         }
 
-        if (dto.getItemName() != null) {
-            query.where(item.name.eq(dto.getItemName()));
+        if (itemName != null) {
+            query.where(item.name.eq(itemName));
         }
 
-        if (dto.getIsDelete() != null) {
-            query.where(item.isDelete.eq(dto.getIsDelete()));
+        if (isDelete != null) {
+            query.where(item.isDelete.eq(isDelete));
         }
 
-        if (dto.getItemSort() != null) {
-            if (dto.getItemSort().equals("new")) {
+        if (itemSort != null) {
+            if (itemSort.equals("new")) {
                 query.orderBy(item.createdDate.asc());
-            } else if (dto.getItemSort().equals("sale")) {
+            } else if (itemSort.equals("sale")) {
                 query.orderBy(item.discountRate.desc());
             }
         }
@@ -63,7 +63,8 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 ))
                 .collect(Collectors.toList());
 
-        return new ItemDto.ItemCondResponse(itemList, results.getTotal(), dto.getNowPage());
+        int totalPages = (int) Math.ceil((double) results.getTotal() / pageable.getPageSize());
+        return new ItemDto.ItemCondResponse(itemList, totalPages, nowPage);
 
     }
 }

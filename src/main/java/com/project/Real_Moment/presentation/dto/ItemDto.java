@@ -76,18 +76,6 @@ public class ItemDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class ItemCondRequest {
-        private String itemSort;
-        private Long categoryId;
-        private String itemName;
-        private Boolean isDelete;
-        private int nowPage;
-
-    }
-
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
     public static class ItemCondResponse {
         private List<ItemDto.ItemResponse> item;
         private long totalPage;

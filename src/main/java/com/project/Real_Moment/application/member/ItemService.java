@@ -16,8 +16,8 @@ public class ItemService {
     private final ItemRepository itemRepository;
 
     @Transactional(readOnly = true)
-    public ItemDto.ItemCondResponse getItemList(ItemDto.ItemCondRequest dto) {
-        return itemRepository.findItemListByCond(dto);
+    public ItemDto.ItemCondResponse getItemList(String itemSort, Long categoryId, String itemName, Boolean isDelete, int nowPage) {
+        return itemRepository.findItemListByCond(itemSort, categoryId, itemName, isDelete, nowPage);
     }
 
     @Transactional(readOnly = true)

@@ -49,7 +49,8 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 ))
                 .toList();
 
-        return new ReviewDto.ItemDetReviewResponse(reviewList, results.getTotal(), nowPage);
+        int totalPages = (int) Math.ceil((double) results.getTotal() / pageable.getPageSize());
+        return new ReviewDto.ItemDetReviewResponse(reviewList, totalPages, nowPage);
 
     }
 }
