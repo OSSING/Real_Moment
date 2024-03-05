@@ -6,9 +6,9 @@ import lombok.*;
 
 @Entity
 @Getter
-@ToString
+@Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Review extends BaseTimeEntity {
 
     @Id

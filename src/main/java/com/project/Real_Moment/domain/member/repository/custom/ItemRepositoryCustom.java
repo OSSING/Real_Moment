@@ -4,5 +4,5 @@ import com.project.Real_Moment.presentation.dto.ItemDto;
 
 public interface ItemRepositoryCustom {
 
-    ItemDto.ItemCondResponse findItemListByCond(ItemDto.ItemCondRequest dto);
+    ItemDto.ItemCondResponse findItemListByCond(String itemSort, Long categoryId, String itemName, Boolean isDelete, int nowPage);
 }

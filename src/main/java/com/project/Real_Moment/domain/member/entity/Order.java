@@ -24,9 +24,9 @@ public class Order {
     @JoinColumn(name = "member_id")
     private Member memberId;
 
-    private Timestamp orderedDate;
+    private LocalDateTime orderedDate;
 
-    private Timestamp deliveryDate;
+    private LocalDateTime deliveryDate;
 
     private int totalPrice;
 
