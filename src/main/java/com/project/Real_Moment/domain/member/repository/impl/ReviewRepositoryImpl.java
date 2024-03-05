@@ -115,4 +115,15 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
         int totalPages = (int) Math.ceil((double) total / pageable.getPageSize());
         return new ReviewDto.MyReviewListResponse(results, totalPages, nowPage);
     }
+
+    @Override
+    public void updateReview(ReviewDto.editReviewClick dto) {
+        queryFactory
+                .update(review)
+                .set(review.title, dto.getTitle())
+                .set(review.content, dto.getContent())
+                .set(review.star, dto.getStar())
+                .where(review.id.eq(dto.getReviewId()))
+                .execute();
+    }
 }
