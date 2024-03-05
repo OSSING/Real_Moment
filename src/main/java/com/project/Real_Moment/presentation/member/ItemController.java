@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -19,5 +20,10 @@ public class ItemController {
     @GetMapping("/itemList")
     public ResponseEntity<ItemDto.ItemCondResponse> getItemList(@RequestBody ItemDto.ItemCondRequest dto) {
         return ResponseEntity.ok().body(itemService.getItemList(dto));
+    }
+
+    @GetMapping("/item")
+    public ResponseEntity<ItemDto.ItemDetResponse> getItemDet(@RequestParam("itemId") Long id) {
+        return ResponseEntity.ok().body(itemService.getItemDet(id));
     }
 }

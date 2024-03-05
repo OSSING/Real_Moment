@@ -1,5 +1,6 @@
 package com.project.Real_Moment.application.member;
 
+import com.project.Real_Moment.domain.member.entity.Item;
 import com.project.Real_Moment.domain.member.repository.ItemRepository;
 import com.project.Real_Moment.presentation.dto.ItemDto;
 import lombok.RequiredArgsConstructor;
@@ -15,5 +16,11 @@ public class ItemService {
 
     public ItemDto.ItemCondResponse getItemList(ItemDto.ItemCondRequest dto) {
         return itemRepository.findItemListByCond(dto);
+    }
+
+    public ItemDto.ItemDetResponse getItemDet(Long id) {
+        Item item = itemRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        return new ItemDto.ItemDetResponse(item);
     }
 }
