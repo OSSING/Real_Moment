@@ -31,4 +31,27 @@ public class ReviewDto {
         private long totalPage;
         private long nowPage;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MyReview {
+        private Long reviewId;
+        private ItemDto.ItemResponse item;
+        private String loginId;
+        private String title;
+        private String content;
+        private int star;
+        private LocalDateTime createdDate;
+        private LocalDateTime lastModifiedDate;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MyReviewListResponse {
+        private List<ReviewDto.MyReview> reviewList;
+        private long totalPage;
+        private long nowPage;
+    }
 }
