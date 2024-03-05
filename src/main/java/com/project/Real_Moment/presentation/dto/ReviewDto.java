@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -76,6 +75,23 @@ public class ReviewDto {
                     .content(content)
                     .star(star)
                     .build();
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class editReviewClickResponse {
+        private Long reviewId;
+        private String title;
+        private String content;
+        private int star;
+
+        public editReviewClickResponse(Review review) {
+            reviewId = review.getId();
+            title = review.getTitle();
+            content = review.getContent();
+            star = review.getStar();
         }
     }
 }
