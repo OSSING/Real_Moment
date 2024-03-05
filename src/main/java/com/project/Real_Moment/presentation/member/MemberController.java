@@ -1,13 +1,10 @@
 package com.project.Real_Moment.presentation.member;
 
-import com.project.Real_Moment.presentation.dto.AddressDto;
-import com.project.Real_Moment.presentation.dto.CartDto;
-import com.project.Real_Moment.presentation.dto.MemberDto;
+import com.project.Real_Moment.presentation.dto.*;
 import com.project.Real_Moment.auth.jwt.dto.TokenDto;
 import com.project.Real_Moment.auth.jwt.JwtFilter;
 import com.project.Real_Moment.auth.jwt.TokenProvider;
 import com.project.Real_Moment.application.member.MemberService;
-import com.project.Real_Moment.presentation.dto.WishDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -178,6 +175,22 @@ public class MemberController {
     public ResponseEntity<Void> changeCartCount(@RequestParam("cartId") Long cartId, @RequestParam("stock") int stock) {
         memberService.changeCartCount(cartId, stock);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/reviewList")
+    public ResponseEntity<ReviewDto.MyReviewListResponse> getMyReviewList(@PathVariable("id") Long id, @RequestParam("nowPage") int nowPage) {
+        return ResponseEntity.ok().body(memberService.getMyReviewList(id, nowPage));
+    }
+
+    @PostMapping("/{id}/review")
+    public ResponseEntity<Void> saveReview(@PathVariable("id") Long id, @RequestBody ReviewDto.SaveReviewRequest dto) {
+        memberService.saveReview(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/review/data")
+    public ResponseEntity<ReviewDto.editReviewClickResponse> editReview(@PathVariable("id") Long id, @RequestParam("reviewId") Long reviewId) {
+        return ResponseEntity.ok().body(memberService.editReview(id, reviewId));
     }
 }
 

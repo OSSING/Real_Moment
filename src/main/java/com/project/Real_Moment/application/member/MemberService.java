@@ -2,10 +2,7 @@ package com.project.Real_Moment.application.member;
 
 import com.project.Real_Moment.domain.member.entity.*;
 import com.project.Real_Moment.domain.member.repository.*;
-import com.project.Real_Moment.presentation.dto.AddressDto;
-import com.project.Real_Moment.presentation.dto.CartDto;
-import com.project.Real_Moment.presentation.dto.MemberDto;
-import com.project.Real_Moment.presentation.dto.WishDto;
+import com.project.Real_Moment.presentation.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,6 +23,9 @@ public class MemberService {
     private final AddressRepository addressRepository;
     private final ItemRepository itemRepository;
     private final CartRepository cartRepository;
+    private final ReviewRepository reviewRepository;
+    private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -211,5 +211,38 @@ public class MemberService {
     public void changeCartCount(Long cartId, int stock) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(IllegalArgumentException::new);
         cartRepository.updateByStock(cartId, stock);
+    }
+
+    @Transactional(readOnly = true)
+    public ReviewDto.MyReviewListResponse getMyReviewList(Long id, int nowPage) {
+        Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        return reviewRepository.findMyReviewListByMemberId(member, nowPage);
+    }
+
+    @Transactional
+    public void saveReview(Long id, ReviewDto.SaveReviewRequest dto) {
+        Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+        Item item = itemRepository.findById(dto.getItemId()).orElseThrow(IllegalArgumentException::new);
+
+        if (reviewRepository.existsByMemberIdAndItemId(member, item)) {
+            log.info("이미 해당 상품에 대해 작성한 리뷰가 있습니다.");
+            throw new IllegalArgumentException();
+        }
+
+        reviewRepository.save(dto.toEntity(member, item));
+    }
+
+    @Transactional(readOnly = true)
+    public ReviewDto.editReviewClickResponse editReview(Long id, Long reviewId) {
+        Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        if (!reviewRepository.existsByIdAndMemberId(reviewId, member)) {
+            log.info("존재하지 않는 리뷰입니다.");
+            throw new IllegalArgumentException();
+        }
+
+        Review review = reviewRepository.findById(reviewId).orElseThrow(IllegalArgumentException::new);
+
+        return new ReviewDto.editReviewClickResponse(review);
     }
 }

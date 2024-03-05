@@ -12,6 +12,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Getter
 @MappedSuperclass
@@ -21,7 +22,7 @@ public class AuditingUserEntity {
     @CreatedDate
     @Column(updatable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
-    private Timestamp createdDate;
+    private LocalDateTime createdDate;
 
     @CreatedBy
     @Column(updatable = false)
@@ -30,7 +31,7 @@ public class AuditingUserEntity {
     @LastModifiedDate
 //    @Column(nullable = false)
     @DateTimeFormat(pattern = "yyyy-MM-dd/HH:mm:ss")
-    private Timestamp lastModifiedDate;
+    private LocalDateTime lastModifiedDate;
 
     @LastModifiedBy
 //    @Column(nullable = false)

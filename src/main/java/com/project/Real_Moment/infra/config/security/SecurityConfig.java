@@ -59,7 +59,7 @@ public class SecurityConfig {
                                 "/category",
                                 "/itemList",
                                 "/item",
-                                "/reviews",
+                                "/reviewList",
                                 "/QAList",
                                 "/Announcements",
                                 "/Announcement",
