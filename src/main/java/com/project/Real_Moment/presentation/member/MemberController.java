@@ -198,4 +198,10 @@ public class MemberController {
         memberService.editReview(id, dto);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{id}/review")
+    public ResponseEntity<Void> deleteReview(@PathVariable("id") Long id, @RequestParam("reviewId") Long reviewId) {
+        memberService.deleteReview(id, reviewId);
+        return ResponseEntity.ok().build();
+    }
 }
