@@ -111,9 +111,9 @@ public class MemberController {
         return ResponseEntity.ok(memberService.deleteMember(id));
     }
 
-    @GetMapping("/{id}/address")
-    public ResponseEntity<List<AddressDto.AddressListResponse>> findAddress(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(memberService.findAddress(id));
+    @GetMapping("/{id}/addressList")
+    public ResponseEntity<AddressDto.AddressListPage> findAddress(@PathVariable("id") Long id, @RequestParam("nowPage") int nowPage) {
+        return ResponseEntity.ok(memberService.findAddress(id, nowPage));
     }
 
     @PostMapping("/{id}/address")
