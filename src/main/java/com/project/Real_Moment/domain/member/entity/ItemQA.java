@@ -6,7 +6,7 @@ import lombok.*;
 
 @Entity
 @Getter
-@ToString
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "item_qa")
@@ -30,6 +30,6 @@ public class ItemQA extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @Builder.Default
     private boolean isAnswer = false;
-
 }

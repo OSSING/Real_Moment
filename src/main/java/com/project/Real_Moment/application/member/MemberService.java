@@ -27,8 +27,8 @@ public class MemberService {
     private final ItemRepository itemRepository;
     private final CartRepository cartRepository;
     private final ReviewRepository reviewRepository;
-    private final OrderRepository orderRepository;
-    private final OrderDetailRepository orderDetailRepository;
+    private final ItemQARepository itemQARepository;
+    private final QACommentRepository qaCommentRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -152,7 +152,29 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public WishDto.WishListResponseWrapper getWishList(Long id, int nowPage) {
-        return wishRepository.findWishByMemberId(id, nowPage);
+        Pageable pageable = PageRequest.of(nowPage - 1, 10);
+
+
+        Page<Wish> wishList = wishRepository.findWishByMemberIdPaging(pageable, id, nowPage);
+
+        List<WishDto.WishListResponse> wishListDto = wishList.stream()
+                .map(WishDto.WishListResponse::new)
+                .toList();
+
+
+        for (WishDto.WishListResponse wishListResponse : wishListDto) {
+            Wish wish = wishRepository.findById(wishListResponse.getWishId()).orElse(null);
+
+            ItemDto.ItemResponse itemResponse = null;
+
+            if (wish != null) {
+                itemResponse = new ItemDto.ItemResponse(wish.getItemId());
+            }
+
+            wishListResponse.setItem(itemResponse);
+        }
+
+        return new WishDto.WishListResponseWrapper(wishListDto, wishList.getTotalPages(), nowPage);
     }
 
     @Transactional
@@ -270,5 +292,51 @@ public class MemberService {
         Review review = reviewRepository.findById(reviewId).orElseThrow(IllegalArgumentException::new);
 
         reviewRepository.delete(review);
+    }
+
+    @Transactional(readOnly = true)
+    public ItemQADto.MyItemQAListPage getMyItemQAList(Long memberId, int nowPage) {
+        Pageable pageable = PageRequest.of(nowPage - 1, 10);
+
+        Page<ItemQA> itemQAList = itemQARepository.findMyItemQAListPage(memberId, pageable);
+
+        List<ItemQADto.MyItemQAList> itemQAListDto = itemQAList.stream()
+                .map(ItemQADto.MyItemQAList::new)
+                .toList();
+
+        for (ItemQADto.MyItemQAList myItemQAList : itemQAListDto) {
+            QAComment qaComment = qaCommentRepository.findById(myItemQAList.getItemQAId()).orElse(null);
+            Item item = itemRepository.findById(myItemQAList.getItem().getItemId()).orElse(null);
+
+            ItemDto.ItemResponse itemDto = null;
+            QACommentDto.QAComment qaCommentDto = null;
+
+            if (item != null) {
+                itemDto = new ItemDto.ItemResponse(item);
+            }
+
+            myItemQAList.setItem(itemDto);
+
+            if (qaComment != null) {
+                qaCommentDto = new QACommentDto.QAComment(qaComment);
+            }
+
+            myItemQAList.setQaComment(qaCommentDto);
+        }
+
+        return new ItemQADto.MyItemQAListPage(itemQAListDto, itemQAList.getTotalPages(), nowPage);
+    }
+
+    @Transactional
+    public void saveQA(Long id, ItemQADto.SaveQARequest dto) {
+        /**
+         * dto에 담긴 itemId가 회원이 주문한 item이 맞는지 검증 로직 필요
+         */
+        Item item = itemRepository.findById(dto.getItemId()).orElseThrow(IllegalArgumentException::new);
+        Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        ItemQA itemQA = dto.toEntity(member, item);
+
+        itemQARepository.save(itemQA);
     }
 }
