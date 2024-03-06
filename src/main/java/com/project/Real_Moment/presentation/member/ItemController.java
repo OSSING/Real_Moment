@@ -1,6 +1,7 @@
 package com.project.Real_Moment.presentation.member;
 
 import com.project.Real_Moment.application.member.ItemService;
+import com.project.Real_Moment.presentation.dto.CondDto;
 import com.project.Real_Moment.presentation.dto.ItemDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +24,9 @@ public class ItemController {
             @RequestParam(value = "itemName", required = false) String itemName,
             @RequestParam(value = "isDelete", required = false) Boolean isDelete,
             @RequestParam("nowPage") int nowPage) {
-        return ResponseEntity.ok().body(itemService.getItemList(itemSort, categoryId, itemName, isDelete, nowPage));
+
+        CondDto.ItemListCond dto = new CondDto.ItemListCond(itemSort, categoryId, itemName, isDelete, nowPage);
+        return ResponseEntity.ok().body(itemService.getItemList(dto));
     }
 
     @GetMapping("/item")

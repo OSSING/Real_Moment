@@ -9,7 +9,7 @@ import java.util.List;
 
 public class WishDto {
 
-    @Getter
+    @Getter @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class WishListResponse {

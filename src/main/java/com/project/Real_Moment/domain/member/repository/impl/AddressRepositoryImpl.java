@@ -5,6 +5,11 @@ import com.project.Real_Moment.domain.member.repository.custom.AddressRepository
 import com.project.Real_Moment.presentation.dto.AddressDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+
+import java.util.List;
 
 import static com.project.Real_Moment.domain.member.entity.QAddress.address;
 
@@ -27,5 +32,23 @@ public class AddressRepositoryImpl implements AddressRepositoryCustom {
                 .execute();
     }
 
+    @Override
+    public Page<Address> findAddressByPaging(Long memberId, Pageable pageable) {
+
+        List<Address> addressList = queryFactory
+                .selectFrom(address)
+                .where(address.memberId.id.eq(memberId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long total = queryFactory
+                .select(address.count())
+                .from(address)
+                .where(address.memberId.id.eq(memberId))
+                .fetchOne();
+
+        return new PageImpl<>(addressList, pageable, total);
+    }
 }
 
