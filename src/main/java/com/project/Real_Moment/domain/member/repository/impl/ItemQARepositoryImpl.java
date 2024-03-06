@@ -45,6 +45,25 @@ public class ItemQARepositoryImpl implements ItemQARepositoryCustom {
 
     }
 
+    @Override
+    public Page<ItemQA> findMyItemQAListPage(Long memberId, Pageable pageable) {
+
+        List<ItemQA> itemQAList = queryFactory
+                .selectFrom(itemQA)
+                .where(itemQA.memberId.id.eq(memberId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long total = queryFactory
+                .select(itemQA.count())
+                .from(itemQA)
+                .where(itemQA.memberId.id.eq(memberId))
+                .fetchOne();
+
+        return new PageImpl<>(itemQAList, pageable, total);
+    }
+
     private BooleanExpression itemIdEq(Long itemId) {
         return itemId != null ? itemQA.itemId.id.eq(itemId) : null;
     }

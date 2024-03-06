@@ -18,7 +18,7 @@ public class ItemQAController {
     private final ItemQAService itemQAService;
 
     @GetMapping("/QAList")
-    public ResponseEntity<ItemQADto.ItemQAListResponse> getItemQAList(
+    public ResponseEntity<ItemQADto.ItemQAListPage> getItemQAList(
             @RequestParam("itemId") Long itemId,
             @RequestParam(value = "isAnswer", required = false) Boolean isAnswer,
             @RequestParam("nowPage") int nowPage) {

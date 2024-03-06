@@ -204,4 +204,15 @@ public class MemberController {
         memberService.deleteReview(id, reviewId);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{id}/QAList")
+    public ResponseEntity<ItemQADto.MyItemQAListPage> getMyItemQAList(@PathVariable("id") Long id, @RequestParam("nowPage") int nowPage) {
+        return ResponseEntity.ok().body(memberService.getMyItemQAList(id, nowPage));
+    }
+
+    @PostMapping("/{id}/QA")
+    public ResponseEntity<Void> saveQA(@PathVariable("id") Long id, @RequestBody ItemQADto.SaveQARequest dto) {
+        memberService.saveQA(id, dto);
+        return ResponseEntity.ok().build();
+    }
 }

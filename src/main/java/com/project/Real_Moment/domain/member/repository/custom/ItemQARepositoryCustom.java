@@ -8,4 +8,6 @@ import org.springframework.data.domain.Pageable;
 public interface ItemQARepositoryCustom {
 
     Page<ItemQA> findQAListByCond(Pageable pageable, CondDto.QAListCond dto);
+
+    Page<ItemQA> findMyItemQAListPage(Long memberId, Pageable pageable);
 }

@@ -3,6 +3,7 @@ package com.project.Real_Moment.application.member;
 import com.project.Real_Moment.domain.member.entity.ItemQA;
 import com.project.Real_Moment.domain.member.entity.QAComment;
 import com.project.Real_Moment.domain.member.repository.ItemQARepository;
+import com.project.Real_Moment.domain.member.repository.ItemRepository;
 import com.project.Real_Moment.domain.member.repository.QACommentRepository;
 import com.project.Real_Moment.presentation.dto.CondDto;
 import com.project.Real_Moment.presentation.dto.ItemQADto;
@@ -26,7 +27,7 @@ public class ItemQAService {
     private final QACommentRepository qaCommentRepository;
 
     @Transactional
-    public ItemQADto.ItemQAListResponse getItemQAList(CondDto.QAListCond dto) {
+    public ItemQADto.ItemQAListPage getItemQAList(CondDto.QAListCond dto) {
         Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 5);
 
         Page<ItemQA> itemQAList = itemQARepository.findQAListByCond(pageable, dto);
@@ -47,7 +48,7 @@ public class ItemQAService {
             itemQA.setQaComment(qaCommentDto);
         }
 
-        ItemQADto.ItemQAListResponse itemQAPage = new ItemQADto.ItemQAListResponse(itemQAListDto, itemQAList.getTotalPages(), dto.getNowPage());
+        ItemQADto.ItemQAListPage itemQAPage = new ItemQADto.ItemQAListPage(itemQAListDto, itemQAList.getTotalPages(), dto.getNowPage());
 
         return itemQAPage;
     }
