@@ -10,6 +10,7 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "qa_comment")
 public class QAComment extends AuditingUserEntity {
 
     @Id

@@ -111,9 +111,9 @@ public class MemberController {
         return ResponseEntity.ok(memberService.deleteMember(id));
     }
 
-    @GetMapping("/{id}/address")
-    public ResponseEntity<List<AddressDto.AddressListResponse>> findAddress(@PathVariable("id") Long id) {
-        return ResponseEntity.ok(memberService.findAddress(id));
+    @GetMapping("/{id}/addressList")
+    public ResponseEntity<AddressDto.AddressListPage> findAddress(@PathVariable("id") Long id, @RequestParam("nowPage") int nowPage) {
+        return ResponseEntity.ok(memberService.findAddress(id, nowPage));
     }
 
     @PostMapping("/{id}/address")
@@ -196,6 +196,23 @@ public class MemberController {
     @PatchMapping("/{id}/review")
     public ResponseEntity<Void> editReview(@PathVariable("id") Long id, @RequestBody ReviewDto.editReviewClick dto) {
         memberService.editReview(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/review")
+    public ResponseEntity<Void> deleteReview(@PathVariable("id") Long id, @RequestParam("reviewId") Long reviewId) {
+        memberService.deleteReview(id, reviewId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/QAList")
+    public ResponseEntity<ItemQADto.MyItemQAListPage> getMyItemQAList(@PathVariable("id") Long id, @RequestParam("nowPage") int nowPage) {
+        return ResponseEntity.ok().body(memberService.getMyItemQAList(id, nowPage));
+    }
+
+    @PostMapping("/{id}/QA")
+    public ResponseEntity<Void> saveQA(@PathVariable("id") Long id, @RequestBody ItemQADto.SaveQARequest dto) {
+        memberService.saveQA(id, dto);
         return ResponseEntity.ok().build();
     }
 }

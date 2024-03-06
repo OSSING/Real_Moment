@@ -1,8 +1,11 @@
 package com.project.Real_Moment.domain.member.repository.custom;
 
-import com.project.Real_Moment.presentation.dto.ItemDto;
+import com.project.Real_Moment.domain.member.entity.Item;
+import com.project.Real_Moment.presentation.dto.CondDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ItemRepositoryCustom {
 
-    ItemDto.ItemCondResponse findItemListByCond(String itemSort, Long categoryId, String itemName, Boolean isDelete, int nowPage);
+    Page<Item> findItemListByCond(Pageable pageable, CondDto.ItemListCond dto);
 }

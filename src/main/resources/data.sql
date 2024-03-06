@@ -89,7 +89,7 @@ VALUES
 (3, 3, 1000, 0, 0, 1000, 3, 3000);
 
 -- QA Table 더미데이터
-INSERT INTO item_qa (item_id, member_id, title, content, answer)
+INSERT INTO item_qa (item_id, member_id, title, content, is_answer)
 VALUES
 (1, 1, 'QA title1', 'QA content1', false),
 (2, 2, 'QA title2', 'QA content2', true),
