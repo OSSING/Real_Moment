@@ -9,6 +9,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "item_qa")
 public class ItemQA extends BaseTimeEntity {
 
     @Id
@@ -29,6 +30,6 @@ public class ItemQA extends BaseTimeEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private boolean answer = false;
+    private boolean isAnswer = false;
 
 }

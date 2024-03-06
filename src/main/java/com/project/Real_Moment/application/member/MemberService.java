@@ -249,4 +249,17 @@ public class MemberService {
 
         reviewRepository.updateReview(dto);
     }
+
+    @Transactional
+    public void deleteReview(Long id, Long reviewId) {
+        Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
+
+        if (!reviewRepository.existsByIdAndMemberId(reviewId, member)) {
+            throw new IllegalArgumentException("존재하지 않는 리뷰입니다.");
+        }
+
+        Review review = reviewRepository.findById(reviewId).orElseThrow(IllegalArgumentException::new);
+
+        reviewRepository.delete(review);
+    }
 }
