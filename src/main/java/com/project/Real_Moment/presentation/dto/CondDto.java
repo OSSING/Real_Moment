@@ -14,4 +14,15 @@ public class CondDto {
         private Boolean isAnswer;
         private int nowPage;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ItemListCond {
+        private String itemSort;
+        private Long categoryId;
+        private String itemName;
+        private Boolean isDelete;
+        private int nowPage;
+    }
 }
