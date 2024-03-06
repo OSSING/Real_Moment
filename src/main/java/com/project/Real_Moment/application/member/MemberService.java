@@ -5,6 +5,9 @@ import com.project.Real_Moment.domain.member.repository.*;
 import com.project.Real_Moment.presentation.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -114,9 +117,15 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<AddressDto.AddressListResponse> findAddress(Long id) {
-        return addressRepository.findAddressByMemberId_Id(id).stream()
-                .map(AddressDto.AddressListResponse::new).collect(Collectors.toList());
+    public AddressDto.AddressListPage findAddress(Long id, int nowPage) {
+        Pageable pageable = PageRequest.of(nowPage - 1, 10);
+
+        Page<Address> addressList = addressRepository.findAddressByPaging(id, pageable);
+
+        List<AddressDto.AddressListResponse> addressListDto = addressList.stream()
+                .map(AddressDto.AddressListResponse::new).toList();
+
+        return new AddressDto.AddressListPage(addressListDto, addressList.getTotalPages(), nowPage);
     }
 
     @Transactional

@@ -4,6 +4,8 @@ import com.project.Real_Moment.domain.member.entity.Address;
 import com.project.Real_Moment.domain.member.entity.Member;
 import lombok.*;
 
+import java.util.List;
+
 public class AddressDto {
 
     @Getter
@@ -26,6 +28,15 @@ public class AddressDto {
             detAddress = address.getDetAddress();
             isDefAddress = address.getIsDefAddress();
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AddressListPage {
+        private List<AddressListResponse> addressList;
+        private long totalPage;
+        private long nowPage;
     }
 
     @Getter
