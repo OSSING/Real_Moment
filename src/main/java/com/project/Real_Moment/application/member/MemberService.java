@@ -339,4 +339,41 @@ public class MemberService {
 
         itemQARepository.save(itemQA);
     }
+
+    @Transactional(readOnly = true)
+    public ItemQADto.editQAClick editQAClick(Long memberId, Long itemQAId) {
+
+        ItemQA itemQA = checkItemQAValidity(itemQAId, memberId);
+
+        return new ItemQADto.editQAClick(itemQA);
+    }
+
+    @Transactional
+    public void editQA(Long memberId, ItemQADto.editQAClick dto) {
+
+        checkItemQAValidity(dto.getItemQAId(), memberId);
+
+        itemQARepository.updateItemQA(memberId, dto);
+    }
+
+    @Transactional
+    public void deleteQA(Long memberId, Long itemQAId) {
+        ItemQA itemQA = checkItemQAValidity(itemQAId, memberId);
+
+        itemQARepository.delete(itemQA);
+    }
+
+    private ItemQA checkItemQAValidity(Long itemQAId, Long memberId) {
+
+        // 존재하는 ItemQA에 대한 요청인지 검증
+        ItemQA itemQA = itemQARepository.findById(itemQAId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 ItemQA 입니다."));
+
+        // 요청된 ItemQA가 회원의 ItemQA인지 검증
+        if (!itemQA.getMemberId().getId().equals(memberId)) {
+            throw new IllegalArgumentException("회원의 itemQA가 아닙니다.");
+        }
+
+        return itemQA;
+    }
 }
