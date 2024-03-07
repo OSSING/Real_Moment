@@ -98,4 +98,19 @@ public class ItemQADto {
                     .build();
         }
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class editQAClick {
+        private Long itemQAId;
+        private String title;
+        private String content;
+
+        public editQAClick(ItemQA itemQA) {
+            itemQAId = itemQA.getId();
+            title = itemQA.getTitle();
+            content = itemQA.getContent();
+        }
+    }
 }
