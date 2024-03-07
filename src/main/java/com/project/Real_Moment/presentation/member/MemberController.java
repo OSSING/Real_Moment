@@ -215,5 +215,22 @@ public class MemberController {
         memberService.saveQA(id, dto);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{id}/QA/data")
+    public ResponseEntity<ItemQADto.editQAClick> editQAClick(@PathVariable("id") Long id, @RequestParam("itemQAId") Long itemQAId) {
+        return ResponseEntity.ok().body(memberService.editQAClick(id, itemQAId));
+    }
+
+    @PatchMapping("/{id}/QA")
+    public ResponseEntity<Void> editQA(@PathVariable("id") Long id, @RequestBody ItemQADto.editQAClick dto) {
+        memberService.editQA(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/QA")
+    public ResponseEntity<Void> deleteQA(@PathVariable("id") Long id, @RequestParam("itemQAId") Long itemQAId) {
+        memberService.deleteQA(id, itemQAId);
+        return ResponseEntity.ok().build();
+    }
 }
 

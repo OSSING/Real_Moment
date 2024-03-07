@@ -3,6 +3,7 @@ package com.project.Real_Moment.domain.member.repository.impl;
 import com.project.Real_Moment.domain.member.entity.ItemQA;
 import com.project.Real_Moment.domain.member.repository.custom.ItemQARepositoryCustom;
 import com.project.Real_Moment.presentation.dto.CondDto;
+import com.project.Real_Moment.presentation.dto.ItemQADto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +63,17 @@ public class ItemQARepositoryImpl implements ItemQARepositoryCustom {
                 .fetchOne();
 
         return new PageImpl<>(itemQAList, pageable, total);
+    }
+
+    @Override
+    public void updateItemQA(Long memberId, ItemQADto.editQAClick dto) {
+        queryFactory
+                .update(itemQA)
+                .set(itemQA.title, dto.getTitle())
+                .set(itemQA.content, dto.getContent())
+                .where(itemQA.memberId.id.eq(memberId),
+                        itemQA.id.eq(dto.getItemQAId()))
+                .execute();
     }
 
     private BooleanExpression itemIdEq(Long itemId) {
