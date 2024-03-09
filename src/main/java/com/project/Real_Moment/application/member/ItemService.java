@@ -1,7 +1,7 @@
 package com.project.Real_Moment.application.member;
 
-import com.project.Real_Moment.domain.member.entity.Item;
-import com.project.Real_Moment.domain.member.repository.ItemRepository;
+import com.project.Real_Moment.domain.entity.Item;
+import com.project.Real_Moment.domain.repository.ItemRepository;
 import com.project.Real_Moment.presentation.dto.CondDto;
 import com.project.Real_Moment.presentation.dto.ItemDto;
 import lombok.RequiredArgsConstructor;

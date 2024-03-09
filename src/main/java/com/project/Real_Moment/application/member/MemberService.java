@@ -1,7 +1,9 @@
 package com.project.Real_Moment.application.member;
 
-import com.project.Real_Moment.domain.member.entity.*;
-import com.project.Real_Moment.domain.member.repository.*;
+import com.project.Real_Moment.domain.entity.*;
+import com.project.Real_Moment.domain.entity.*;
+import com.project.Real_Moment.domain.repository.*;
+import com.project.Real_Moment.domain.repository.*;
 import com.project.Real_Moment.presentation.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -79,6 +81,7 @@ public class MemberService {
     @Transactional
     public MemberDto.MemberInfoUpdateResponse changePassword(Long id, String password) {
         String encodedPassword = passwordEncoder.encode(password);
+
         Member member = memberRepository.updatePasswordById(id, encodedPassword);
 
         return new MemberDto.MemberInfoUpdateResponse(member);

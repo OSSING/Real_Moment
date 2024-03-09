@@ -1,6 +1,6 @@
 package com.project.Real_Moment.presentation.dto;
 
-import com.project.Real_Moment.domain.member.entity.Category;
+import com.project.Real_Moment.domain.entity.Category;
 import lombok.*;
 
 public class CategoryDto {

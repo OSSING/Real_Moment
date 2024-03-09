@@ -1,10 +1,8 @@
 package com.project.Real_Moment.auth.jwt;
 
 import com.project.Real_Moment.auth.jwt.service.AuthService;
-import com.project.Real_Moment.domain.member.entity.Member;
-import com.project.Real_Moment.domain.member.repository.MemberRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import com.project.Real_Moment.domain.entity.Member;
+import com.project.Real_Moment.domain.repository.MemberRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

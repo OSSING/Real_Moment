@@ -1,8 +1,7 @@
 package com.project.Real_Moment.presentation.dto;
 
 
-import com.project.Real_Moment.domain.member.entity.Member;
-import com.project.Real_Moment.domain.member.entity.Order;
+import com.project.Real_Moment.domain.entity.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -87,6 +86,7 @@ public class MemberDto {
     }
 
     @Getter
+    @ToString
     @AllArgsConstructor
     @NoArgsConstructor
     public static class MemberLoginDto {

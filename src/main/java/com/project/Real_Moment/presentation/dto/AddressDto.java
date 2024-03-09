@@ -1,7 +1,7 @@
 package com.project.Real_Moment.presentation.dto;
 
-import com.project.Real_Moment.domain.member.entity.Address;
-import com.project.Real_Moment.domain.member.entity.Member;
+import com.project.Real_Moment.domain.entity.Address;
+import com.project.Real_Moment.domain.entity.Member;
 import lombok.*;
 
 import java.util.List;
