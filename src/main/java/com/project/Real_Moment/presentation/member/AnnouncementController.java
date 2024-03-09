@@ -20,4 +20,9 @@ public class AnnouncementController {
     public ResponseEntity<AnnouncementDto.AnnouncementListWrapper> getAnnouncementList(@RequestParam("nowPage") int nowPage) {
         return ResponseEntity.ok().body(announcementService.getAnnouncementList(nowPage));
     }
+
+    @GetMapping("/announcement")
+    public ResponseEntity<AnnouncementDto.AnnouncementDef> getAnnouncement(@RequestParam("announcementId") Long announcementId) {
+        return ResponseEntity.ok().body(announcementService.getAnnouncement(announcementId));
+    }
 }

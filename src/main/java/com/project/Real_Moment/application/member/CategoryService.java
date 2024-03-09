@@ -1,7 +1,7 @@
 package com.project.Real_Moment.application.member;
 
-import com.project.Real_Moment.domain.member.entity.Category;
-import com.project.Real_Moment.domain.member.repository.CategoryRepository;
+import com.project.Real_Moment.domain.entity.Category;
+import com.project.Real_Moment.domain.repository.CategoryRepository;
 import com.project.Real_Moment.presentation.dto.CategoryDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

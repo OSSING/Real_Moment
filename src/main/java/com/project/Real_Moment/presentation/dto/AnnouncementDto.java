@@ -1,6 +1,6 @@
 package com.project.Real_Moment.presentation.dto;
 
-import com.project.Real_Moment.domain.member.entity.Announcement;
+import com.project.Real_Moment.domain.entity.Announcement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +35,31 @@ public class AnnouncementDto {
             announcementId = announcement.getId();
             adminName = announcement.getAdminId().getLoginId();
             title = announcement.getTitle();
+            isFix = announcement.isFix();
+            viewCount = announcement.getViewCount();
+            createdDate = announcement.getCreatedDate();
+            lastModifiedDate = announcement.getLastModifiedDate();
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AnnouncementDef {
+        private Long announcementId;
+        private String adminName;
+        private String title;
+        private String content;
+        private boolean isFix;
+        private Long viewCount;
+        private LocalDateTime createdDate;
+        private LocalDateTime lastModifiedDate;
+
+        public AnnouncementDef(Announcement announcement) {
+            announcementId = announcement.getId();
+            adminName = announcement.getAdminId().getLoginId();
+            title = announcement.getTitle();
+            content = announcement.getContent();
             isFix = announcement.isFix();
             viewCount = announcement.getViewCount();
             createdDate = announcement.getCreatedDate();

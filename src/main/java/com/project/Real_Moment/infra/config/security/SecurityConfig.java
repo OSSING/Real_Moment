@@ -4,7 +4,7 @@ import com.project.Real_Moment.auth.jwt.JwtAccessDeniedHandler;
 import com.project.Real_Moment.auth.jwt.JwtAuthenticationEntryPoint;
 import com.project.Real_Moment.auth.jwt.TokenProvider;
 import com.project.Real_Moment.auth.jwt.service.AuthService;
-import com.project.Real_Moment.domain.member.repository.MemberRepository;
+import com.project.Real_Moment.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

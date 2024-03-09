@@ -1,10 +1,9 @@
 package com.project.Real_Moment.application.member;
 
-import com.project.Real_Moment.domain.member.entity.ItemQA;
-import com.project.Real_Moment.domain.member.entity.QAComment;
-import com.project.Real_Moment.domain.member.repository.ItemQARepository;
-import com.project.Real_Moment.domain.member.repository.ItemRepository;
-import com.project.Real_Moment.domain.member.repository.QACommentRepository;
+import com.project.Real_Moment.domain.entity.ItemQA;
+import com.project.Real_Moment.domain.entity.QAComment;
+import com.project.Real_Moment.domain.repository.ItemQARepository;
+import com.project.Real_Moment.domain.repository.QACommentRepository;
 import com.project.Real_Moment.presentation.dto.CondDto;
 import com.project.Real_Moment.presentation.dto.ItemQADto;
 import com.project.Real_Moment.presentation.dto.QACommentDto;
