@@ -115,3 +115,17 @@ VALUES
 (1, 2),
 (2, 3),
 (3, 1);
+
+-- OneOnOne Table 더미데이터
+INSERT INTO one_on_one (member_id, title, content, is_answer)
+VALUES
+(1, 'OneOnOne title1', 'OneOnOne content1', true),
+(2, 'OneOnOne title2', 'OneOnOne content1', true),
+(3, 'OneOnOne title3', 'OneOnOne content1', true);
+
+-- Comment Table 더미데이터
+INSERT INTO comment (admin_id, one_on_one_id, content)
+VALUES
+(1, 1, 'OneOnOne content1'),
+(1, 2, 'OneOnOne content1'),
+(1, 3, 'OneOnOne content1');
