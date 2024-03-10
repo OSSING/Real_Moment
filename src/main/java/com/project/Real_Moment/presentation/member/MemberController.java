@@ -240,4 +240,10 @@ public class MemberController {
         CondDto.OneOnOneListCond dto = new CondDto.OneOnOneListCond(answer, nowPage);
         return ResponseEntity.ok().body(memberService.getOneOnOneList(id, dto));
     }
+
+    @PostMapping("{id}/oneOnOne")
+    public ResponseEntity<Void> saveOneOnOne(@PathVariable("id") Long id, @RequestBody OneOnOneDto.SaveOneOnOne dto) {
+        memberService.saveOneOnOne(id, dto);
+        return ResponseEntity.ok().build();
+    }
 }
