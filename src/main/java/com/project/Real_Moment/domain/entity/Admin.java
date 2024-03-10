@@ -27,7 +27,7 @@ public class Admin extends BaseTimeEntity {
 
     private String name;
 
-    private boolean isDelete;
+    private boolean isDelete = false;
 
     @Enumerated(EnumType.STRING)
     private AdminAuthority roles;

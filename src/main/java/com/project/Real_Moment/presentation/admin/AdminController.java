@@ -2,6 +2,7 @@ package com.project.Real_Moment.presentation.admin;
 
 import com.project.Real_Moment.auth.jwt.JwtFilter;
 import com.project.Real_Moment.auth.jwt.TokenProvider;
+import com.project.Real_Moment.auth.jwt.dto.TokenDto;
 import com.project.Real_Moment.presentation.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,14 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/admin")
 public class AdminController {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
 
-    @PostMapping("/login")
-    public ResponseEntity<Void> login(@RequestBody MemberDto.MemberLoginDto dto) {
+    @PostMapping("/adminLogin")
+    public ResponseEntity<TokenDto> login(@RequestBody MemberDto.MemberLoginDto dto) {
 
         log.info("LoginDto = {}", dto.toString());
 
@@ -41,10 +41,15 @@ public class AdminController {
         String accessToken = tokenProvider.createAccessToken(authentication);
         String refreshToken = tokenProvider.createRefreshToken(authentication);
 
+        TokenDto tokenDto = new TokenDto(accessToken, refreshToken);
+
+        log.info("로그인 성공 후 생성된 Access: {}", accessToken);
+        log.info("로그인 성공 후 생성된 Refresh: {}", refreshToken);
+
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.ACCESSTOKEN_HEADER, "Bearer " + accessToken);
         httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + refreshToken);
 
-        return new ResponseEntity<>(httpHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(tokenDto, httpHeaders, HttpStatus.OK);
     }
 }
