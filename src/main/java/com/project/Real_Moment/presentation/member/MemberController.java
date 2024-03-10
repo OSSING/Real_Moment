@@ -246,4 +246,15 @@ public class MemberController {
         memberService.saveOneOnOne(id, dto);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{id}/oneOnOne")
+    public ResponseEntity<OneOnOneDto.editOneOnOneClick> editOneOnOneClick(@PathVariable("id") Long id, @RequestParam("oneOnOneId") Long oneOnOneId) {
+        return ResponseEntity.ok().body(memberService.editOneOnOneClick(id, oneOnOneId));
+    }
+
+    @PatchMapping("/{id}/oneOnOne")
+    public ResponseEntity<Void> editOneOnOne(@PathVariable("id") Long id, @RequestBody OneOnOneDto.editOneOnOneClick dto) {
+        memberService.editOneOnOne(id, dto);
+        return ResponseEntity.ok().build();
+    }
 }
