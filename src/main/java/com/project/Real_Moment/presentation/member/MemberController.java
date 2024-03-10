@@ -232,4 +232,12 @@ public class MemberController {
         memberService.deleteQA(id, itemQAId);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{id}/oneOnOneList")
+    public ResponseEntity<OneOnOneDto.OneOnOneWrapper> getOneOnOneList(@PathVariable("id") Long id,
+                                            @RequestParam("answer") Boolean answer,
+                                            @RequestParam("nowPage") int nowPage) {
+        CondDto.OneOnOneListCond dto = new CondDto.OneOnOneListCond(answer, nowPage);
+        return ResponseEntity.ok().body(memberService.getOneOnOneList(id, dto));
+    }
 }

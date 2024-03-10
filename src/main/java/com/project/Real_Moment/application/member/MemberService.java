@@ -1,8 +1,6 @@
 package com.project.Real_Moment.application.member;
 
 import com.project.Real_Moment.domain.entity.*;
-import com.project.Real_Moment.domain.entity.*;
-import com.project.Real_Moment.domain.repository.*;
 import com.project.Real_Moment.domain.repository.*;
 import com.project.Real_Moment.presentation.dto.*;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +29,8 @@ public class MemberService {
     private final ReviewRepository reviewRepository;
     private final ItemQARepository itemQARepository;
     private final QACommentRepository qaCommentRepository;
+    private final OneOnOneRepository oneonOneRepository;
+    private final CommentRepository commentRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -378,5 +378,30 @@ public class MemberService {
         }
 
         return itemQA;
+    }
+
+    @Transactional
+    public OneOnOneDto.OneOnOneWrapper getOneOnOneList(Long id, CondDto.OneOnOneListCond dto) {
+        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 10);
+
+        Page<OneOnOne> oneOnOneListByPaging = oneonOneRepository.findOneOnOneListByPaging(id, dto, pageable);
+
+        List<OneOnOneDto.OneOnOneList> oneOnOneListDto = oneOnOneListByPaging.stream()
+                .map(OneOnOneDto.OneOnOneList::new)
+                .toList();
+
+        for (OneOnOneDto.OneOnOneList oneOnOneList : oneOnOneListDto) {
+            Comment comment = commentRepository.findById(oneOnOneList.getOneOnOneId()).orElse(null);
+
+            CommentDto.commentResponse commentDto = null;
+
+            if (comment != null) {
+                commentDto = new CommentDto.commentResponse(comment);
+            }
+
+            oneOnOneList.setComment(commentDto);
+        }
+
+        return new OneOnOneDto.OneOnOneWrapper(oneOnOneListDto, oneOnOneListByPaging.getTotalPages(), dto.getNowPage());
     }
 }
