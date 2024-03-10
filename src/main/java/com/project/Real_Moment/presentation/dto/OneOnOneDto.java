@@ -1,5 +1,6 @@
 package com.project.Real_Moment.presentation.dto;
 
+import com.project.Real_Moment.domain.entity.Member;
 import com.project.Real_Moment.domain.entity.OneOnOne;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,6 +33,22 @@ public class OneOnOneDto {
             oneOnOneId = oneOnOne.getId();
             title = oneOnOne.getTitle();
             content = oneOnOne.getContent();
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SaveOneOnOne {
+        private String title;
+        private String content;
+
+        public OneOnOne toEntity(Member member) {
+            return OneOnOne.builder()
+                    .memberId(member)
+                    .title(title)
+                    .content(content)
+                    .build();
         }
     }
 }

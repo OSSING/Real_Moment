@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -380,7 +381,7 @@ public class MemberService {
         return itemQA;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public OneOnOneDto.OneOnOneWrapper getOneOnOneList(Long id, CondDto.OneOnOneListCond dto) {
         Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 10);
 
@@ -403,5 +404,13 @@ public class MemberService {
         }
 
         return new OneOnOneDto.OneOnOneWrapper(oneOnOneListDto, oneOnOneListByPaging.getTotalPages(), dto.getNowPage());
+    }
+
+    @Transactional
+    public void saveOneOnOne(Long id, OneOnOneDto.SaveOneOnOne dto) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하는 회원이 아닙니다."));
+
+        oneonOneRepository.save(dto.toEntity(member));
     }
 }

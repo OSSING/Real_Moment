@@ -5,6 +5,7 @@ import lombok.*;
 
 @Getter
 @Entity
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class OneOnOne {
@@ -23,5 +24,6 @@ public class OneOnOne {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @Builder.Default
     private boolean isAnswer = false;
 }
