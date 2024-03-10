@@ -63,7 +63,7 @@ public class SecurityConfig {
                                 "/QAList",
                                 "/announcementList",
                                 "/announcement",
-                                "/admin/login",
+                                "/adminLogin",
                                 "/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )

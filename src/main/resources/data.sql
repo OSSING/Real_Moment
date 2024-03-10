@@ -28,11 +28,11 @@ INSERT INTO address (member_id, name, tel, main_address, det_address, is_def_add
 
 -- Admin Table 더미데이터
 INSERT INTO admin (login_id, login_password, email, name, is_delete, roles) VALUES
-('adminId1', '$2a$10$3rNtn9JeSQmg3MTk1uBxS.Y1Ks.qdG2WKmiOxWSqbHVh0aYkJyg22', 'admin1@example.com', 'adminName1', TRUE, 'ROLE_CUSTOMER_MANAGER'),
-('adminId2', '$2a$10$1mVZ/tnAvI9NqFZEULjf2OJt7BorY1vXlukgyPxJ83DZ0ocRpY5sC', 'admin2@example.com', 'adminName2', TRUE, 'ROLE_PRODUCT_MANAGER'),
-('adminId3', '$2a$10$qkiojc.QSXcGxOOPKDo0Ruu2TlPR5d3VhGkOOQf80BLBIWadvgTbO', 'admin2@example.com', 'adminName3', TRUE, 'ROLE_ORDER_MANAGER'),
-('adminId4', '$2a$10$HK7tpwoV4THD9Hb1Fs3bGunn13UudbdM7DtploEHBa72Qg3RCOIV.', 'admin4@example.com', 'adminName4', TRUE, 'ROLE_PRODUCT_MANAGER'),
-('adminId5', '$2a$10$tXCITPXWabNySF2yF149XOME4QpcL87jCKlvgsGBHf7PbQQvE9iNy', 'admin5@example.com', 'adminName5', TRUE, 'ROLE_ADMIN_SUPERVISOR');
+('adminId1', '$2a$10$3rNtn9JeSQmg3MTk1uBxS.Y1Ks.qdG2WKmiOxWSqbHVh0aYkJyg22', 'admin1@example.com', 'adminName1', false, 'ROLE_CUSTOMER_MANAGER'),
+('adminId2', '$2a$10$1mVZ/tnAvI9NqFZEULjf2OJt7BorY1vXlukgyPxJ83DZ0ocRpY5sC', 'admin2@example.com', 'adminName2', false, 'ROLE_PRODUCT_MANAGER'),
+('adminId3', '$2a$10$qkiojc.QSXcGxOOPKDo0Ruu2TlPR5d3VhGkOOQf80BLBIWadvgTbO', 'admin2@example.com', 'adminName3', false, 'ROLE_ORDER_MANAGER'),
+('adminId4', '$2a$10$HK7tpwoV4THD9Hb1Fs3bGunn13UudbdM7DtploEHBa72Qg3RCOIV.', 'admin4@example.com', 'adminName4', false, 'ROLE_PRODUCT_MANAGER'),
+('adminId5', '$2a$10$tXCITPXWabNySF2yF149XOME4QpcL87jCKlvgsGBHf7PbQQvE9iNy', 'admin5@example.com', 'adminName5', false, 'ROLE_ADMIN_SUPERVISOR');
 
 ---- admin_authority Table 더미데이터 (Authority와 Admin 테이블의 중간 테이블)
 --INSERT INTO admin_authority (admin_id, authority_name) VALUES
