@@ -51,4 +51,19 @@ public class OneOnOneDto {
                     .build();
         }
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class editOneOnOneClick {
+        private Long oneOnOneId;
+        private String title;
+        private String content;
+
+        public editOneOnOneClick(OneOnOne oneOnOne) {
+            oneOnOneId = oneOnOne.getId();
+            title = oneOnOne.getTitle();
+            content = oneOnOne.getContent();
+        }
+    }
 }

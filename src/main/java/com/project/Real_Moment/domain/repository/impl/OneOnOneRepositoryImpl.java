@@ -3,6 +3,7 @@ package com.project.Real_Moment.domain.repository.impl;
 import com.project.Real_Moment.domain.entity.OneOnOne;
 import com.project.Real_Moment.domain.repository.custom.OneOnOneRepositoryCustom;
 import com.project.Real_Moment.presentation.dto.CondDto;
+import com.project.Real_Moment.presentation.dto.OneOnOneDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,17 @@ public class OneOnOneRepositoryImpl implements OneOnOneRepositoryCustom {
                 .fetchOne();
 
         return new PageImpl<>(oneOnOneList, pageable, total);
+    }
+
+    @Override
+    public void updateOneOnOne(Long memberId, OneOnOneDto.editOneOnOneClick dto) {
+        queryFactory
+                .update(oneOnOne)
+                .set(oneOnOne.title, dto.getTitle())
+                .set(oneOnOne.content, dto.getContent())
+                .where(oneOnOne.id.eq(dto.getOneOnOneId()),
+                        oneOnOne.memberId.id.eq(memberId))
+                .execute();
     }
 
     private BooleanExpression answerEq(Boolean answer) {

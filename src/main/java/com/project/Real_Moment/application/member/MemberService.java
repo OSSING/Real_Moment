@@ -413,4 +413,30 @@ public class MemberService {
 
         oneonOneRepository.save(dto.toEntity(member));
     }
+
+    @Transactional(readOnly = true)
+    public OneOnOneDto.editOneOnOneClick editOneOnOneClick(Long id, Long oneOnOneId) {
+        OneOnOne oneOnOne = checkOneOnOneValidity(oneOnOneId, id);
+        return new OneOnOneDto.editOneOnOneClick(oneOnOne);
+    }
+
+    @Transactional
+    public void editOneOnOne(Long memberId, OneOnOneDto.editOneOnOneClick dto) {
+        checkOneOnOneValidity(dto.getOneOnOneId(), memberId);
+        oneonOneRepository.updateOneOnOne(memberId, dto);
+    }
+
+    private OneOnOne checkOneOnOneValidity(Long oneOnOneId, Long memberId) {
+
+        // 존재하는 OneOnOne에 대한 요청인지 검증
+        OneOnOne oneOnOne = oneonOneRepository.findById(oneOnOneId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 OneOnOneId 입니다."));
+
+        // 요청된 OneOnOne가 회원의 OneOnOne인지 검증
+        if (!oneOnOne.getMemberId().getId().equals(memberId)) {
+            throw new IllegalArgumentException("회원의 OneOnOne가 아닙니다.");
+        }
+
+        return oneOnOne;
+    }
 }
