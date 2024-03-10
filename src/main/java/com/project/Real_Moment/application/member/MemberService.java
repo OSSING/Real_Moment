@@ -426,6 +426,12 @@ public class MemberService {
         oneonOneRepository.updateOneOnOne(memberId, dto);
     }
 
+    @Transactional
+    public void deleteOneOnOne(Long memberId, Long oneOnOneId) {
+        OneOnOne oneOnOne = checkOneOnOneValidity(oneOnOneId, memberId);
+        oneonOneRepository.delete(oneOnOne);
+    }
+
     private OneOnOne checkOneOnOneValidity(Long oneOnOneId, Long memberId) {
 
         // 존재하는 OneOnOne에 대한 요청인지 검증

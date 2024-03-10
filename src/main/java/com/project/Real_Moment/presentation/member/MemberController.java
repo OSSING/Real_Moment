@@ -257,4 +257,10 @@ public class MemberController {
         memberService.editOneOnOne(id, dto);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{id}/oneOnOne")
+    public ResponseEntity<Void> deleteOneOnOne(@PathVariable("id") Long id, @RequestParam("oneOnOneId") Long oneOnOneId) {
+        memberService.deleteOneOnOne(id, oneOnOneId);
+        return ResponseEntity.ok().build();
+    }
 }
