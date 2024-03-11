@@ -215,5 +215,53 @@ public class MemberController {
         memberService.saveQA(id, dto);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{id}/QA/data")
+    public ResponseEntity<ItemQADto.editQAClick> editQAClick(@PathVariable("id") Long id, @RequestParam("itemQAId") Long itemQAId) {
+        return ResponseEntity.ok().body(memberService.editQAClick(id, itemQAId));
+    }
+
+    @PatchMapping("/{id}/QA")
+    public ResponseEntity<Void> editQA(@PathVariable("id") Long id, @RequestBody ItemQADto.editQAClick dto) {
+        memberService.editQA(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/QA")
+    public ResponseEntity<Void> deleteQA(@PathVariable("id") Long id, @RequestParam("itemQAId") Long itemQAId) {
+        memberService.deleteQA(id, itemQAId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/oneOnOneList")
+    public ResponseEntity<OneOnOneDto.OneOnOneWrapper> getOneOnOneList(@PathVariable("id") Long id,
+                                            @RequestParam("answer") Boolean answer,
+                                            @RequestParam("nowPage") int nowPage) {
+        CondDto.OneOnOneListCond dto = new CondDto.OneOnOneListCond(answer, nowPage);
+        return ResponseEntity.ok().body(memberService.getOneOnOneList(id, dto));
+    }
+
+    @PostMapping("{id}/oneOnOne")
+    public ResponseEntity<Void> saveOneOnOne(@PathVariable("id") Long id, @RequestBody OneOnOneDto.SaveOneOnOne dto) {
+        memberService.saveOneOnOne(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/oneOnOne")
+    public ResponseEntity<OneOnOneDto.editOneOnOneClick> editOneOnOneClick(@PathVariable("id") Long id, @RequestParam("oneOnOneId") Long oneOnOneId) {
+        return ResponseEntity.ok().body(memberService.editOneOnOneClick(id, oneOnOneId));
+    }
+
+    @PatchMapping("/{id}/oneOnOne")
+    public ResponseEntity<Void> editOneOnOne(@PathVariable("id") Long id, @RequestBody OneOnOneDto.editOneOnOneClick dto) {
+        memberService.editOneOnOne(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/{id}/oneOnOne")
+    public ResponseEntity<Void> deleteOneOnOne(@PathVariable("id") Long id, @RequestParam("oneOnOneId") Long oneOnOneId) {
+        memberService.deleteOneOnOne(id, oneOnOneId);
+        return ResponseEntity.ok().build();
+    }
 }
 
