@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -29,5 +31,11 @@ public class AdminCategoryService {
         Category category = dto.toEntity(parentCategory);
 
         categoryRepository.save(category);
+    }
+
+    @Transactional(readOnly = true)
+    public List<CategoryDto.CategoryList> getCategoryList() {
+        return categoryRepository.findAll().stream()
+                .map(CategoryDto.CategoryList::new).toList();
     }
 }
