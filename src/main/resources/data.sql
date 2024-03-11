@@ -53,7 +53,7 @@ VALUES
 (4, 'Announcement title3', 'Announcement content3', TRUE, 75);
 
 -- Category Table 더미데이터
-INSERT INTO category (category_name, parent_category) VALUES
+INSERT INTO category (name, parent_category) VALUES
 ('parent category1', NULL),
 ('parent category2', NULL),
 ('child1', 1),
