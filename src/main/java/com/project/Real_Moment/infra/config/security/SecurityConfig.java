@@ -64,6 +64,7 @@ public class SecurityConfig {
                                 "/announcementList",
                                 "/announcement",
                                 "/adminLogin",
+                                "/adminIdCheck",
                                 "/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
