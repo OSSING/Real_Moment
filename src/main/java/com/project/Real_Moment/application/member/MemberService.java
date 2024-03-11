@@ -1,7 +1,7 @@
 package com.project.Real_Moment.application.member;
 
-import com.project.Real_Moment.domain.member.entity.*;
-import com.project.Real_Moment.domain.member.repository.*;
+import com.project.Real_Moment.domain.entity.*;
+import com.project.Real_Moment.domain.repository.*;
 import com.project.Real_Moment.presentation.dto.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,6 +30,8 @@ public class MemberService {
     private final ReviewRepository reviewRepository;
     private final ItemQARepository itemQARepository;
     private final QACommentRepository qaCommentRepository;
+    private final OneOnOneRepository oneonOneRepository;
+    private final CommentRepository commentRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -79,6 +82,7 @@ public class MemberService {
     @Transactional
     public MemberDto.MemberInfoUpdateResponse changePassword(Long id, String password) {
         String encodedPassword = passwordEncoder.encode(password);
+
         Member member = memberRepository.updatePasswordById(id, encodedPassword);
 
         return new MemberDto.MemberInfoUpdateResponse(member);
@@ -341,5 +345,107 @@ public class MemberService {
         ItemQA itemQA = dto.toEntity(member, item);
 
         itemQARepository.save(itemQA);
+    }
+
+    @Transactional(readOnly = true)
+    public ItemQADto.editQAClick editQAClick(Long memberId, Long itemQAId) {
+
+        ItemQA itemQA = checkItemQAValidity(itemQAId, memberId);
+
+        return new ItemQADto.editQAClick(itemQA);
+    }
+
+    @Transactional
+    public void editQA(Long memberId, ItemQADto.editQAClick dto) {
+
+        checkItemQAValidity(dto.getItemQAId(), memberId);
+
+        itemQARepository.updateItemQA(memberId, dto);
+    }
+
+    @Transactional
+    public void deleteQA(Long memberId, Long itemQAId) {
+        ItemQA itemQA = checkItemQAValidity(itemQAId, memberId);
+
+        itemQARepository.delete(itemQA);
+    }
+
+    private ItemQA checkItemQAValidity(Long itemQAId, Long memberId) {
+
+        // 존재하는 ItemQA에 대한 요청인지 검증
+        ItemQA itemQA = itemQARepository.findById(itemQAId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 ItemQA 입니다."));
+
+        // 요청된 ItemQA가 회원의 ItemQA인지 검증
+        if (!itemQA.getMemberId().getId().equals(memberId)) {
+            throw new IllegalArgumentException("회원의 itemQA가 아닙니다.");
+        }
+
+        return itemQA;
+    }
+
+    @Transactional(readOnly = true)
+    public OneOnOneDto.OneOnOneWrapper getOneOnOneList(Long id, CondDto.OneOnOneListCond dto) {
+        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 10);
+
+        Page<OneOnOne> oneOnOneListByPaging = oneonOneRepository.findOneOnOneListByPaging(id, dto, pageable);
+
+        List<OneOnOneDto.OneOnOneList> oneOnOneListDto = oneOnOneListByPaging.stream()
+                .map(OneOnOneDto.OneOnOneList::new)
+                .toList();
+
+        for (OneOnOneDto.OneOnOneList oneOnOneList : oneOnOneListDto) {
+            Comment comment = commentRepository.findById(oneOnOneList.getOneOnOneId()).orElse(null);
+
+            CommentDto.commentResponse commentDto = null;
+
+            if (comment != null) {
+                commentDto = new CommentDto.commentResponse(comment);
+            }
+
+            oneOnOneList.setComment(commentDto);
+        }
+
+        return new OneOnOneDto.OneOnOneWrapper(oneOnOneListDto, oneOnOneListByPaging.getTotalPages(), dto.getNowPage());
+    }
+
+    @Transactional
+    public void saveOneOnOne(Long id, OneOnOneDto.SaveOneOnOne dto) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하는 회원이 아닙니다."));
+
+        oneonOneRepository.save(dto.toEntity(member));
+    }
+
+    @Transactional(readOnly = true)
+    public OneOnOneDto.editOneOnOneClick editOneOnOneClick(Long id, Long oneOnOneId) {
+        OneOnOne oneOnOne = checkOneOnOneValidity(oneOnOneId, id);
+        return new OneOnOneDto.editOneOnOneClick(oneOnOne);
+    }
+
+    @Transactional
+    public void editOneOnOne(Long memberId, OneOnOneDto.editOneOnOneClick dto) {
+        checkOneOnOneValidity(dto.getOneOnOneId(), memberId);
+        oneonOneRepository.updateOneOnOne(memberId, dto);
+    }
+
+    @Transactional
+    public void deleteOneOnOne(Long memberId, Long oneOnOneId) {
+        OneOnOne oneOnOne = checkOneOnOneValidity(oneOnOneId, memberId);
+        oneonOneRepository.delete(oneOnOne);
+    }
+
+    private OneOnOne checkOneOnOneValidity(Long oneOnOneId, Long memberId) {
+
+        // 존재하는 OneOnOne에 대한 요청인지 검증
+        OneOnOne oneOnOne = oneonOneRepository.findById(oneOnOneId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 OneOnOneId 입니다."));
+
+        // 요청된 OneOnOne가 회원의 OneOnOne인지 검증
+        if (!oneOnOne.getMemberId().getId().equals(memberId)) {
+            throw new IllegalArgumentException("회원의 OneOnOne가 아닙니다.");
+        }
+
+        return oneOnOne;
     }
 }

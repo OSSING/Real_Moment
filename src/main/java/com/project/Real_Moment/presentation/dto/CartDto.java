@@ -1,8 +1,8 @@
 package com.project.Real_Moment.presentation.dto;
 
-import com.project.Real_Moment.domain.member.entity.Cart;
-import com.project.Real_Moment.domain.member.entity.Item;
-import com.project.Real_Moment.domain.member.entity.Member;
+import com.project.Real_Moment.domain.entity.Cart;
+import com.project.Real_Moment.domain.entity.Item;
+import com.project.Real_Moment.domain.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

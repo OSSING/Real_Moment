@@ -1,9 +1,10 @@
 package com.project.Real_Moment.auth.jwt.service;
 
-import com.project.Real_Moment.domain.admin.entity.Admin;
-import com.project.Real_Moment.domain.member.entity.Member;
-import com.project.Real_Moment.domain.admin.repository.AdminRepository;
-import com.project.Real_Moment.domain.member.repository.MemberRepository;
+import com.project.Real_Moment.domain.entity.Admin;
+import com.project.Real_Moment.domain.entity.AdminAuthority;
+import com.project.Real_Moment.domain.entity.Member;
+import com.project.Real_Moment.domain.repository.AdminRepository;
+import com.project.Real_Moment.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -14,9 +15,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Slf4j
 @Component("userDetailsService")
@@ -37,21 +41,38 @@ public class CustomUserDetailsService implements UserDetailsService {
                         .orElseThrow(() -> new UsernameNotFoundException(loginId + " -> 데이터베이스에서 찾을 수 없습니다.")));
     }
 
+//    private org.springframework.security.core.userdetails.User createAdmin(String adminName, Admin admin) {
+//        if (!admin.isDelete()) {
+//            throw new RuntimeException(adminName + " -> 활성화되어 있지 않습니다.");
+//        }
+//
+//        List<GrantedAuthority> grantedAuthorities = admin.getAuthorities().stream()
+//                .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
+//                .collect(Collectors.toList());
+//        log.info("admin's authority: {}", grantedAuthorities);
+//
+//        return new org.springframework.security.core.userdetails.User(
+//                admin.getLoginId(),
+//                admin.getLoginPassword(),
+//                grantedAuthorities);
+//    }
+
     // DB에서 가져온 정보를 기준으로 Admin이 activated 상태라면 Admin의 권한 정보와 이름, 비밀번호를 담아 userdetails.User 객체를 return
-    private org.springframework.security.core.userdetails.User createAdmin(String adminName, Admin admin) {
-        if (!admin.isActivated()) {
-            throw new RuntimeException(adminName + " -> 활성화되어 있지 않습니다.");
+    private org.springframework.security.core.userdetails.User createAdmin(String AdminName, Admin admin) {
+        if (admin.isDelete()) {
+            throw new RuntimeException(AdminName + " -> 활성화 되어 있지 않습니다.");
         }
 
-        List<GrantedAuthority> grantedAuthorities = admin.getAuthorities().stream()
-                .map(authority -> new SimpleGrantedAuthority(authority.getAuthorityName()))
+        EnumSet<AdminAuthority> rolesSet = EnumSet.of(admin.getRoles());
+        List<SimpleGrantedAuthority> authorities = rolesSet.stream()
+                .map(role -> new SimpleGrantedAuthority(role.name()))
                 .collect(Collectors.toList());
-        log.info("admin's authority: {}", grantedAuthorities);
+        log.info("admin's authority: {}", authorities);
 
         return new org.springframework.security.core.userdetails.User(
                 admin.getLoginId(),
                 admin.getLoginPassword(),
-                grantedAuthorities);
+                authorities);
     }
 
     // DB에 가져온 정보를 기준으로 Member가 activated 상태라면 Member의 권한 정보와 이름, 비밀번호를 담아 userdetails.User 객체를 return

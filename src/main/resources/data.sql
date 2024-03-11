@@ -20,30 +20,30 @@ INSERT INTO address (member_id, name, tel, main_address, det_address, is_def_add
 (3, 'address5', '010-3187-5352', '대전 중구', '508호', TRUE),
 (3, 'address6', '010-1287-4871', '대전 중구', '509호', FALSE);
 
--- Authority Table 더미데이터
-INSERT INTO authority (authority_name) VALUES
-('ROLE_ADMIN1'),
-('ROLE_ADMIN2'),
-('ROLE_ADMIN3');
+---- Authority Table 더미데이터
+--INSERT INTO authority (authority_name) VALUES
+--('ROLE_ADMIN1'),
+--('ROLE_ADMIN2'),
+--('ROLE_ADMIN3');
 
 -- Admin Table 더미데이터
-INSERT INTO admin (login_id, login_password, email, name, activated) VALUES
-('adminId1', 'password1', 'admin1@example.com', 'adminName1', TRUE),
-('adminId2', 'password2', 'admin2@example.com', 'adminName2', TRUE),
-('adminId3', 'password3', 'admin2@example.com', 'adminName3', TRUE),
-('adminId4', 'password4', 'admin4@example.com', 'adminName4', TRUE),
-('adminId5', 'password5', 'admin5@example.com', 'adminName5', TRUE);
+INSERT INTO admin (login_id, login_password, email, name, is_delete, roles) VALUES
+('adminId1', '$2a$10$3rNtn9JeSQmg3MTk1uBxS.Y1Ks.qdG2WKmiOxWSqbHVh0aYkJyg22', 'admin1@example.com', 'adminName1', false, 'ROLE_CUSTOMER_MANAGER'),
+('adminId2', '$2a$10$1mVZ/tnAvI9NqFZEULjf2OJt7BorY1vXlukgyPxJ83DZ0ocRpY5sC', 'admin2@example.com', 'adminName2', false, 'ROLE_PRODUCT_MANAGER'),
+('adminId3', '$2a$10$qkiojc.QSXcGxOOPKDo0Ruu2TlPR5d3VhGkOOQf80BLBIWadvgTbO', 'admin2@example.com', 'adminName3', false, 'ROLE_ORDER_MANAGER'),
+('adminId4', '$2a$10$HK7tpwoV4THD9Hb1Fs3bGunn13UudbdM7DtploEHBa72Qg3RCOIV.', 'admin4@example.com', 'adminName4', false, 'ROLE_PRODUCT_MANAGER'),
+('adminId5', '$2a$10$tXCITPXWabNySF2yF149XOME4QpcL87jCKlvgsGBHf7PbQQvE9iNy', 'admin5@example.com', 'adminName5', false, 'ROLE_ADMIN_SUPERVISOR');
 
--- admin_authority Table 더미데이터 (Authority와 Admin 테이블의 중간 테이블)
-INSERT INTO admin_authority (admin_id, authority_name) VALUES
-(1, 'ROLE_ADMIN1'),
-(1, 'ROLE_ADMIN2'),
-(1, 'ROLE_ADMIN3'),
-(2, 'ROLE_ADMIN2'),
-(2, 'ROLE_ADMIN3'),
-(3, 'ROLE_ADMIN3'),
-(4, 'ROLE_ADMIN3'),
-(5, 'ROLE_ADMIN3');
+---- admin_authority Table 더미데이터 (Authority와 Admin 테이블의 중간 테이블)
+--INSERT INTO admin_authority (admin_id, authority_name) VALUES
+--(1, 'ROLE_ADMIN1'),
+--(1, 'ROLE_ADMIN2'),
+--(1, 'ROLE_ADMIN3'),
+--(2, 'ROLE_ADMIN2'),
+--(2, 'ROLE_ADMIN3'),
+--(3, 'ROLE_ADMIN3'),
+--(4, 'ROLE_ADMIN3'),
+--(5, 'ROLE_ADMIN3');
 
 -- Announcement Table 더미데이터
 INSERT INTO announcement (admin_id, title, content, is_fix, view_count)
@@ -53,7 +53,7 @@ VALUES
 (4, 'Announcement title3', 'Announcement content3', TRUE, 75);
 
 -- Category Table 더미데이터
-INSERT INTO category (category_name, parent_category) VALUES
+INSERT INTO category (name, parent_category) VALUES
 ('parent category1', NULL),
 ('parent category2', NULL),
 ('child1', 1),
@@ -115,3 +115,17 @@ VALUES
 (1, 2),
 (2, 3),
 (3, 1);
+
+-- OneOnOne Table 더미데이터
+INSERT INTO one_on_one (member_id, title, content, is_answer)
+VALUES
+(1, 'OneOnOne title1', 'OneOnOne content1', true),
+(2, 'OneOnOne title2', 'OneOnOne content1', true),
+(3, 'OneOnOne title3', 'OneOnOne content1', true);
+
+-- Comment Table 더미데이터
+INSERT INTO comment (admin_id, one_on_one_id, content)
+VALUES
+(1, 1, 'OneOnOne content1'),
+(1, 2, 'OneOnOne content1'),
+(1, 3, 'OneOnOne content1');

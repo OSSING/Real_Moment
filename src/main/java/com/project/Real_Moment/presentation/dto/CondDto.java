@@ -25,4 +25,12 @@ public class CondDto {
         private Boolean isDelete;
         private int nowPage;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class OneOnOneListCond {
+        private Boolean answer;
+        private int nowPage;
+    }
 }

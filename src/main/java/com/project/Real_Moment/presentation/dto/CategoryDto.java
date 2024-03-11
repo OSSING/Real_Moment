@@ -1,6 +1,6 @@
 package com.project.Real_Moment.presentation.dto;
 
-import com.project.Real_Moment.domain.member.entity.Category;
+import com.project.Real_Moment.domain.entity.Category;
 import lombok.*;
 
 public class CategoryDto {
@@ -9,15 +9,30 @@ public class CategoryDto {
     @ToString
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class CategoryListRes {
+    public static class CategoryList {
         private Long categoryId;
-        private String categoryName;
-        private Long parentCategory;
+        private String name;
+        private Long parentId;
 
-        public CategoryListRes(Category category) {
+        public CategoryList(Category category) {
             categoryId = category.getId();
-            categoryName = category.getCategoryName();
-            parentCategory = category.getParentCategory() != null ? category.getParentCategory().getId() : null;
+            name = category.getName();
+            parentId = category.getParent() != null ? category.getParent().getId() : null;
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SaveCategoryResponse {
+        private String name;
+        private Long parentId;
+
+        public Category toEntity(Category parentCategory) {
+            return Category.builder()
+                    .name(name)
+                    .parent(parentCategory)
+                    .build();
         }
     }
 }
