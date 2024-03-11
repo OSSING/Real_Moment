@@ -16,8 +16,23 @@ public class CategoryDto {
 
         public CategoryListRes(Category category) {
             categoryId = category.getId();
-            categoryName = category.getCategoryName();
-            parentCategory = category.getParentCategory() != null ? category.getParentCategory().getId() : null;
+            categoryName = category.getName();
+            parentCategory = category.getParent() != null ? category.getParent().getId() : null;
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SaveCategoryResponse {
+        private String name;
+        private Long parentId;
+
+        public Category toEntity(Category parentCategory) {
+            return Category.builder()
+                    .name(name)
+                    .parent(parentCategory)
+                    .build();
         }
     }
 }

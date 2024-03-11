@@ -9,9 +9,9 @@ import java.util.List;
 
 @Entity
 @Getter
-@ToString
+@Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Category {
 
     @Id
@@ -19,14 +19,15 @@ public class Category {
     @Column(name = "category_id")
     private Long id;
 
-    private String categoryName;
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_category")
-    private Category parentCategory;
+    private Category parent;
 
-    @OneToMany(mappedBy = "parentCategory")
-    private List<Category> subCategory = new ArrayList<>();
+    @Builder.Default
+    @OneToMany(mappedBy = "parent")
+    private List<Category> child = new ArrayList<>();
 }
 
 // https://velog.io/@joshuara7235/JPA-%EC%82%AC%EC%9A%A9%ED%95%9C-%EC%B9%B4%ED%85%8C%EA%B3%A0%EB%A6%AC-%EA%B5%AC%ED%98%84-infinite-depth-01
