@@ -27,4 +27,10 @@ public class AdminCategoryController {
     public ResponseEntity<List<CategoryDto.CategoryList>> getCategoryList() {
         return ResponseEntity.ok().body(adminCategoryService.getCategoryList());
     }
+
+    @PatchMapping
+    public ResponseEntity<Void> editCategory(@RequestBody CategoryDto.CategoryList dto) {
+        adminCategoryService.editCategory(dto);
+        return ResponseEntity.ok().build();
+    }
 }
