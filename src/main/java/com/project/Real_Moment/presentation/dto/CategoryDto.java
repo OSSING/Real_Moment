@@ -9,15 +9,15 @@ public class CategoryDto {
     @ToString
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    public static class CategoryListRes {
+    public static class CategoryList {
         private Long categoryId;
-        private String categoryName;
-        private Long parentCategory;
+        private String name;
+        private Long parentId;
 
-        public CategoryListRes(Category category) {
+        public CategoryList(Category category) {
             categoryId = category.getId();
-            categoryName = category.getName();
-            parentCategory = category.getParent() != null ? category.getParent().getId() : null;
+            name = category.getName();
+            parentId = category.getParent() != null ? category.getParent().getId() : null;
         }
     }
 
