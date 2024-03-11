@@ -64,8 +64,10 @@ public class SecurityConfig {
                                 "/announcementList",
                                 "/announcement",
                                 "/adminLogin",
+                                "/admin/logout",
                                 "/adminIdCheck",
-                                "/auth/**").permitAll()
+                                "/admin/reissue/accessToken",
+                        "/member/reissue/accessToken").permitAll()
                         .anyRequest().authenticated()
                 )
 

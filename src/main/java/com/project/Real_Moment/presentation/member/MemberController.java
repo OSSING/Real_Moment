@@ -82,7 +82,7 @@ public class MemberController {
 //    }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestHeader("RefreshToken") String refreshToken) {
+    public ResponseEntity<Void> logout(@RequestHeader("RefreshToken") String refreshToken) {
         return ResponseEntity.ok().build();
     }
 

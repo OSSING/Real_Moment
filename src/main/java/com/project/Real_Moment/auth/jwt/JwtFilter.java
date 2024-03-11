@@ -69,8 +69,10 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
             log.info("====== Refresh Token 요청 받음!! ======");
             log.info("요청받은 Refresh : {}", request.getHeader(REFRESHTOKEN_HEADER));
 
+            // accessToken 재발급 처리
             if (requestURI.equals("/member/reissue/accessToken") | requestURI.equals("/admin/reissue/accessToken")) {
                 authService.reissueToken(response, refreshToken);
+                // 로그아웃 요청 처리
             } else {
                 authService.addBlacklist(refreshToken);
             }
