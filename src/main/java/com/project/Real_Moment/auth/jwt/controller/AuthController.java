@@ -7,13 +7,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
     // JwtFilter에서 AuthService를 통해 AccessToken 재발급 과정을 자동으로 수행해서 response에 담는다.
-    @PostMapping("/reissue")
-    public ResponseEntity<Void> refreshReissue() {
+    @PostMapping("/member/reissue/accessToken")
+    public ResponseEntity<Void> memberRefreshReissue() {
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/admin/reissue/accessToken")
+    public ResponseEntity<Void> adminRefreshReissue() {
 
         return ResponseEntity.ok().build();
     }

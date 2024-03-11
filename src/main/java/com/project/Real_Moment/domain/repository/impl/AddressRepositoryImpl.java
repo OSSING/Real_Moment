@@ -51,3 +51,4 @@ public class AddressRepositoryImpl implements AddressRepositoryCustom {
         return new PageImpl<>(addressList, pageable, total);
     }
 }
+

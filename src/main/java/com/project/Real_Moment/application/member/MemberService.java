@@ -120,6 +120,7 @@ public class MemberService {
         }
     }
 
+
     @Transactional(readOnly = true)
     public AddressDto.AddressListPage findAddress(Long id, int nowPage) {
         Pageable pageable = PageRequest.of(nowPage - 1, 10);
@@ -135,6 +136,7 @@ public class MemberService {
     @Transactional
     public void saveAddress(Long id, AddressDto.SaveAddressRequest dto) {
         Member member = memberRepository.findById(id).orElse(null);
+
         Address address = dto.toEntity(member);
         addressRepository.save(address);
     }
@@ -201,6 +203,7 @@ public class MemberService {
     public void deleteWish(Long id) {
         Wish wish = wishRepository.findById(id).orElseThrow(IllegalArgumentException::new);
         wishRepository.delete(wish);
+
     }
 
     @Transactional(readOnly = true)
