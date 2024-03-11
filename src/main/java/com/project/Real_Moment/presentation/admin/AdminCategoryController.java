@@ -33,4 +33,10 @@ public class AdminCategoryController {
         adminCategoryService.editCategory(dto);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping
+    public ResponseEntity<Void> deleteCategory(@RequestParam("categoryId") Long categoryId) {
+        adminCategoryService.deleteCategory(categoryId);
+        return ResponseEntity.ok().build();
+    }
 }
