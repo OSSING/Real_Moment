@@ -1,8 +1,10 @@
 package com.project.Real_Moment.presentation.admin;
 
+import com.project.Real_Moment.application.admin.AdminService;
 import com.project.Real_Moment.auth.jwt.JwtFilter;
 import com.project.Real_Moment.auth.jwt.TokenProvider;
 import com.project.Real_Moment.auth.jwt.dto.TokenDto;
+import com.project.Real_Moment.presentation.dto.AdminDto;
 import com.project.Real_Moment.presentation.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,8 +25,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class AdminController {
 
+    private final AdminService adminService;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
     private final TokenProvider tokenProvider;
+
+    @PostMapping("/adminIdCheck")
+    public ResponseEntity<Boolean> checkIdDuplicate(@RequestBody AdminDto.CheckIdDuplicate dto) {
+        return ResponseEntity.ok().body(adminService.checkIdDuplicate(dto));
+    }
 
     @PostMapping("/adminLogin")
     public ResponseEntity<TokenDto> login(@RequestBody MemberDto.MemberLoginDto dto) {
