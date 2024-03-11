@@ -14,7 +14,7 @@ public class AnnouncementDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class AnnouncementListWrapper {
-        private List<AnnouncementList> announcementList;
+        private List<AnnouncementDto.AnnouncementList> announcementList;
         private long totalPage;
         private long nowPage;
     }
@@ -40,6 +40,15 @@ public class AnnouncementDto {
             createdDate = announcement.getCreatedDate();
             lastModifiedDate = announcement.getLastModifiedDate();
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AnnouncementDefWrapper {
+        private List<AnnouncementDto.AnnouncementDef> announcementList;
+        private long totalPage;
+        private long nowPage;
     }
 
     @Getter
