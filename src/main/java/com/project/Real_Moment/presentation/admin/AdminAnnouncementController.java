@@ -34,4 +34,11 @@ public class AdminAnnouncementController {
     public ResponseEntity<AnnouncementDto.editAnnouncementClick> editAnnouncementClick(@PathVariable("id") Long id, @RequestParam("announcementId") Long announcementId) {
         return ResponseEntity.ok().body(adminAnnouncementService.editAnnouncementClick(id, announcementId));
     }
+
+    @PatchMapping("/admin/{id}/announcement")
+    public ResponseEntity<Void> editAnnouncement(@PathVariable("id") Long id, @RequestBody AnnouncementDto.editAnnouncementClick dto) {
+        log.info("dto.toString : {}", dto.toString());
+        adminAnnouncementService.editAnnouncement(id, dto);
+        return ResponseEntity.ok().build();
+    }
 }

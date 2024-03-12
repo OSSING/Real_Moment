@@ -10,4 +10,6 @@ public interface AnnouncementRepositoryCustom {
     AnnouncementDto.AnnouncementListWrapper findAnnouncementListByPaging(int nowPage);
 
     Page<Announcement> findAnnouncementListByPaging_admin(int nowPage, Pageable pageable);
+
+    void updateAnnouncement(Long adminId, AnnouncementDto.editAnnouncementClick dto);
 }

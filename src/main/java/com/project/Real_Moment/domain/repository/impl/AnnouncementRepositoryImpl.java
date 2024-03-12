@@ -66,4 +66,16 @@ public class AnnouncementRepositoryImpl implements AnnouncementRepositoryCustom 
 
         return new PageImpl<>(announcementList, pageable, total);
     }
+
+    @Override
+    public void updateAnnouncement(Long adminId, AnnouncementDto.editAnnouncementClick dto) {
+        queryFactory
+                .update(announcement)
+                .set(announcement.title, dto.getTitle())
+                .set(announcement.content, dto.getContent())
+                .set(announcement.isFix, dto.getIsFix())
+                .where(announcement.adminId.id.eq(adminId),
+                        announcement.id.eq(dto.getAnnouncementId()))
+                .execute();
+    }
 }
