@@ -1,9 +1,12 @@
 package com.project.Real_Moment.domain.repository.impl;
 
+import com.project.Real_Moment.domain.entity.Announcement;
 import com.project.Real_Moment.domain.repository.custom.AnnouncementRepositoryCustom;
 import com.project.Real_Moment.presentation.dto.AnnouncementDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
@@ -45,5 +48,34 @@ public class AnnouncementRepositoryImpl implements AnnouncementRepositoryCustom 
         long totalPage = (long) Math.ceil((double) total / pageable.getPageSize());
 
         return new AnnouncementDto.AnnouncementListWrapper(announcementList, totalPage, nowPage);
+    }
+
+    @Override
+    public Page<Announcement> findAnnouncementListByPaging_admin(int nowPage, Pageable pageable) {
+
+        List<Announcement> announcementList = queryFactory
+                .selectFrom(announcement)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long total = queryFactory
+                .select(announcement.count())
+                .from(announcement)
+                .fetchOne();
+
+        return new PageImpl<>(announcementList, pageable, total);
+    }
+
+    @Override
+    public void updateAnnouncement(Long adminId, AnnouncementDto.editAnnouncementClick dto) {
+        queryFactory
+                .update(announcement)
+                .set(announcement.title, dto.getTitle())
+                .set(announcement.content, dto.getContent())
+                .set(announcement.isFix, dto.getIsFix())
+                .where(announcement.adminId.id.eq(adminId),
+                        announcement.id.eq(dto.getAnnouncementId()))
+                .execute();
     }
 }
