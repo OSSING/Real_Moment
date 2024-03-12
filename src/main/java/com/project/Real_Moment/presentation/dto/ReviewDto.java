@@ -20,9 +20,19 @@ public class ReviewDto {
         private String loginId;
         private String title;
         private String content;
-        private int star;
+        private Integer star;
         private LocalDateTime createdDate;
         private LocalDateTime lastModifiedDate;
+
+        public ReviewListResponse(Review review) {
+            reviewId = review.getId();
+            loginId = review.getMemberId().getLoginId();
+            title = review.getTitle();
+            content = review.getContent();
+            star = review.getStar();
+            createdDate = review.getCreatedDate();
+            lastModifiedDate = review.getLastModifiedDate();
+        }
     }
 
     @Getter

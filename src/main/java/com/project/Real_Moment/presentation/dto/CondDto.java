@@ -33,4 +33,13 @@ public class CondDto {
         private Boolean answer;
         private int nowPage;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ReviewListCond {
+        private Long itemId;
+        private Integer star;
+        private int nowPage;
+    }
 }
