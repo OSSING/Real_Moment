@@ -1,9 +1,11 @@
 package com.project.Real_Moment.presentation.dto;
 
+import com.project.Real_Moment.domain.entity.Admin;
 import com.project.Real_Moment.domain.entity.Announcement;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -73,6 +75,43 @@ public class AnnouncementDto {
             viewCount = announcement.getViewCount();
             createdDate = announcement.getCreatedDate();
             lastModifiedDate = announcement.getLastModifiedDate();
+        }
+    }
+
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class saveAnnouncement {
+        private String title;
+        private String content;
+        private Boolean isFix;
+
+        public Announcement toEntity(Admin admin) {
+            return Announcement.builder()
+                    .adminId(admin)
+                    .title(title)
+                    .content(content)
+                    .isFix(isFix)
+                    .build();
+        }
+    }
+
+    @Getter
+    @ToString
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class editAnnouncementClick {
+        private Long announcementId;
+        private String title;
+        private String content;
+        private Boolean isFix;
+
+        public editAnnouncementClick(Announcement announcement) {
+            announcementId = announcement.getId();
+            title = announcement.getTitle();
+            content = announcement.getContent();
+            isFix = announcement.isFix();
         }
     }
 }

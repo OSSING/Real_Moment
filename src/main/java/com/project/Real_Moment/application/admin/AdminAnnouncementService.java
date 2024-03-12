@@ -1,6 +1,8 @@
 package com.project.Real_Moment.application.admin;
 
+import com.project.Real_Moment.domain.entity.Admin;
 import com.project.Real_Moment.domain.entity.Announcement;
+import com.project.Real_Moment.domain.repository.AdminRepository;
 import com.project.Real_Moment.domain.repository.AnnouncementRepository;
 import com.project.Real_Moment.presentation.dto.AnnouncementDto;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,7 +21,9 @@ import java.util.List;
 public class AdminAnnouncementService {
 
     private final AnnouncementRepository announcementRepository;
+    private final AdminRepository adminRepository;
 
+    @Transactional(readOnly = true)
     public AnnouncementDto.AnnouncementDefWrapper getAnnouncementList(int nowPage) {
         Pageable pageable = PageRequest.of(nowPage - 1, 10);
 
@@ -29,5 +34,40 @@ public class AdminAnnouncementService {
                 .toList();
 
         return new AnnouncementDto.AnnouncementDefWrapper(announcementDto, announcementPaging.getTotalPages(), nowPage);
+    }
+
+    @Transactional(readOnly = true)
+    public AnnouncementDto.AnnouncementDef getAnnouncement(Long announcementId) {
+        Announcement announcement = announcementRepository.findById(announcementId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 공지사항입니다."));
+
+        return new AnnouncementDto.AnnouncementDef(announcement);
+    }
+
+    @Transactional
+    public void saveAnnouncement(Long adminId, AnnouncementDto.saveAnnouncement dto) {
+        Admin admin = adminRepository.findById(adminId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자입니다."));
+
+        announcementRepository.save(dto.toEntity(admin));
+    }
+
+    @Transactional(readOnly = true)
+    public AnnouncementDto.editAnnouncementClick editAnnouncementClick(Long adminId, Long announcementId) {
+        Announcement announcement = announcementValidity(adminId, announcementId);
+
+        return new AnnouncementDto.editAnnouncementClick(announcement);
+    }
+
+    // Announcement 검증
+    private Announcement announcementValidity(Long adminId, Long announcementId) {
+        Announcement announcement = announcementRepository.findById(announcementId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하는 공지사항이 아닙니다."));
+
+        if (!announcement.getAdminId().getId().equals(adminId)) {
+            throw new IllegalArgumentException("유효하지 않은 관리자입니다.");
+        }
+
+        return announcement;
     }
 }

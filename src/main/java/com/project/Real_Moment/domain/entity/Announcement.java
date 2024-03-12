@@ -6,7 +6,7 @@ import lombok.*;
 
 @Entity
 @Getter
-@ToString
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Announcement extends AuditingUserEntity {
@@ -25,8 +25,9 @@ public class Announcement extends AuditingUserEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private boolean isFix = false;
+    private boolean isFix;
 
-    private Long viewCount;
+    @Builder.Default
+    private Long viewCount = 0L;
 
 }
