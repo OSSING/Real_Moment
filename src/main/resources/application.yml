@@ -51,7 +51,7 @@ server:
 
 jwt:
   header: Authorization
-  #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
+  #HS256 알고리즘을 사용할 것이기 때문에 256bit, 즉 32byte 이상의 secret key를 사용해야 한다.
   #echo 'OSSING-spring-boot-jwt-secret-OSSING-spring-boot-jwt-secret'|base64
   secret: T1NTSU5HLXNwcmluZy1ib290LWp3dC1zZWNyZXQtT1NTSU5HLXNwcmluZy1ib290LWp3dC1zZWNyZXQK
   token-validity-in-seconds: 86400
