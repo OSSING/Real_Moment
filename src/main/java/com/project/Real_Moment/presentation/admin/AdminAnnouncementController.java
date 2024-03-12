@@ -41,4 +41,10 @@ public class AdminAnnouncementController {
         adminAnnouncementService.editAnnouncement(id, dto);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/admin/{id}/announcement")
+    public ResponseEntity<Void> deleteAnnouncement(@PathVariable("id") Long id, @RequestParam("announcementId") Long announcementId) {
+        adminAnnouncementService.deleteAnnouncement(id, announcementId);
+        return ResponseEntity.ok().build();
+    }
 }

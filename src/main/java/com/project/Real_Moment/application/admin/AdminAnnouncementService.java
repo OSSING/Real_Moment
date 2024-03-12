@@ -66,6 +66,12 @@ public class AdminAnnouncementService {
     }
 
     // Announcement 검증
+    public void deleteAnnouncement(Long adminId, Long announcementId) {
+        Announcement announcement = announcementValidity(adminId, announcementId);
+
+        announcementRepository.delete(announcement);
+    }
+
     private Announcement announcementValidity(Long adminId, Long announcementId) {
         Announcement announcement = announcementRepository.findById(announcementId)
                 .orElse(null);
