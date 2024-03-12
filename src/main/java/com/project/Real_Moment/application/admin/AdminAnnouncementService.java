@@ -59,15 +59,24 @@ public class AdminAnnouncementService {
         return new AnnouncementDto.editAnnouncementClick(announcement);
     }
 
+    @Transactional
+    public void editAnnouncement(Long adminId, AnnouncementDto.editAnnouncementClick dto) {
+        announcementValidity(adminId, dto.getAnnouncementId());
+        announcementRepository.updateAnnouncement(adminId, dto);
+    }
+
     // Announcement 검증
     private Announcement announcementValidity(Long adminId, Long announcementId) {
         Announcement announcement = announcementRepository.findById(announcementId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하는 공지사항이 아닙니다."));
+                .orElse(null);
 
-        if (!announcement.getAdminId().getId().equals(adminId)) {
-            throw new IllegalArgumentException("유효하지 않은 관리자입니다.");
+        if (announcement != null) {
+            if (!announcement.getAdminId().getId().equals(adminId)) {
+                throw new IllegalArgumentException("유효하지 않은 관리자입니다.");
+            }
+            return announcement;
+        } else {
+            throw new IllegalArgumentException("존재하지 않는 공지사항입니다.");
         }
-
-        return announcement;
     }
 }
