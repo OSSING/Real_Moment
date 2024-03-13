@@ -13,4 +13,6 @@ public interface ItemQARepositoryCustom {
     Page<ItemQA> findMyItemQAListPage(Long memberId, Pageable pageable);
 
     void updateItemQA(Long memberId, ItemQADto.editQAClick dto);
+
+    void updateItemQAByIsAnswer(Long itemQAId);
 }

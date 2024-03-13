@@ -38,10 +38,10 @@ public class AdminItemQAService {
         for (ItemQADto.ItemQAList itemQA : itemQAListDto) {
             QAComment qaComment = qaCommentRepository.findById(itemQA.getItemQAId()).orElse(null);
 
-            QACommentDto.QAComment qaCommentDto = null;
+            QACommentDto.QACommentResponse qaCommentDto = null;
 
             if (qaComment != null) {
-                qaCommentDto = new QACommentDto.QAComment(qaComment);
+                qaCommentDto = new QACommentDto.QACommentResponse(qaComment);
             }
 
             itemQA.setQaComment(qaCommentDto);
