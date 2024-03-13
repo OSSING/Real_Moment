@@ -43,11 +43,11 @@ public class QACommentDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class editQAComment {
+    public static class EditQAComment {
         private Long qaCommentId;
         private String content;
 
-        public editQAComment(QAComment qaComment) {
+        public EditQAComment(QAComment qaComment) {
             qaCommentId = qaComment.getId();
             content = qaComment.getContent();
         }

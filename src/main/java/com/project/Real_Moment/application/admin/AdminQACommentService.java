@@ -40,10 +40,21 @@ public class AdminQACommentService {
     }
 
     @Transactional(readOnly = true)
-    public QACommentDto.editQAComment editQACommentClick(Long id, Long qaCommentId) {
+    public QACommentDto.EditQAComment editQACommentClick(Long qaCommentId) {
         QAComment qaComment = checkQACommentValidity(qaCommentId);
 
-        return new QACommentDto.editQAComment(qaComment);
+        return new QACommentDto.EditQAComment(qaComment);
+    }
+
+    @Transactional
+    public void editQAComment(Long adminId, QACommentDto.EditQAComment dto) {
+        QAComment qaComment = checkQACommentValidity(dto.getQaCommentId());
+
+        if (!qaComment.getAdminId().getId().equals(adminId)) {
+            throw new IllegalArgumentException("댓글을 작성한 관리자가 아닙니다.");
+        }
+
+        qaCommentRepository.updateById(dto);
     }
 
     private ItemQA checkItemQAValidity(Long itemQAId) {
