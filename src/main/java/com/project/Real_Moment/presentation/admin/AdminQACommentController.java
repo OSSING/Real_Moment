@@ -21,7 +21,13 @@ public class AdminQACommentController {
     }
 
     @GetMapping("/admin/{id}/QAComment/data")
-    public ResponseEntity<QACommentDto.editQAComment> editQACommentClick(@PathVariable("id") Long id, @RequestParam("qaCommentId") Long qaCommentId) {
-        return ResponseEntity.ok().body(adminQACommentService.editQACommentClick(id, qaCommentId));
+    public ResponseEntity<QACommentDto.EditQAComment> editQACommentClick(@RequestParam("qaCommentId") Long qaCommentId) {
+        return ResponseEntity.ok().body(adminQACommentService.editQACommentClick(qaCommentId));
+    }
+
+    @PatchMapping("/admin/{id}/QAComment")
+    public ResponseEntity<Void> editQAComment(@PathVariable("id") Long id, @RequestBody QACommentDto.EditQAComment dto) {
+        adminQACommentService.editQAComment(id, dto);
+        return ResponseEntity.ok().build();
     }
 }
