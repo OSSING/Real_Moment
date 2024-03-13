@@ -33,7 +33,7 @@ public class ItemQADto {
         private Boolean isAnswer;
         private LocalDateTime createdDate;
         private LocalDateTime lastModifiedDate;
-        private QACommentDto.QAComment qaComment;
+        private QACommentDto.QACommentResponse qaComment;
 
         public ItemQAList(ItemQA itemQA) {
             itemQAId = itemQA.getId();
@@ -67,7 +67,7 @@ public class ItemQADto {
         private Boolean isAnswer;
         private LocalDateTime createdDate;
         private LocalDateTime lastModifiedDate;
-        private QACommentDto.QAComment qaComment;
+        private QACommentDto.QACommentResponse qaComment;
 
         public MyItemQAList(ItemQA itemQA) {
             itemQAId = itemQA.getId();

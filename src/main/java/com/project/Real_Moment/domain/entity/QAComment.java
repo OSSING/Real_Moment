@@ -6,7 +6,7 @@ import lombok.*;
 
 @Entity
 @Getter
-@ToString
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "qa_comment")

@@ -316,7 +316,7 @@ public class MemberService {
             Item item = itemRepository.findById(myItemQAList.getItem().getItemId()).orElse(null);
 
             ItemDto.ItemResponse itemDto = null;
-            QACommentDto.QAComment qaCommentDto = null;
+            QACommentDto.QACommentResponse qaCommentDto = null;
 
             if (item != null) {
                 itemDto = new ItemDto.ItemResponse(item);
@@ -325,7 +325,7 @@ public class MemberService {
             myItemQAList.setItem(itemDto);
 
             if (qaComment != null) {
-                qaCommentDto = new QACommentDto.QAComment(qaComment);
+                qaCommentDto = new QACommentDto.QACommentResponse(qaComment);
             }
 
             myItemQAList.setQaComment(qaCommentDto);
