@@ -30,4 +30,10 @@ public class AdminQACommentController {
         adminQACommentService.editQAComment(id, dto);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/admin/{id}/QAComment")
+    public ResponseEntity<Void> deleteQAComment(@PathVariable("id") Long id, @RequestParam("qaCommentId") Long qaCommentId) {
+        adminQACommentService.deleteQAComment(id, qaCommentId);
+        return ResponseEntity.ok().build();
+    }
 }

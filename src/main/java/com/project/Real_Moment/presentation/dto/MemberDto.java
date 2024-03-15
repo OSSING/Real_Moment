@@ -1,6 +1,8 @@
 package com.project.Real_Moment.presentation.dto;
 
 
+import com.project.Real_Moment.domain.entity.Gender;
+import com.project.Real_Moment.domain.entity.Grade;
 import com.project.Real_Moment.domain.entity.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,6 +10,8 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class MemberDto {
 
@@ -50,7 +54,7 @@ public class MemberDto {
         @NotBlank(message = "생년월일을 입력해주세요.")
         private LocalDate birthDate;
 
-        private char gender;
+        private Gender gender;
 
         // 회원가입 시 요청받은 Dto -> Entity 변환
         public Member toEntity() {
@@ -142,7 +146,7 @@ public class MemberDto {
         private String loginId;
         private String email;
         private String name;
-        private char gender;
+        private Gender gender;
         private LocalDate birthDate;
 
         public MemberInfoUpdateResponse(Member member) {
@@ -183,11 +187,32 @@ public class MemberDto {
 
     }
 
-//    @Getter
-//    @ToString
-//    @AllArgsConstructor
-//    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-//    public static class TelChangeRequest {
-//        private String tel;
-//    }
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MemberListWrapper {
+        private List<MemberList> memberList;
+        private int totalPage;
+        private int nowPage;
+    }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MemberList {
+        private Long memberId;
+        private GradeDto.GradeResponse grade;
+        private String loginId;
+        private String name;
+        private Boolean isDelete;
+        private LocalDateTime createdDate;
+
+        public MemberList(Member member) {
+            memberId = member.getId();
+            loginId = member.getLoginId();
+            name = member.getName();
+            isDelete = member.isDelete();
+            createdDate = member.getCreatedDate();
+        }
+    }
 }
