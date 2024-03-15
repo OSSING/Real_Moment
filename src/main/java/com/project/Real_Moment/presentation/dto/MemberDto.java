@@ -57,17 +57,17 @@ public class MemberDto {
         private Gender gender;
 
         // 회원가입 시 요청받은 Dto -> Entity 변환
-        public Member toEntity() {
-            return Member.builder()
-                    .loginId(loginId)
-                    .email(email)
-                    .loginPassword(loginPassword)
-                    .name(name)
-                    .tel(tel)
-                    .birthDate(birthDate)
-                    .gender(gender)
-                    .build();
-        }
+//        public Member toEntity() {
+//            return Member.builder()
+//                    .loginId(loginId)
+//                    .email(email)
+//                    .loginPassword(loginPassword)
+//                    .name(name)
+//                    .tel(tel)
+//                    .birthDate(birthDate)
+//                    .gender(gender)
+//                    .build();
+//        }
     }
 
     @Getter
