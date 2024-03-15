@@ -30,7 +30,7 @@ public class CondDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class OneOnOneListCond {
-        private Boolean answer;
+        private Boolean isAnswer;
         private int nowPage;
     }
 
@@ -40,6 +40,26 @@ public class CondDto {
     public static class ReviewListCond {
         private Long itemId;
         private Integer star;
+        private int nowPage;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AdminOneOnOneListCond {
+        private String loginId;
+        private Boolean isAnswer;
+        private int nowPage;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MemberListCond {
+        private String memberSort;
+        private String loginId;
+        private Long gradeId;
+        private Boolean isDelete;
         private int nowPage;
     }
 }

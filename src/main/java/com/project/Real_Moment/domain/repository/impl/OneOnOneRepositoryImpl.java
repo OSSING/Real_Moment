@@ -25,7 +25,7 @@ public class OneOnOneRepositoryImpl implements OneOnOneRepositoryCustom {
         List<OneOnOne> oneOnOneList = queryFactory
                 .selectFrom(oneOnOne)
                 .where(oneOnOne.memberId.id.eq(memberId),
-                        answerEq(dto.getAnswer()))
+                        answerEq(dto.getIsAnswer()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -34,7 +34,7 @@ public class OneOnOneRepositoryImpl implements OneOnOneRepositoryCustom {
                 .select(oneOnOne.count())
                 .from(oneOnOne)
                 .where(oneOnOne.memberId.id.eq(memberId),
-                        answerEq(dto.getAnswer()))
+                        answerEq(dto.getIsAnswer()))
                 .fetchOne();
 
         return new PageImpl<>(oneOnOneList, pageable, total);
@@ -51,7 +51,49 @@ public class OneOnOneRepositoryImpl implements OneOnOneRepositoryCustom {
                 .execute();
     }
 
+    @Override
+    public Page<OneOnOne> findOneOnOneListByPaging_admin(Pageable pageable, CondDto.AdminOneOnOneListCond dto) {
+        List<OneOnOne> oneOnOneList = queryFactory
+                .selectFrom(oneOnOne)
+                .where(answerEq(dto.getIsAnswer()),
+                        loginIdEq(dto.getLoginId()))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long total = queryFactory
+                .select(oneOnOne.count())
+                .from(oneOnOne)
+                .where(answerEq(dto.getIsAnswer()),
+                        loginIdEq(dto.getLoginId()))
+                .fetchOne();
+
+        return new PageImpl<>(oneOnOneList, pageable, total);
+    }
+
+    @Override
+    public void updateOneOnOneByComment(Long oneOnOneId) {
+        queryFactory
+                .update(oneOnOne)
+                .set(oneOnOne.isAnswer, true)
+                .where(oneOnOne.id.eq(oneOnOneId))
+                .execute();
+    }
+
+    @Override
+    public void updateOneOnOneById(Long oneOnOneId) {
+        queryFactory
+                .update(oneOnOne)
+                .set(oneOnOne.isAnswer, false)
+                .where(oneOnOne.id.eq(oneOnOneId))
+                .execute();
+    }
+
     private BooleanExpression answerEq(Boolean answer) {
         return answer != null ? oneOnOne.isAnswer.eq(answer) : null;
+    }
+
+    private BooleanExpression loginIdEq(String loginId) {
+        return loginId != null ? oneOnOne.memberId.loginId.eq(loginId) : null;
     }
 }

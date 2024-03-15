@@ -25,7 +25,7 @@ public class Member extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "grade_id")
-    private Grade GradeId;
+    private Grade gradeId;
 
     @OneToMany(mappedBy = "memberId")
     private List<Order> orders;
@@ -45,11 +45,10 @@ public class Member extends BaseTimeEntity {
     @Column(name = "birth_date")
     private LocalDate birthDate;
 
-    @Column(nullable = false)
-    private char gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     @Builder.Default
-    @Column(nullable = false)
     private int point = 0;
 
     @Builder.Default

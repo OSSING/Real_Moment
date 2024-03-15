@@ -1,6 +1,9 @@
 package com.project.Real_Moment.domain.repository.custom;
 
 import com.project.Real_Moment.domain.entity.Member;
+import com.project.Real_Moment.presentation.dto.CondDto;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
 
@@ -14,8 +17,8 @@ public interface MemberRepositoryCustom {
 
     Member updateBirthDateById(Long id, LocalDate birthDate);
 
-//    Member updateTelById(Long id, String tel);
-
     Long updateActivatedById(Long id);
+
+    Page<Member> findMemberListByCond(Pageable pageable, CondDto.MemberListCond dto);
 
 }

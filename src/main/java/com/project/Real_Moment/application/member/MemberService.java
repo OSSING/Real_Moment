@@ -32,6 +32,7 @@ public class MemberService {
     private final QACommentRepository qaCommentRepository;
     private final OneOnOneRepository oneonOneRepository;
     private final CommentRepository commentRepository;
+    private final GradeRepository gradeRepository;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -45,12 +46,18 @@ public class MemberService {
     @Transactional
     public MemberDto.RegisterResponse memberSave(MemberDto.RegisterRequest dto) {
 
-        // 1. 요청받은 dto -> Entity로 변환
-        Member member = createMember(dto);
+        // 1. 회원에게 적용할 기본 등급 생성
+        Grade grade = gradeRepository.findById(1L)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 등급입니다."));
+
+        if (!grade.getGradeName().equals("Moment")) {
+            throw new IllegalArgumentException("잘못된 등급입니다.");
+        }
+
+        // 2. 요청받은 dto -> Entity로 변환
+        Member member = createMember(dto, grade);
 
         log.info("member.toString() = {}", member.toString());
-
-        // 2. DB에 회원 저장
 
         // 3. 저장한 회원 데이터를 Dto로 변환 후 반환
         Member savedMember = memberRepository.save(member);
@@ -58,9 +65,9 @@ public class MemberService {
         return MemberDto.RegisterResponse.toDto(savedMember);
     }
 
-    private Member createMember(MemberDto.RegisterRequest dto) {
-
+    private Member createMember(MemberDto.RegisterRequest dto, Grade grade) {
         return Member.builder()
+                .gradeId(grade)
                 .loginId(dto.getLoginId())
                 .email(dto.getEmail())
                 .loginPassword(passwordEncoder.encode(dto.getLoginPassword()))
@@ -71,13 +78,6 @@ public class MemberService {
                 .roles("ROLE_MEMBER")
                 .build();
     }
-
-//    @Transactional(readOnly = true)
-//    public List<MemberDto.OrdersListDto> findOrdersList(Long id) {
-//
-//        return ordersRepository.findByMemberId_Id(id).stream()
-//                .map(MemberDto.OrdersListDto::new).toList();
-//    }
 
     @Transactional
     public MemberDto.MemberInfoUpdateResponse changePassword(Long id, String password) {
@@ -316,7 +316,7 @@ public class MemberService {
             Item item = itemRepository.findById(myItemQAList.getItem().getItemId()).orElse(null);
 
             ItemDto.ItemResponse itemDto = null;
-            QACommentDto.QAComment qaCommentDto = null;
+            QACommentDto.QACommentResponse qaCommentDto = null;
 
             if (item != null) {
                 itemDto = new ItemDto.ItemResponse(item);
@@ -325,7 +325,7 @@ public class MemberService {
             myItemQAList.setItem(itemDto);
 
             if (qaComment != null) {
-                qaCommentDto = new QACommentDto.QAComment(qaComment);
+                qaCommentDto = new QACommentDto.QACommentResponse(qaComment);
             }
 
             myItemQAList.setQaComment(qaCommentDto);
@@ -397,10 +397,10 @@ public class MemberService {
         for (OneOnOneDto.OneOnOneList oneOnOneList : oneOnOneListDto) {
             Comment comment = commentRepository.findById(oneOnOneList.getOneOnOneId()).orElse(null);
 
-            CommentDto.commentResponse commentDto = null;
+            CommentDto.CommentResponse commentDto = null;
 
             if (comment != null) {
-                commentDto = new CommentDto.commentResponse(comment);
+                commentDto = new CommentDto.CommentResponse(comment);
             }
 
             oneOnOneList.setComment(commentDto);
