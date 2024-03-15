@@ -57,6 +57,17 @@ public class AdminQACommentService {
         qaCommentRepository.updateById(dto);
     }
 
+    @Transactional
+    public void deleteQAComment(Long adminId, Long qaCommentId) {
+        QAComment qaComment = checkQACommentValidity(qaCommentId);
+
+        if (!qaComment.getAdminId().getId().equals(adminId)) {
+            throw new IllegalArgumentException("댓글을 작성한 관리자가 아닙니다.");
+        }
+
+        qaCommentRepository.delete(qaComment);
+    }
+
     private ItemQA checkItemQAValidity(Long itemQAId) {
         return itemQARepository.findById(itemQAId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 ItemQA입니다."));

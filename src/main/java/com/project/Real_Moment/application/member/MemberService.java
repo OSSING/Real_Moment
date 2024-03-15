@@ -50,9 +50,7 @@ public class MemberService {
 
         log.info("member.toString() = {}", member.toString());
 
-        // 2. DB에 회원 저장
-
-        // 3. 저장한 회원 데이터를 Dto로 변환 후 반환
+        // 2. 저장한 회원 데이터를 Dto로 변환 후 반환
         Member savedMember = memberRepository.save(member);
 
         return MemberDto.RegisterResponse.toDto(savedMember);
@@ -61,6 +59,7 @@ public class MemberService {
     private Member createMember(MemberDto.RegisterRequest dto) {
 
         return Member.builder()
+                .gradeId(new Grade())
                 .loginId(dto.getLoginId())
                 .email(dto.getEmail())
                 .loginPassword(passwordEncoder.encode(dto.getLoginPassword()))
@@ -397,10 +396,10 @@ public class MemberService {
         for (OneOnOneDto.OneOnOneList oneOnOneList : oneOnOneListDto) {
             Comment comment = commentRepository.findById(oneOnOneList.getOneOnOneId()).orElse(null);
 
-            CommentDto.commentResponse commentDto = null;
+            CommentDto.CommentResponse commentDto = null;
 
             if (comment != null) {
-                commentDto = new CommentDto.commentResponse(comment);
+                commentDto = new CommentDto.CommentResponse(comment);
             }
 
             oneOnOneList.setComment(commentDto);

@@ -7,9 +7,9 @@ INSERT INTO grade (grade_name, reward_rate, grade_price) VALUES
 
 -- Member Table 더미데이터
 INSERT INTO member (grade_id, login_id, login_password, email,  name, tel, birth_date, gender, point, this_year_pay, recently_login, is_delete, roles) VALUES
-(1, 'user1', 'password1', 'user1@example.com', 'User 1', '010-2456-7890', '19980101', 'M', 100, 53000, '2023-11-01 12:00:00', TRUE, 'ROLE_MEMBER'),
-(2, 'user2', 'password2', 'user2@example.com', 'User 2', '010-1654-3210', '19950315', 'F', 50, 15000, '2023-10-02 09:30:00', TRUE, 'ROLE_MEMBER'),
-(4, 'user3', 'password3', 'user3@example.com', 'User 3', '010-5222-3333', '19880720', 'M', 200, 200000, '2023-01-03 15:45:00', TRUE, 'ROLE_MEMBER');
+(1, 'user1', 'password1', 'user1@example.com', 'User 1', '010-2456-7890', '19980101', 'MAN', 100, 53000, '2023-11-01 12:00:00', TRUE, 'ROLE_MEMBER'),
+(2, 'user2', 'password2', 'user2@example.com', 'User 2', '010-1654-3210', '19950315', 'WOMAN', 50, 15000, '2023-10-02 09:30:00', TRUE, 'ROLE_MEMBER'),
+(4, 'user3', 'password3', 'user3@example.com', 'User 3', '010-5222-3333', '19880720', 'MAN', 200, 200000, '2023-01-03 15:45:00', TRUE, 'ROLE_MEMBER');
 
 -- Addresses Table 더미데이터
 INSERT INTO address (member_id, name, tel, main_address, det_address, is_def_address) VALUES
@@ -106,8 +106,8 @@ VALUES
 INSERT INTO review (member_id, item_id, title, content, star)
 VALUES
 (1, 1, 'review title1', 'review content1', 5),
-(2, 2, 'review title1', 'review content2', 4),
-(3, 3, 'review title1', 'review content3', 5);
+(2, 2, 'review title2', 'review content2', 4),
+(3, 3, 'review title3', 'review content3', 5);
 
 -- Wishlist Table 더미데이터
 INSERT INTO wish (member_id, item_id)
@@ -120,12 +120,11 @@ VALUES
 INSERT INTO one_on_one (member_id, title, content, is_answer)
 VALUES
 (1, 'OneOnOne title1', 'OneOnOne content1', true),
-(2, 'OneOnOne title2', 'OneOnOne content1', true),
-(3, 'OneOnOne title3', 'OneOnOne content1', true);
+(2, 'OneOnOne title2', 'OneOnOne content2', true),
+(3, 'OneOnOne title3', 'OneOnOne content3', false);
 
 -- Comment Table 더미데이터
 INSERT INTO comment (admin_id, one_on_one_id, content)
 VALUES
 (1, 1, 'OneOnOne content1'),
-(1, 2, 'OneOnOne content1'),
-(1, 3, 'OneOnOne content1');
+(1, 2, 'OneOnOne content2');
