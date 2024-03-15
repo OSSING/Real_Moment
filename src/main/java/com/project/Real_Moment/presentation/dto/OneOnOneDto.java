@@ -27,7 +27,7 @@ public class OneOnOneDto {
         private Long oneOnOneId;
         private String title;
         private String content;
-        private CommentDto.commentResponse comment;
+        private CommentDto.CommentResponse comment;
 
         public OneOnOneList(OneOnOne oneOnOne) {
             oneOnOneId = oneOnOne.getId();

@@ -29,6 +29,10 @@ public class AdminCategoryService {
         if (dto.getParentId() != null) {
             parentCategory = categoryRepository.findById(dto.getParentId())
                     .orElseThrow(() -> new IllegalArgumentException("부모 카테고리를 찾을 수 없습니다."));
+
+            if (parentCategory.getParent() != null) {
+                throw new IllegalArgumentException("지정된 부모 카테고리의 id는 자식 카테고리입니다.");
+            }
         }
 
         Category category = dto.toEntity(parentCategory);

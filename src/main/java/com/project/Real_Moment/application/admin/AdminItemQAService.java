@@ -1,7 +1,8 @@
-package com.project.Real_Moment.application.member;
+package com.project.Real_Moment.application.admin;
 
 import com.project.Real_Moment.domain.entity.ItemQA;
 import com.project.Real_Moment.domain.entity.QAComment;
+import com.project.Real_Moment.domain.repository.AdminRepository;
 import com.project.Real_Moment.domain.repository.ItemQARepository;
 import com.project.Real_Moment.domain.repository.QACommentRepository;
 import com.project.Real_Moment.presentation.dto.CondDto;
@@ -13,19 +14,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ItemQAService {
+public class AdminItemQAService {
 
     private final ItemQARepository itemQARepository;
     private final QACommentRepository qaCommentRepository;
 
-    @Transactional
+
     public ItemQADto.ItemQAListPage getItemQAList(CondDto.QAListCond dto) {
         Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 5);
 

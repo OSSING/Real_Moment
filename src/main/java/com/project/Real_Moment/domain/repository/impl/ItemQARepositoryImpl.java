@@ -76,6 +76,15 @@ public class ItemQARepositoryImpl implements ItemQARepositoryCustom {
                 .execute();
     }
 
+    @Override
+    public void updateItemQAByIsAnswer(Long itemQAId) {
+        queryFactory
+                .update(itemQA)
+                .set(itemQA.isAnswer, true)
+                .where(itemQA.id.eq(itemQAId))
+                .execute();
+    }
+
     private BooleanExpression itemIdEq(Long itemId) {
         return itemId != null ? itemQA.itemId.id.eq(itemId) : null;
     }
