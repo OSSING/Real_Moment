@@ -6,7 +6,6 @@ import lombok.*;
 
 @Entity
 @Getter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class Item extends AuditingUserEntity {
@@ -34,6 +33,8 @@ public class Item extends AuditingUserEntity {
     private int sellPrice;
 
     private int stock;
+
+    private int sellCount = 0;
 
     private boolean isSell;
 

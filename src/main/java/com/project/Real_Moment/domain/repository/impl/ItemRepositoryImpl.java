@@ -108,6 +108,12 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 return item.createdDate.asc();
             } else if (itemSort.equals("sale")) {
                 return item.discountRate.desc();
+            } else if (itemSort.equals("low")) {
+                return item.price.asc();
+            } else if (itemSort.equals("high")) {
+                return item.price.desc();
+            } else if (itemSort.equals("sell")) {
+                return item.sellCount.desc();
             }
         }
         return null;
