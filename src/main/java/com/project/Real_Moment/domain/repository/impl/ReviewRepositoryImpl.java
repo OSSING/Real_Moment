@@ -44,6 +44,8 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
             countQuery.where(review.star.eq(star));
         }
 
+        query.orderBy(review.createdDate.desc().nullsLast());
+
         List<ReviewDto.ReviewListResponse> results = query
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -85,6 +87,7 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
         List<ReviewDto.MyReview> results = queryFactory.selectFrom(review)
                 .where(review.memberId.eq(member))
+                .orderBy(review.createdDate.desc().nullsLast())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch()

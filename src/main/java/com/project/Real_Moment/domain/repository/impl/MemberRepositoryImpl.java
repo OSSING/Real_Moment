@@ -117,9 +117,11 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     private OrderSpecifier<?> memberSort(String memberSort) {
-        if (memberSort != null) {
-            if (memberSort.equals("new")) {
-                return member.createdDate.asc().nullsLast();
+        if (memberSort == null || memberSort.equals("day")) {
+            return member.createdDate.desc().nullsLast();
+        } else {
+            if (memberSort.equals("totalPay")) {
+                return member.thisYearPay.desc();
             }
         }
         return null;
