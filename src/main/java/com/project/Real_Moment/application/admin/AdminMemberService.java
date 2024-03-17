@@ -37,19 +37,16 @@ public class AdminMemberService {
                 .toList();
 
         for (MemberDto.MemberList memberList : memberListDto) {
-            if (memberList.getGrade() == null) {
-                memberList.setGrade(null);
-            } else {
-                Grade grade = gradeRepository.findById(memberList.getGrade().getGradeId()).orElse(null);
+            log.info("memberList.getGrade : {}", memberList.getGrade());
+            Grade grade = gradeRepository.findById(memberList.getGrade().getGradeId()).orElse(null);
 
-                GradeDto.GradeResponse gradeDto = null;
+            GradeDto.GradeResponse gradeDto = null;
 
-                if (grade != null) {
-                    gradeDto = new GradeDto.GradeResponse(grade);
-                }
-
-                memberList.setGrade(gradeDto);
+            if (grade != null) {
+                gradeDto = new GradeDto.GradeResponse(grade);
             }
+
+            memberList.setGrade(gradeDto);
         }
 
         return new MemberDto.MemberListWrapper(memberListDto, memberListPaging.getTotalPages(), dto.getNowPage());

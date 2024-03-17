@@ -209,6 +209,7 @@ public class MemberDto {
 
         public MemberList(Member member) {
             memberId = member.getId();
+            grade = new GradeDto.GradeResponse(member.getGradeId());
             loginId = member.getLoginId();
             name = member.getName();
             isDelete = member.isDelete();
