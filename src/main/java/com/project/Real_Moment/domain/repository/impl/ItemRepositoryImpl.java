@@ -42,52 +42,6 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 .fetchOne();
 
         return new PageImpl<>(itemList, pageable, total);
-
-//        if (categoryId != null) {
-//            query.where(item.categoryId.id.eq(categoryId));
-//            countQuery.where(item.categoryId.id.eq(categoryId));
-//        }
-//
-//        if (itemName != null) {
-//            query.where(item.name.eq(itemName));
-//            countQuery.where(item.name.eq(itemName));
-//        }
-//
-//        if (isDelete != null) {
-//            query.where(item.isDelete.eq(isDelete));
-//            countQuery.where(item.isDelete.eq(isDelete));
-//        }
-
-//        if (itemSort != null) {
-//            if (itemSort.equals("new")) {
-//                query.orderBy(item.createdDate.asc());
-//            } else if (itemSort.equals("sale")) {
-//                query.orderBy(item.discountRate.desc());
-//            }
-//        }
-
-//        List<ItemDto.ItemResponse> results = query
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch()
-//                .stream()
-//                .map(item -> new ItemDto.ItemResponse(
-//                        item.getId(),
-//                        item.getName(),
-//                        item.getPrice(),
-//                        item.getDiscountRate(),
-//                        item.getDiscountPrice(),
-//                        item.getSellPrice(),
-//                        item.isSell(),
-//                        item.getMainImg()
-//                ))
-//                .toList();
-//
-//        Long total = countQuery.fetchOne();
-
-//        int totalPages = (int) Math.ceil((double) total / pageable.getPageSize());
-//        return new ItemDto.ItemCondResponse(results, totalPages, nowPage);
-
     }
 
     private BooleanExpression categoryIdEq(Long categoryId) {
@@ -103,17 +57,22 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     }
 
     private OrderSpecifier<?> itemSortEq(String itemSort) {
-        if (itemSort != null) {
-            if (itemSort.equals("new")) {
-                return item.createdDate.asc();
-            } else if (itemSort.equals("sale")) {
-                return item.discountRate.desc();
-            } else if (itemSort.equals("low")) {
-                return item.price.asc();
-            } else if (itemSort.equals("high")) {
-                return item.price.desc();
-            } else if (itemSort.equals("sell")) {
-                return item.sellCount.desc();
+        if (itemSort == null || itemSort.equals("new")) {
+            return item.createdDate.desc();
+        } else {
+            switch (itemSort) {
+                case "sale" -> {
+                    return item.discountRate.desc();
+                }
+                case "low" -> {
+                    return item.price.asc();
+                }
+                case "high" -> {
+                    return item.price.desc();
+                }
+                case "sell" -> {
+                    return item.sellCount.desc();
+                }
             }
         }
         return null;
