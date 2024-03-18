@@ -72,4 +72,9 @@ public class AdminController {
         CondDto.AdminListCond dto = new CondDto.AdminListCond(loginId, name, roles, nowPage);
         return ResponseEntity.ok().body(adminService.getAdminList(dto));
     }
+
+    @GetMapping("/admin/admin")
+    public ResponseEntity<AdminDto.AdminList> getAdminDet(@RequestParam("adminId") Long adminId) {
+        return ResponseEntity.ok().body(adminService.getAdminDet(adminId));
+    }
 }

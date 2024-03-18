@@ -41,4 +41,12 @@ public class AdminService {
 
         return new AdminDto.AdminListWrapper(adminListDto, adminListPaging.getTotalPages(), pageNumber);
     }
+
+    @Transactional(readOnly = true)
+    public AdminDto.AdminList getAdminDet(Long adminId) {
+        Admin admin = adminRepository.findById(adminId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자입니다."));
+
+        return new AdminDto.AdminList(admin);
+    }
 }
