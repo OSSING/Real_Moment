@@ -51,4 +51,12 @@ public class AdminDto {
         private String email;
         private String name;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AdminRolesInfo {
+        private Long adminId;
+        private String roles;
+    }
 }

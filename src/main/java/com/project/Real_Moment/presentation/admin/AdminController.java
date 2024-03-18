@@ -82,4 +82,10 @@ public class AdminController {
     public ResponseEntity<AdminDto.AdminList> editAdminInfo(@PathVariable("id") Long id, @RequestBody AdminDto.AdminInfo dto) {
         return ResponseEntity.ok().body(adminService.editAdminInfo(id, dto));
     }
+
+    @PatchMapping("/admin/admin/roles")
+    public ResponseEntity<Void> editAdminRoles(@RequestBody AdminDto.AdminRolesInfo dto) {
+        adminService.editAdminRoles(dto);
+        return ResponseEntity.ok().build();
+    }
 }

@@ -58,6 +58,12 @@ public class AdminService {
         return new AdminDto.AdminList(admin);
     }
 
+    @Transactional
+    public void editAdminRoles(AdminDto.AdminRolesInfo dto) {
+        adminCheckValidity(dto.getAdminId());
+        adminRepository.updateRolesByAdminInfo(dto);
+    }
+
     private Admin adminCheckValidity(Long adminId) {
         return adminRepository.findById(adminId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자입니다."));

@@ -11,4 +11,6 @@ public interface AdminRepositoryCustom {
     Page<Admin> findAdminListByPaging(Pageable pageable, CondDto.AdminListCond dto);
 
     void updateByAdminInfo(Long adminId, AdminDto.AdminInfo dto);
+
+    void updateRolesByAdminInfo(AdminDto.AdminRolesInfo dto);
 }
