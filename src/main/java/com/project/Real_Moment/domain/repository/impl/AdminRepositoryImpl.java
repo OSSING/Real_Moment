@@ -3,9 +3,11 @@ package com.project.Real_Moment.domain.repository.impl;
 import com.project.Real_Moment.domain.entity.Admin;
 import com.project.Real_Moment.domain.entity.AdminAuthority;
 import com.project.Real_Moment.domain.repository.custom.AdminRepositoryCustom;
+import com.project.Real_Moment.presentation.dto.AdminDto;
 import com.project.Real_Moment.presentation.dto.CondDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -19,6 +21,7 @@ import static com.project.Real_Moment.domain.entity.QAdmin.admin;
 public class AdminRepositoryImpl implements AdminRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+    private final EntityManager em;
 
     @Override
     public Page<Admin> findAdminListByPaging(Pageable pageable, CondDto.AdminListCond dto) {
@@ -41,6 +44,16 @@ public class AdminRepositoryImpl implements AdminRepositoryCustom {
                 .fetchOne();
 
         return new PageImpl<>(adminList, pageable, total);
+    }
+
+    @Override
+    public void updateByAdminInfo(Long adminId, AdminDto.AdminInfo dto) {
+        queryFactory
+                .update(admin)
+                .set(admin.email, dto.getEmail())
+                .set(admin.name, dto.getName())
+                .where(admin.id.eq(adminId))
+                .execute();
     }
 
     private BooleanExpression loginIdEq(String loginId) {
