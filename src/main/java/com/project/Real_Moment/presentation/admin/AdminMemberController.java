@@ -26,4 +26,9 @@ public class AdminMemberController {
         CondDto.MemberListCond dto = new CondDto.MemberListCond(memberSort, loginId, gradeId, isDelete, nowPage);
         return ResponseEntity.ok().body(adminMemberService.getMemberList(dto));
     }
+
+    @GetMapping("/admin/member")
+    public ResponseEntity<MemberDto.memberDet> getMemberDet(@RequestParam("memberId") Long memberId) {
+        return ResponseEntity.ok().body(adminMemberService.getMemberDet(memberId));
+    }
 }
