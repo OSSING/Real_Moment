@@ -5,6 +5,7 @@ import com.project.Real_Moment.auth.jwt.JwtFilter;
 import com.project.Real_Moment.auth.jwt.TokenProvider;
 import com.project.Real_Moment.auth.jwt.dto.TokenDto;
 import com.project.Real_Moment.presentation.dto.AdminDto;
+import com.project.Real_Moment.presentation.dto.CondDto;
 import com.project.Real_Moment.presentation.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -61,5 +62,14 @@ public class AdminController {
     @PostMapping("/admin/logout")
     public ResponseEntity<Void> logout() {
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/admin/adminList")
+    public ResponseEntity<AdminDto.AdminListWrapper> getAdminList(@RequestParam(value = "loginId", required = false) String loginId,
+                                                                  @RequestParam(value = "name", required = false) String name,
+                                                                  @RequestParam(value = "roles", required = false) String roles,
+                                                                  @RequestParam(value = "nowPage", required = false) Integer nowPage) {
+        CondDto.AdminListCond dto = new CondDto.AdminListCond(loginId, name, roles, nowPage);
+        return ResponseEntity.ok().body(adminService.getAdminList(dto));
     }
 }

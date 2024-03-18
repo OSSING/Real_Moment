@@ -62,4 +62,14 @@ public class CondDto {
         private Boolean isDelete;
         private int nowPage;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AdminListCond {
+        private String loginId;
+        private String name;
+        private String roles;
+        private Integer nowPage;
+    }
 }
