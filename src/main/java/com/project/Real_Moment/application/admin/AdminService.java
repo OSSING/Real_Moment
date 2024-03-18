@@ -44,9 +44,22 @@ public class AdminService {
 
     @Transactional(readOnly = true)
     public AdminDto.AdminList getAdminDet(Long adminId) {
-        Admin admin = adminRepository.findById(adminId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자입니다."));
+        Admin admin = adminCheckValidity(adminId);
 
         return new AdminDto.AdminList(admin);
+    }
+
+    @Transactional
+    public AdminDto.AdminList editAdminInfo(Long adminId, AdminDto.AdminInfo dto) {
+        adminRepository.updateByAdminInfo(adminId, dto);
+
+        Admin admin = adminCheckValidity(adminId);
+
+        return new AdminDto.AdminList(admin);
+    }
+
+    private Admin adminCheckValidity(Long adminId) {
+        return adminRepository.findById(adminId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자입니다."));
     }
 }

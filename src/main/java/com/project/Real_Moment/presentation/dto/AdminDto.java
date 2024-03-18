@@ -43,4 +43,12 @@ public class AdminDto {
             roles = String.valueOf(admin.getRoles());
         }
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AdminInfo {
+        private String email;
+        private String name;
+    }
 }

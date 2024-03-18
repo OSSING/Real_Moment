@@ -77,4 +77,9 @@ public class AdminController {
     public ResponseEntity<AdminDto.AdminList> getAdminDet(@RequestParam("adminId") Long adminId) {
         return ResponseEntity.ok().body(adminService.getAdminDet(adminId));
     }
+
+    @PatchMapping("/admin/{id}")
+    public ResponseEntity<AdminDto.AdminList> editAdminInfo(@PathVariable("id") Long id, @RequestBody AdminDto.AdminInfo dto) {
+        return ResponseEntity.ok().body(adminService.editAdminInfo(id, dto));
+    }
 }
