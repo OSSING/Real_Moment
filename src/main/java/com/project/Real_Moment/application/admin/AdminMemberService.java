@@ -25,7 +25,6 @@ public class AdminMemberService {
     private final MemberRepository memberRepository;
     private final GradeRepository gradeRepository;
 
-
     @Transactional(readOnly = true)
     public MemberDto.MemberListWrapper getMemberList(CondDto.MemberListCond dto) {
         Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 10);
@@ -50,5 +49,18 @@ public class AdminMemberService {
         }
 
         return new MemberDto.MemberListWrapper(memberListDto, memberListPaging.getTotalPages(), dto.getNowPage());
+    }
+
+    @Transactional(readOnly = true)
+    public MemberDto.memberDet getMemberDet(Long memberId) {
+        Member member = memberCheckValidity(memberId);
+
+        return new MemberDto.memberDet(member);
+    }
+
+    // 회원 검증
+    private Member memberCheckValidity(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
     }
 }
