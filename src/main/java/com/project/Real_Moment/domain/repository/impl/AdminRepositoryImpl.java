@@ -56,6 +56,15 @@ public class AdminRepositoryImpl implements AdminRepositoryCustom {
                 .execute();
     }
 
+    @Override
+    public void updateRolesByAdminInfo(AdminDto.AdminRolesInfo dto) {
+        queryFactory
+                .update(admin)
+                .set(admin.roles, AdminAuthority.valueOf(dto.getRoles()))
+                .where(admin.id.eq(dto.getAdminId()))
+                .execute();
+    }
+
     private BooleanExpression loginIdEq(String loginId) {
         return loginId != null ? admin.loginId.eq(loginId) : null;
     }
