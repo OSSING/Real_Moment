@@ -40,4 +40,13 @@ public class GradeDto {
                     .build();
         }
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class EditGrade {
+        private Long gradeId;
+        private String gradeName;
+        private int rewardRate;
+    }
 }
