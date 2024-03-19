@@ -88,4 +88,10 @@ public class AdminController {
         adminService.editAdminRoles(dto);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/admin/admin")
+    public ResponseEntity<Void> deleteAdmin(@RequestParam("adminId") Long adminId) {
+        adminService.deleteAdmin(adminId);
+        return ResponseEntity.ok().build();
+    }
 }

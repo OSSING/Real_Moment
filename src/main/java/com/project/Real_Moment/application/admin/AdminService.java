@@ -64,6 +64,13 @@ public class AdminService {
         adminRepository.updateRolesByAdminInfo(dto);
     }
 
+    @Transactional
+    public void deleteAdmin(Long adminId) {
+        adminCheckValidity(adminId);
+
+        adminRepository.deleteAdmin(adminId);
+    }
+
     private Admin adminCheckValidity(Long adminId) {
         return adminRepository.findById(adminId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자입니다."));

@@ -65,6 +65,18 @@ public class AdminRepositoryImpl implements AdminRepositoryCustom {
                 .execute();
     }
 
+    @Override
+    public void deleteAdmin(Long adminId) {
+        queryFactory
+                .update(admin)
+                .set(admin.isDelete, true)
+                .set(admin.loginPassword, "")
+                .set(admin.email, "")
+                .set(admin.name, "")
+                .where(admin.id.eq(adminId))
+                .execute();
+    }
+
     private BooleanExpression loginIdEq(String loginId) {
         return loginId != null ? admin.loginId.eq(loginId) : null;
     }
