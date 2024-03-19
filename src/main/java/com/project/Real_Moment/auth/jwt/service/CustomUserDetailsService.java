@@ -60,6 +60,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     // DB에서 가져온 정보를 기준으로 Admin이 activated 상태라면 Admin의 권한 정보와 이름, 비밀번호를 담아 userdetails.User 객체를 return
     private org.springframework.security.core.userdetails.User createAdmin(String AdminName, Admin admin) {
         if (admin.isDelete()) {
+            log.info("활성화 되어 있지 않은 사용자입니다.");
             throw new RuntimeException(AdminName + " -> 활성화 되어 있지 않습니다.");
         }
 
@@ -78,6 +79,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     // DB에 가져온 정보를 기준으로 Member가 activated 상태라면 Member의 권한 정보와 이름, 비밀번호를 담아 userdetails.User 객체를 return
     private org.springframework.security.core.userdetails.User createMember(String MemberName, Member member) {
         if (member.isDelete()) {
+            log.info("활성화 되어 있지 않은 사용자입니다.");
             throw new RuntimeException(MemberName + " -> 활성화 되어 있지 않습니다.");
         }
 

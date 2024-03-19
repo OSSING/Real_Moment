@@ -13,4 +13,6 @@ public interface AdminRepositoryCustom {
     void updateByAdminInfo(Long adminId, AdminDto.AdminInfo dto);
 
     void updateRolesByAdminInfo(AdminDto.AdminRolesInfo dto);
+
+    void deleteAdmin(Long adminId);
 }
