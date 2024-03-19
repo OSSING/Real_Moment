@@ -23,4 +23,9 @@ public class AdminGradeService {
                 .map(GradeDto.GradeResponse::new)
                 .toList();
     }
+
+    @Transactional
+    public void saveGrade(GradeDto.SaveGrade dto) {
+        gradeRepository.save(dto.toEntity());
+    }
 }
