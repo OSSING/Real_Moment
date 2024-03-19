@@ -23,4 +23,21 @@ public class GradeDto {
             rewardRate = grade.getRewardRate();
         }
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SaveGrade {
+        private String gradeName;
+        private int gradePrice;
+        private int rewardRate;
+
+        public Grade toEntity() {
+            return Grade.builder()
+                    .gradeName(gradeName)
+                    .gradePrice(gradePrice)
+                    .rewardRate(rewardRate)
+                    .build();
+        }
+    }
 }
