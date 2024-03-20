@@ -1,8 +1,7 @@
 package com.project.Real_Moment.presentation.dto;
 
 
-import com.project.Real_Moment.domain.entity.Gender;
-import com.project.Real_Moment.domain.entity.Grade;
+import com.project.Real_Moment.domain.enumuration.Gender;
 import com.project.Real_Moment.domain.entity.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

@@ -7,9 +7,9 @@ INSERT INTO grade (grade_name, reward_rate, grade_price) VALUES
 
 -- Member Table 더미데이터
 INSERT INTO member (grade_id, login_id, login_password, email,  name, tel, birth_date, gender, point, this_year_pay, recently_login, is_delete, roles) VALUES
-(1, 'user1', 'password1', 'user1@example.com', 'User 1', '010-2456-7890', '19980101', 'MAN', 100, 53000, '2023-11-01 12:00:00', TRUE, 'ROLE_MEMBER'),
-(2, 'user2', 'password2', 'user2@example.com', 'User 2', '010-1654-3210', '19950315', 'WOMAN', 50, 15000, '2023-10-02 09:30:00', TRUE, 'ROLE_MEMBER'),
-(4, 'user3', 'password3', 'user3@example.com', 'User 3', '010-5222-3333', '19880720', 'MAN', 200, 200000, '2023-01-03 15:45:00', TRUE, 'ROLE_MEMBER');
+(1, 'user1', '$2a$10$6tJIAdSoVbunKE9yZKSiGOkn7zdPux8sTy/c5/1/R9FJoZ3pLT8Sm', 'user1@example.com', 'User 1', '010-2456-7890', '19980101', 'MAN', 100, 53000, '2023-11-01 12:00:00', false, 'ROLE_MEMBER'),
+(2, 'user2', '$2a$10$4Ix3u/.AQTaP3ZgPOvBzDuWF5mFuopY6WZRx0avQh8n13D57hlEP6', 'user2@example.com', 'User 2', '010-1654-3210', '19950315', 'WOMAN', 50, 15000, '2023-10-02 09:30:00', false, 'ROLE_MEMBER'),
+(4, 'user3', '$2a$10$whdwtf4XIKAtzXYBCgwEEeTcvP/gfOZ7LtoweLUL2Ld.voqmPCRUa', 'user3@example.com', 'User 3', '010-5222-3333', '19880720', 'MAN', 200, 200000, '2023-01-03 15:45:00', false, 'ROLE_MEMBER');
 
 -- Addresses Table 더미데이터
 INSERT INTO address (member_id, name, tel, main_address, det_address, is_def_address) VALUES
@@ -62,11 +62,11 @@ INSERT INTO category (name, parent_category) VALUES
 ('child4', 2);
 
 -- Items Table 더미데이터
-INSERT INTO item (category_id, name, content, price, discount_rate, discount_price, sell_price, stock, sell_count, is_sell, is_delete, main_img, serve_img)
+INSERT INTO item (category_id, name, content, price, discount_rate, discount_price, sell_price, stock, sell_count, is_sell, is_delete)
 VALUES
-(3, 'item1', 'item content1', 800, 10, 80, 720, 50, 30, TRUE, FALSE, 'main1.jpg', 'serve1.jpg'),
-(4, 'item2', 'item content2', 1200, 5, 60, 1140, 30, 50, TRUE, FALSE, 'main2.jpg', 'serve2.jpg'),
-(5, 'item3', 'item content3', 1000, 0, 0, 1000, 100, 70, TRUE, FALSE, 'main3.jpg', 'serve3.jpg');
+(3, 'item1', 'item content1', 800, 10, 80, 720, 50, 30, TRUE, FALSE),
+(4, 'item2', 'item content2', 1200, 5, 60, 1140, 30, 50, TRUE, FALSE),
+(5, 'item3', 'item content3', 1000, 0, 0, 1000, 100, 70, TRUE, FALSE);
 
 -- Carts Table 더미데이터
 INSERT INTO cart (member_id, item_id, stock, price) VALUES
@@ -128,3 +128,21 @@ INSERT INTO comment (admin_id, one_on_one_id, content)
 VALUES
 (1, 1, 'OneOnOne content1'),
 (1, 2, 'OneOnOne content2');
+
+-- S3File Table 더미데이터
+INSERT INTO s3_file (file_name, file_url)
+VALUES
+('fileName1', 'fileUrl1'),
+('fileName2', 'fileUrl2'),
+('fileName3', 'fileUrl3'),
+('fileName4', 'fileUrl4'),
+('fileName5', 'fileUrl5');
+
+-- ItemFile Table 더미데이터
+INSERT INTO item_file (s3_file_id, item_id, main_or_serve)
+VALUES
+(1, 1, 'main'),
+(2, 1, 'serve'),
+(3, 1, 'serve'),
+(4, 2, 'main'),
+(5, 2, 'serve');

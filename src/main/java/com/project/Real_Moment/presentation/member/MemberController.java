@@ -178,7 +178,7 @@ public class MemberController {
     }
 
     @GetMapping("/{id}/reviewList")
-    public ResponseEntity<ReviewDto.MyReviewListResponse> getMyReviewList(@PathVariable("id") Long id, @RequestParam("nowPage") int nowPage) {
+    public ResponseEntity<ReviewDto.MyReviewListResponse> getMyReviewList(@PathVariable("id") Long id, @RequestParam("nowPage") Integer nowPage) {
         return ResponseEntity.ok().body(memberService.getMyReviewList(id, nowPage));
     }
 

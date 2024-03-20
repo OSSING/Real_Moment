@@ -6,6 +6,7 @@ import com.project.Real_Moment.domain.entity.Review;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -47,6 +48,15 @@ public class ReviewDto {
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
+    public static class MyReviewListResponse {
+        private List<ReviewDto.MyReview> reviewList;
+        private int totalPage;
+        private int nowPage;
+    }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class MyReview {
         private Long reviewId;
         private ItemDto.ItemResponse item;
@@ -56,21 +66,23 @@ public class ReviewDto {
         private int star;
         private LocalDateTime createdDate;
         private LocalDateTime lastModifiedDate;
-    }
 
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class MyReviewListResponse {
-        private List<ReviewDto.MyReview> reviewList;
-        private long totalPage;
-        private long nowPage;
+        public MyReview(Review review) {
+            reviewId = review.getId();
+            loginId = review.getMemberId().getLoginId();
+            title = review.getTitle();
+            content = review.getContent();
+            star = review.getStar();
+            createdDate = review.getCreatedDate();
+            lastModifiedDate = review.getLastModifiedDate();
+        }
     }
 
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class SaveReviewRequest {
+
         private Long orderId;
         private Long itemId;
         private String title;
