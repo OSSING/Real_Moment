@@ -23,7 +23,7 @@ public class CondDto {
         private Long categoryId;
         private String itemName;
         private Boolean isDelete;
-        private int nowPage;
+        private Integer nowPage;
     }
 
     @Getter

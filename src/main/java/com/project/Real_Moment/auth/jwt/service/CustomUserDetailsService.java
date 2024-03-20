@@ -1,7 +1,7 @@
 package com.project.Real_Moment.auth.jwt.service;
 
 import com.project.Real_Moment.domain.entity.Admin;
-import com.project.Real_Moment.domain.entity.AdminAuthority;
+import com.project.Real_Moment.domain.enumuration.AdminAuthority;
 import com.project.Real_Moment.domain.entity.Member;
 import com.project.Real_Moment.domain.repository.AdminRepository;
 import com.project.Real_Moment.domain.repository.MemberRepository;
@@ -15,12 +15,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Slf4j
 @Component("userDetailsService")

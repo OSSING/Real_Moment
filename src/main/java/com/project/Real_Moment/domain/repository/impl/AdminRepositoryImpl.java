@@ -1,7 +1,7 @@
 package com.project.Real_Moment.domain.repository.impl;
 
 import com.project.Real_Moment.domain.entity.Admin;
-import com.project.Real_Moment.domain.entity.AdminAuthority;
+import com.project.Real_Moment.domain.enumuration.AdminAuthority;
 import com.project.Real_Moment.domain.repository.custom.AdminRepositoryCustom;
 import com.project.Real_Moment.presentation.dto.AdminDto;
 import com.project.Real_Moment.presentation.dto.CondDto;

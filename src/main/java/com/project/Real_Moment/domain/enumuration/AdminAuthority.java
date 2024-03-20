@@ -1,4 +1,4 @@
-package com.project.Real_Moment.domain.entity;
+package com.project.Real_Moment.domain.enumuration;
 
 public enum AdminAuthority {
     ROLE_CUSTOMER_MANAGER,
