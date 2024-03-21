@@ -44,7 +44,6 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
             countQuery.where(review.star.eq(star));
         }
 
-
         query.orderBy(review.createdDate.desc().nullsLast());
 
         List<ReviewDto.ReviewListResponse> results = query
@@ -65,14 +64,12 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
         Long total = countQuery.fetchOne();
 
-
         int totalPages = (int) Math.ceil((double) total / pageable.getPageSize());
         return new ReviewDto.ItemDetReviewResponse(results, totalPages, nowPage);
 
     }
 
     @Override
-
     public Page<Review> findMyReviewListByMemberId(Pageable pageable, Member member) {
 
         List<Review> reviewList = queryFactory
@@ -87,7 +84,6 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 .from(review)
                 .where(review.memberId.eq(member))
                 .fetchOne();
-
 
         return new PageImpl<>(reviewList, pageable, total);
     }

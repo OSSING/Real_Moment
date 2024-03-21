@@ -67,7 +67,6 @@ public class SecurityConfig {
                                 "/admin/logout",
                                 "/adminIdCheck",
                                 "/admin/reissue/accessToken",
-
                         "/member/reissue/accessToken",
                                 "/upload").permitAll()
                         .anyRequest().authenticated()

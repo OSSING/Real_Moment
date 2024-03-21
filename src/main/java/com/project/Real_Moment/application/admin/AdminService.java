@@ -21,7 +21,6 @@ public class AdminService {
 
     private final AdminRepository adminRepository;
 
-
     @Transactional(readOnly = true)
     public boolean checkIdDuplicate(AdminDto.CheckIdDuplicate dto) {
         return adminRepository.existsByLoginId(dto.getLoginId());

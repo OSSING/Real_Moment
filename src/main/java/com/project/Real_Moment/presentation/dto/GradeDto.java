@@ -24,7 +24,6 @@ public class GradeDto {
         }
     }
 
-
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor

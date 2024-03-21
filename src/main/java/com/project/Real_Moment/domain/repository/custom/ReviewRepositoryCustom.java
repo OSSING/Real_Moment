@@ -11,9 +11,7 @@ public interface ReviewRepositoryCustom {
 
     ReviewDto.ItemDetReviewResponse findReviewListByItemIdOrStar(Long id, Integer star, int nowPage);
 
-
     Page<Review> findMyReviewListByMemberId(Pageable pageable, Member member);
-
 
     void updateReview(ReviewDto.editReviewClick dto);
 

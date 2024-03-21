@@ -1,16 +1,11 @@
 package com.project.Real_Moment.domain.repository.impl;
 
 import com.project.Real_Moment.domain.entity.Item;
-<<<<<<< HEAD
-import com.project.Real_Moment.domain.repository.custom.ItemRepositoryCustom;
-import com.project.Real_Moment.presentation.dto.CondDto;
-=======
 import com.project.Real_Moment.domain.entity.QItemFile;
 import com.project.Real_Moment.domain.entity.QS3File;
 import com.project.Real_Moment.domain.repository.custom.ItemRepositoryCustom;
 import com.project.Real_Moment.presentation.dto.CondDto;
 import com.project.Real_Moment.presentation.dto.ItemDto;
->>>>>>> gil_develop
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -52,7 +47,6 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 .fetchOne();
 
         return new PageImpl<>(itemList, pageable, total);
-
     }
 
     private BooleanExpression categoryIdEq(Long categoryId) {
@@ -68,7 +62,6 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     }
 
     private OrderSpecifier<?> itemSortEq(String itemSort) {
-
         if (itemSort == null || itemSort.equals("new")) {
             return item.createdDate.desc();
         } else {

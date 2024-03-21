@@ -1,8 +1,6 @@
 package com.project.Real_Moment.domain.entity;
 
-
 import com.project.Real_Moment.domain.enumuration.PaymentStatus;
-
 import jakarta.persistence.*;
 import lombok.*;
 

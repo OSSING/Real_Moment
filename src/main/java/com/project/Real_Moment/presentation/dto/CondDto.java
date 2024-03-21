@@ -23,7 +23,6 @@ public class CondDto {
         private Long categoryId;
         private String itemName;
         private Boolean isDelete;
-
         private Integer nowPage;
     }
 
@@ -63,7 +62,6 @@ public class CondDto {
         private Boolean isDelete;
         private int nowPage;
     }
-
 
     @Getter
     @AllArgsConstructor

@@ -1,11 +1,9 @@
 package com.project.Real_Moment.presentation.dto;
 
-
 import com.project.Real_Moment.domain.entity.Admin;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 
 import java.util.List;
 
@@ -17,7 +15,6 @@ public class AdminDto {
     public static class CheckIdDuplicate {
         private String loginId;
     }
-
 
     @Getter
     @AllArgsConstructor

@@ -64,7 +64,6 @@ public class AdminController {
         return ResponseEntity.ok().build();
     }
 
-
     @GetMapping("/admin/adminList")
     public ResponseEntity<AdminDto.AdminListWrapper> getAdminList(@RequestParam(value = "loginId", required = false) String loginId,
                                                                   @RequestParam(value = "name", required = false) String name,
