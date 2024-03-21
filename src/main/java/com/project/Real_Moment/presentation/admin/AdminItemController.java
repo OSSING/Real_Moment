@@ -24,7 +24,7 @@ public class AdminItemController {
                                                                     @RequestParam(value = "categoryId", required = false) Long categoryId,
                                                                     @RequestParam(value = "itemName", required = false) String itemName,
                                                                     @RequestParam(value = "isDelete", required = false) Boolean isDelete,
-                                                                    @RequestParam(value = "nowPage", required = false) int nowPage) {
+                                                                    @RequestParam(value = "nowPage", required = false) Integer nowPage) {
         CondDto.ItemListCond dto = new CondDto.ItemListCond(itemSort, categoryId, itemName, isDelete, nowPage);
         return ResponseEntity.ok().body(adminItemService.getItemList(dto));
     }
