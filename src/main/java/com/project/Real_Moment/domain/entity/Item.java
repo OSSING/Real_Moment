@@ -36,7 +36,7 @@ public class Item extends AuditingUserEntity {
 
     private int sellCount = 0;
 
-    private boolean isSell;
+    private Boolean isSell;
 
     private boolean isDelete;
 

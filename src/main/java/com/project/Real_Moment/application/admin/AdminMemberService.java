@@ -25,7 +25,10 @@ public class AdminMemberService {
     private final MemberRepository memberRepository;
     private final GradeRepository gradeRepository;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 7a2b2d7da5f2e5f5526af4c118a844c0022dffa7
     @Transactional(readOnly = true)
     public MemberDto.MemberListWrapper getMemberList(CondDto.MemberListCond dto) {
         Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 10);
@@ -37,7 +40,6 @@ public class AdminMemberService {
                 .toList();
 
         for (MemberDto.MemberList memberList : memberListDto) {
-
             log.info("memberList.getGrade : {}", memberList.getGrade());
             Grade grade = gradeRepository.findById(memberList.getGrade().getGradeId()).orElse(null);
 

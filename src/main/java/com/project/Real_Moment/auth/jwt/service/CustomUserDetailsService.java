@@ -3,6 +3,7 @@ package com.project.Real_Moment.auth.jwt.service;
 import com.project.Real_Moment.domain.entity.Admin;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import com.project.Real_Moment.domain.entity.AdminAuthority;
 =======
 import com.project.Real_Moment.domain.enumuration.AdminAuthority;
@@ -10,6 +11,9 @@ import com.project.Real_Moment.domain.enumuration.AdminAuthority;
 =======
 import com.project.Real_Moment.domain.enumuration.AdminAuthority;
 >>>>>>> gil_develop
+=======
+import com.project.Real_Moment.domain.enumuration.AdminAuthority;
+>>>>>>> 7a2b2d7da5f2e5f5526af4c118a844c0022dffa7
 import com.project.Real_Moment.domain.entity.Member;
 import com.project.Real_Moment.domain.repository.AdminRepository;
 import com.project.Real_Moment.domain.repository.MemberRepository;
@@ -25,15 +29,19 @@ import org.springframework.transaction.annotation.Transactional;
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.util.Arrays;
 =======
 >>>>>>> gil_develop
 =======
 >>>>>>> gil_develop
+=======
+>>>>>>> 7a2b2d7da5f2e5f5526af4c118a844c0022dffa7
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 import java.util.stream.Stream;
@@ -41,6 +49,8 @@ import java.util.stream.Stream;
 >>>>>>> gil_develop
 =======
 >>>>>>> gil_develop
+=======
+>>>>>>> 7a2b2d7da5f2e5f5526af4c118a844c0022dffa7
 
 @Slf4j
 @Component("userDetailsService")
@@ -82,12 +92,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (admin.isDelete()) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             log.info("활성화 되어 있지 않은 사용자입니다.");
 >>>>>>> gil_develop
 =======
             log.info("활성화 되어 있지 않은 사용자입니다.");
 >>>>>>> gil_develop
+=======
+            log.info("활성화 되어 있지 않은 사용자입니다.");
+>>>>>>> 7a2b2d7da5f2e5f5526af4c118a844c0022dffa7
             throw new RuntimeException(AdminName + " -> 활성화 되어 있지 않습니다.");
         }
 
@@ -108,12 +122,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         if (member.isDelete()) {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
             log.info("활성화 되어 있지 않은 사용자입니다.");
 >>>>>>> gil_develop
 =======
             log.info("활성화 되어 있지 않은 사용자입니다.");
 >>>>>>> gil_develop
+=======
+            log.info("활성화 되어 있지 않은 사용자입니다.");
+>>>>>>> 7a2b2d7da5f2e5f5526af4c118a844c0022dffa7
             throw new RuntimeException(MemberName + " -> 활성화 되어 있지 않습니다.");
         }
 
