@@ -62,19 +62,11 @@ INSERT INTO category (name, parent_category) VALUES
 ('child4', 2);
 
 -- Items Table 더미데이터
-<<<<<<< HEAD
-INSERT INTO item (category_id, name, content, price, discount_rate, discount_price, sell_price, stock, is_sell, is_delete, main_img, serve_img)
-VALUES
-(3, 'item1', 'item content1', 800, 10, 80, 720, 50, TRUE, FALSE, 'main1.jpg', 'serve1.jpg'),
-(4, 'item2', 'item content2', 1200, 5, 60, 1140, 30, TRUE, FALSE, 'main2.jpg', 'serve2.jpg'),
-(5, 'item3', 'item content3', 1000, 0, 0, 1000, 100, TRUE, FALSE, 'main3.jpg', 'serve3.jpg');
-=======
 INSERT INTO item (category_id, name, content, price, discount_rate, discount_price, sell_price, stock, sell_count, is_sell, is_delete)
 VALUES
 (3, 'item1', 'item content1', 800, 10, 80, 720, 50, 30, TRUE, FALSE),
 (4, 'item2', 'item content2', 1200, 5, 60, 1140, 30, 50, TRUE, FALSE),
 (5, 'item3', 'item content3', 1000, 0, 0, 1000, 100, 70, TRUE, FALSE);
->>>>>>> gil_develop
 
 -- Carts Table 더미데이터
 INSERT INTO cart (member_id, item_id, stock, price) VALUES

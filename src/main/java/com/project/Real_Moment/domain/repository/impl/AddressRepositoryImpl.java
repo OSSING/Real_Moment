@@ -38,7 +38,6 @@ public class AddressRepositoryImpl implements AddressRepositoryCustom {
         List<Address> addressList = queryFactory
                 .selectFrom(address)
                 .where(address.memberId.id.eq(memberId))
-
                 .orderBy(address.isDefAddress.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())

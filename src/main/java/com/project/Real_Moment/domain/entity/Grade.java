@@ -17,7 +17,6 @@ public class Grade {
 
     private String gradeName;
 
-
     private int rewardRate;
 
     private int gradePrice;

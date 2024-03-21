@@ -2,7 +2,11 @@ package com.project.Real_Moment.auth.jwt.service;
 
 import com.project.Real_Moment.domain.entity.Admin;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import com.project.Real_Moment.domain.entity.AdminAuthority;
+=======
+import com.project.Real_Moment.domain.enumuration.AdminAuthority;
+>>>>>>> gil_develop
 =======
 import com.project.Real_Moment.domain.enumuration.AdminAuthority;
 >>>>>>> gil_develop
@@ -20,7 +24,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.util.Arrays;
+=======
+>>>>>>> gil_develop
 =======
 >>>>>>> gil_develop
 import java.util.Collections;
@@ -28,7 +35,10 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
 <<<<<<< HEAD
+<<<<<<< HEAD
 import java.util.stream.Stream;
+=======
+>>>>>>> gil_develop
 =======
 >>>>>>> gil_develop
 
@@ -71,6 +81,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     private org.springframework.security.core.userdetails.User createAdmin(String AdminName, Admin admin) {
         if (admin.isDelete()) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+            log.info("활성화 되어 있지 않은 사용자입니다.");
+>>>>>>> gil_develop
 =======
             log.info("활성화 되어 있지 않은 사용자입니다.");
 >>>>>>> gil_develop
@@ -93,6 +107,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     private org.springframework.security.core.userdetails.User createMember(String MemberName, Member member) {
         if (member.isDelete()) {
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+            log.info("활성화 되어 있지 않은 사용자입니다.");
+>>>>>>> gil_develop
 =======
             log.info("활성화 되어 있지 않은 사용자입니다.");
 >>>>>>> gil_develop

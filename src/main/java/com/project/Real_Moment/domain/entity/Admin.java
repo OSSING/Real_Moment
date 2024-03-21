@@ -1,11 +1,8 @@
 package com.project.Real_Moment.domain.entity;
 
-
-
 import com.project.Real_Moment.domain.enumuration.AdminAuthority;
 import jakarta.persistence.*;
 import lombok.*;
-
 
 @Entity
 @Getter

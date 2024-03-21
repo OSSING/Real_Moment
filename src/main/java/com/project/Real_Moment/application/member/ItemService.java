@@ -21,7 +21,6 @@ import java.util.List;
 public class ItemService {
 
     private final ItemRepository itemRepository;
-
     private final S3FileRepository s3FileRepository;
 
     @Transactional(readOnly = true)
@@ -34,7 +33,6 @@ public class ItemService {
         List<ItemDto.ItemResponse> itemListDto = itemList.stream()
                 .map(ItemDto.ItemResponse::new)
                 .toList();
-
 
         for (ItemDto.ItemResponse item : itemListDto) {
             Item findItem = itemRepository.findById(item.getItemId())
@@ -61,6 +59,5 @@ public class ItemService {
         itemDetResponse.setServeImg(subImgUrl);
 
         return itemDetResponse;
-
     }
 }

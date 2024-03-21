@@ -1,7 +1,5 @@
 package com.project.Real_Moment.presentation.dto;
 
-
-
 import com.project.Real_Moment.domain.enumuration.Gender;
 import com.project.Real_Moment.domain.entity.Member;
 import jakarta.validation.constraints.Email;
@@ -209,7 +207,6 @@ public class MemberDto {
 
         public MemberList(Member member) {
             memberId = member.getId();
-
             grade = new GradeDto.GradeResponse(member.getGradeId());
             loginId = member.getLoginId();
             name = member.getName();

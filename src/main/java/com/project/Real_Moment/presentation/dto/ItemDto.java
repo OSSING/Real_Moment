@@ -4,18 +4,14 @@ import com.project.Real_Moment.domain.entity.Item;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import lombok.Setter;
-
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class ItemDto {
 
-
     @Getter @Setter
-
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ItemDetResponse {
@@ -31,10 +27,8 @@ public class ItemDto {
         private int stock;
         private boolean isSell;
         private boolean isDelete;
-
         private List<ItemDto.MainImgList> mainImg;
         private List<ItemDto.SubImaList> serveImg;
-
 
         public ItemDetResponse(Item item) {
             itemId = item.getId();
@@ -49,7 +43,6 @@ public class ItemDto {
             stock = item.getStock();
             isSell = item.isSell();
             isDelete = item.isDelete();
-
         }
     }
 
@@ -64,7 +57,6 @@ public class ItemDto {
         private int discountPrice;
         private int sellPrice;
         private Boolean isSell;
-
         private List<ItemDto.MainImgList> mainImg;
 
         public ItemResponse(Item item) {
@@ -75,7 +67,6 @@ public class ItemDto {
             this.discountPrice = item.getDiscountPrice();
             this.sellPrice = item.getSellPrice();
             this.isSell = item.isSell();
-
         }
     }
 
@@ -87,7 +78,6 @@ public class ItemDto {
         private long totalPage;
         private long nowPage;
     }
-
 
     @Getter
     @AllArgsConstructor

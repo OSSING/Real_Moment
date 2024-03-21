@@ -48,7 +48,6 @@ public class AdminMemberService {
             }
 
             memberList.setGrade(gradeDto);
-
         }
 
         return new MemberDto.MemberListWrapper(memberListDto, memberListPaging.getTotalPages(), dto.getNowPage());

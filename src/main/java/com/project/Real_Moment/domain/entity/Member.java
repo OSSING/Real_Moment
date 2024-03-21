@@ -1,8 +1,6 @@
 package com.project.Real_Moment.domain.entity;
 
-
 import com.project.Real_Moment.domain.enumuration.Gender;
-
 import com.project.Real_Moment.presentation.dto.MemberDto;
 import jakarta.persistence.*;
 import lombok.*;

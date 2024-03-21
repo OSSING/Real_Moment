@@ -1,6 +1,5 @@
 package com.project.Real_Moment.domain.repository.impl;
 
-
 import com.project.Real_Moment.domain.enumuration.Gender;
 import com.project.Real_Moment.domain.entity.Member;
 import com.project.Real_Moment.domain.repository.custom.MemberRepositoryCustom;
@@ -118,7 +117,6 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     private OrderSpecifier<?> memberSort(String memberSort) {
-
         if (memberSort == null || memberSort.equals("day")) {
             return member.createdDate.desc().nullsLast();
         } else {

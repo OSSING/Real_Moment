@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,10 +32,7 @@ public class MemberService {
     private final OneOnOneRepository oneonOneRepository;
     private final CommentRepository commentRepository;
     private final GradeRepository gradeRepository;
-
     private final S3FileRepository s3FileRepository;
-
-
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -250,7 +246,6 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-
     public ReviewDto.MyReviewListResponse getMyReviewList(Long id, Integer nowPage) {
         int pageNumber = (nowPage != null && nowPage > 0) ? nowPage : 1;
         Pageable pageable = PageRequest.of(pageNumber - 1, 9);
