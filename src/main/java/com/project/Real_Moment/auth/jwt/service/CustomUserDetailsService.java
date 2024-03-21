@@ -1,25 +1,7 @@
 package com.project.Real_Moment.auth.jwt.service;
 
 import com.project.Real_Moment.domain.entity.Admin;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 1d1a7541923abcc6710a8ea613f7c1e063f1ef2f
-<<<<<<< HEAD
-<<<<<<< HEAD
-import com.project.Real_Moment.domain.entity.AdminAuthority;
-=======
 import com.project.Real_Moment.domain.enumuration.AdminAuthority;
->>>>>>> gil_develop
-=======
-import com.project.Real_Moment.domain.enumuration.AdminAuthority;
->>>>>>> gil_develop
-<<<<<<< HEAD
-=======
-import com.project.Real_Moment.domain.enumuration.AdminAuthority;
->>>>>>> 7a2b2d7da5f2e5f5526af4c118a844c0022dffa7
-=======
->>>>>>> 1d1a7541923abcc6710a8ea613f7c1e063f1ef2f
 import com.project.Real_Moment.domain.entity.Member;
 import com.project.Real_Moment.domain.repository.AdminRepository;
 import com.project.Real_Moment.domain.repository.MemberRepository;
@@ -33,42 +15,10 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 1d1a7541923abcc6710a8ea613f7c1e063f1ef2f
-<<<<<<< HEAD
-<<<<<<< HEAD
-import java.util.Arrays;
-=======
->>>>>>> gil_develop
-=======
->>>>>>> gil_develop
-<<<<<<< HEAD
-=======
->>>>>>> 7a2b2d7da5f2e5f5526af4c118a844c0022dffa7
-=======
->>>>>>> 1d1a7541923abcc6710a8ea613f7c1e063f1ef2f
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 1d1a7541923abcc6710a8ea613f7c1e063f1ef2f
-<<<<<<< HEAD
-<<<<<<< HEAD
-import java.util.stream.Stream;
-=======
->>>>>>> gil_develop
-=======
->>>>>>> gil_develop
-<<<<<<< HEAD
-=======
->>>>>>> 7a2b2d7da5f2e5f5526af4c118a844c0022dffa7
-=======
->>>>>>> 1d1a7541923abcc6710a8ea613f7c1e063f1ef2f
 
 @Slf4j
 @Component("userDetailsService")
@@ -108,24 +58,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     // DB에서 가져온 정보를 기준으로 Admin이 activated 상태라면 Admin의 권한 정보와 이름, 비밀번호를 담아 userdetails.User 객체를 return
     private org.springframework.security.core.userdetails.User createAdmin(String AdminName, Admin admin) {
         if (admin.isDelete()) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 1d1a7541923abcc6710a8ea613f7c1e063f1ef2f
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
             log.info("활성화 되어 있지 않은 사용자입니다.");
->>>>>>> gil_develop
-=======
-            log.info("활성화 되어 있지 않은 사용자입니다.");
->>>>>>> gil_develop
-<<<<<<< HEAD
-=======
-            log.info("활성화 되어 있지 않은 사용자입니다.");
->>>>>>> 7a2b2d7da5f2e5f5526af4c118a844c0022dffa7
-=======
->>>>>>> 1d1a7541923abcc6710a8ea613f7c1e063f1ef2f
             throw new RuntimeException(AdminName + " -> 활성화 되어 있지 않습니다.");
         }
 
@@ -144,24 +77,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     // DB에 가져온 정보를 기준으로 Member가 activated 상태라면 Member의 권한 정보와 이름, 비밀번호를 담아 userdetails.User 객체를 return
     private org.springframework.security.core.userdetails.User createMember(String MemberName, Member member) {
         if (member.isDelete()) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 1d1a7541923abcc6710a8ea613f7c1e063f1ef2f
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
             log.info("활성화 되어 있지 않은 사용자입니다.");
->>>>>>> gil_develop
-=======
-            log.info("활성화 되어 있지 않은 사용자입니다.");
->>>>>>> gil_develop
-<<<<<<< HEAD
-=======
-            log.info("활성화 되어 있지 않은 사용자입니다.");
->>>>>>> 7a2b2d7da5f2e5f5526af4c118a844c0022dffa7
-=======
->>>>>>> 1d1a7541923abcc6710a8ea613f7c1e063f1ef2f
             throw new RuntimeException(MemberName + " -> 활성화 되어 있지 않습니다.");
         }
 
