@@ -25,7 +25,7 @@ public class ItemDto {
         private LocalDateTime createdDate;
         private LocalDateTime lastModifiedDate;
         private int stock;
-        private boolean isSell;
+        private Boolean isSell;
         private boolean isDelete;
         private List<ItemDto.MainImgList> mainImg;
         private List<ItemDto.SubImaList> serveImg;
@@ -41,7 +41,7 @@ public class ItemDto {
             createdDate = item.getCreatedDate();
             lastModifiedDate = item.getLastModifiedDate();
             stock = item.getStock();
-            isSell = item.isSell();
+            isSell = item.getIsSell();
             isDelete = item.isDelete();
         }
     }
@@ -66,7 +66,7 @@ public class ItemDto {
             this.discountRate = item.getDiscountRate();
             this.discountPrice = item.getDiscountPrice();
             this.sellPrice = item.getSellPrice();
-            this.isSell = item.isSell();
+            this.isSell = item.getIsSell();
         }
     }
 
@@ -101,7 +101,7 @@ public class ItemDto {
         private int stock;
         private int sellCount;
         private int totalSales; // 상품 총 매출
-        private boolean isSell;
+        private Boolean isSell;
         private List<ItemDto.MainImgList> mainImg;
 
         public AdminItemList(Item item) {
@@ -113,7 +113,7 @@ public class ItemDto {
             sellPrice = item.getSellPrice();
             stock = item.getStock();
             sellCount = item.getSellCount();
-            isSell = item.isSell();
+            isSell = item.getIsSell();
         }
     }
 
