@@ -1,7 +1,11 @@
 package com.project.Real_Moment.auth.jwt.service;
 
 import com.project.Real_Moment.domain.entity.Admin;
+<<<<<<< HEAD
 import com.project.Real_Moment.domain.entity.AdminAuthority;
+=======
+import com.project.Real_Moment.domain.enumuration.AdminAuthority;
+>>>>>>> gil_develop
 import com.project.Real_Moment.domain.entity.Member;
 import com.project.Real_Moment.domain.repository.AdminRepository;
 import com.project.Real_Moment.domain.repository.MemberRepository;
@@ -15,12 +19,18 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+<<<<<<< HEAD
 import java.util.Arrays;
+=======
+>>>>>>> gil_develop
 import java.util.Collections;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.stream.Collectors;
+<<<<<<< HEAD
 import java.util.stream.Stream;
+=======
+>>>>>>> gil_develop
 
 @Slf4j
 @Component("userDetailsService")
@@ -60,6 +70,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     // DB에서 가져온 정보를 기준으로 Admin이 activated 상태라면 Admin의 권한 정보와 이름, 비밀번호를 담아 userdetails.User 객체를 return
     private org.springframework.security.core.userdetails.User createAdmin(String AdminName, Admin admin) {
         if (admin.isDelete()) {
+<<<<<<< HEAD
+=======
+            log.info("활성화 되어 있지 않은 사용자입니다.");
+>>>>>>> gil_develop
             throw new RuntimeException(AdminName + " -> 활성화 되어 있지 않습니다.");
         }
 
@@ -78,6 +92,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     // DB에 가져온 정보를 기준으로 Member가 activated 상태라면 Member의 권한 정보와 이름, 비밀번호를 담아 userdetails.User 객체를 return
     private org.springframework.security.core.userdetails.User createMember(String MemberName, Member member) {
         if (member.isDelete()) {
+<<<<<<< HEAD
+=======
+            log.info("활성화 되어 있지 않은 사용자입니다.");
+>>>>>>> gil_develop
             throw new RuntimeException(MemberName + " -> 활성화 되어 있지 않습니다.");
         }
 

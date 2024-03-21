@@ -23,7 +23,8 @@ public class CondDto {
         private Long categoryId;
         private String itemName;
         private Boolean isDelete;
-        private int nowPage;
+
+        private Integer nowPage;
     }
 
     @Getter
@@ -61,5 +62,16 @@ public class CondDto {
         private Long gradeId;
         private Boolean isDelete;
         private int nowPage;
+    }
+
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AdminListCond {
+        private String loginId;
+        private String name;
+        private String roles;
+        private Integer nowPage;
     }
 }

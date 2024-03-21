@@ -5,12 +5,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import lombok.Setter;
+
+
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class ItemDto {
 
-    @Getter
+
+    @Getter @Setter
+
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ItemDetResponse {
@@ -26,8 +31,10 @@ public class ItemDto {
         private int stock;
         private boolean isSell;
         private boolean isDelete;
-        private String mainImg;
-        private String serveImg;
+
+        private List<ItemDto.MainImgList> mainImg;
+        private List<ItemDto.SubImaList> serveImg;
+
 
         public ItemDetResponse(Item item) {
             itemId = item.getId();
@@ -42,12 +49,11 @@ public class ItemDto {
             stock = item.getStock();
             isSell = item.isSell();
             isDelete = item.isDelete();
-            mainImg = item.getMainImg();
-            serveImg = item.getServeImg();
+
         }
     }
 
-    @Getter
+    @Getter @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ItemResponse {
@@ -58,7 +64,8 @@ public class ItemDto {
         private int discountPrice;
         private int sellPrice;
         private Boolean isSell;
-        private String mainImg;
+
+        private List<ItemDto.MainImgList> mainImg;
 
         public ItemResponse(Item item) {
             this.itemId = item.getId();
@@ -68,7 +75,7 @@ public class ItemDto {
             this.discountPrice = item.getDiscountPrice();
             this.sellPrice = item.getSellPrice();
             this.isSell = item.isSell();
-            this.mainImg = item.getMainImg();
+
         }
     }
 
@@ -79,5 +86,58 @@ public class ItemDto {
         private List<ItemDto.ItemResponse> item;
         private long totalPage;
         private long nowPage;
+    }
+
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AdminItemListWrapper {
+        private List<AdminItemList> itemList;
+        private int totalPage;
+        private int nowPage;
+    }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AdminItemList {
+        private Long itemId;
+        private String name;
+        private int price;
+        private int discountRate;
+        private int discountPrice;
+        private int sellPrice;
+        private int stock;
+        private int sellCount;
+        private int totalSales; // 상품 총 매출
+        private boolean isSell;
+        private List<ItemDto.MainImgList> mainImg;
+
+        public AdminItemList(Item item) {
+            itemId = item.getId();
+            name = item.getName();
+            price = item.getPrice();
+            discountRate = item.getDiscountRate();
+            discountPrice = item.getDiscountPrice();
+            sellPrice = item.getSellPrice();
+            stock = item.getStock();
+            sellCount = item.getSellCount();
+            isSell = item.isSell();
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MainImgList {
+        private String fileUrl;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SubImaList {
+        private String fileUrl;
     }
 }

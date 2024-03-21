@@ -44,6 +44,9 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
             countQuery.where(review.star.eq(star));
         }
 
+
+        query.orderBy(review.createdDate.desc().nullsLast());
+
         List<ReviewDto.ReviewListResponse> results = query
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -62,17 +65,6 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
         Long total = countQuery.fetchOne();
 
-//        List<ReviewDto.ReviewListResponse> reviewList = results.getResults().stream()
-//                .map(review -> new ReviewDto.ReviewListResponse(
-//                        review.getId(),
-//                        review.getMemberId().getLoginId(),
-//                        review.getTitle(),
-//                        review.getContent(),
-//                        review.getStar(),
-//                        review.getCreatedDate(),
-//                        review.getLastModifiedDate()
-//                ))
-//                .toList();
 
         int totalPages = (int) Math.ceil((double) total / pageable.getPageSize());
         return new ReviewDto.ItemDetReviewResponse(results, totalPages, nowPage);
@@ -80,35 +72,15 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
     }
 
     @Override
-    public ReviewDto.MyReviewListResponse findMyReviewListByMemberId(Member member, int nowPage) {
-        Pageable pageable = PageRequest.of(nowPage - 1, 10);
 
-        List<ReviewDto.MyReview> results = queryFactory.selectFrom(review)
+    public Page<Review> findMyReviewListByMemberId(Pageable pageable, Member member) {
+
+        List<Review> reviewList = queryFactory
+                .selectFrom(review)
                 .where(review.memberId.eq(member))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetch()
-                .stream()
-                .map(review -> new ReviewDto.MyReview(
-                        review.getId(),
-                        new ItemDto.ItemResponse(
-                                review.getItemId().getId(),
-                                review.getItemId().getName(),
-                                review.getItemId().getPrice(),
-                                review.getItemId().getDiscountRate(),
-                                review.getItemId().getDiscountPrice(),
-                                review.getItemId().getSellPrice(),
-                                review.getItemId().isSell(),
-                                review.getItemId().getMainImg()
-                        ),
-                        review.getMemberId().getLoginId(),
-                        review.getTitle(),
-                        review.getContent(),
-                        review.getStar(),
-                        review.getCreatedDate(),
-                        review.getLastModifiedDate()
-                ))
-                .toList();
+                .fetch();
 
         Long total = queryFactory
                 .select(review.count())
@@ -116,8 +88,8 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
                 .where(review.memberId.eq(member))
                 .fetchOne();
 
-        int totalPages = (int) Math.ceil((double) total / pageable.getPageSize());
-        return new ReviewDto.MyReviewListResponse(results, totalPages, nowPage);
+
+        return new PageImpl<>(reviewList, pageable, total);
     }
 
     @Override

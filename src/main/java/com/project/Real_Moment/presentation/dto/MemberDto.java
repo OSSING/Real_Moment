@@ -1,8 +1,8 @@
 package com.project.Real_Moment.presentation.dto;
 
 
-import com.project.Real_Moment.domain.entity.Gender;
-import com.project.Real_Moment.domain.entity.Grade;
+
+import com.project.Real_Moment.domain.enumuration.Gender;
 import com.project.Real_Moment.domain.entity.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -209,9 +209,42 @@ public class MemberDto {
 
         public MemberList(Member member) {
             memberId = member.getId();
+
+            grade = new GradeDto.GradeResponse(member.getGradeId());
             loginId = member.getLoginId();
             name = member.getName();
             isDelete = member.isDelete();
+            createdDate = member.getCreatedDate();
+        }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class memberDet {
+        private Long memberId;
+        private GradeDto.GradeResponse grade;
+        private String loginId;
+        private String email;
+        private String name;
+        private String tel;
+        private String gender;
+        private int point;
+        private boolean isDelete;
+        private LocalDateTime recentlyLogin;
+        private LocalDateTime createdDate;
+
+        public memberDet(Member member) {
+            memberId = member.getId();
+            grade = new GradeDto.GradeResponse(member.getGradeId());
+            loginId = member.getLoginId();
+            email = member.getEmail();
+            name = member.getName();
+            tel = member.getTel();
+            gender = String.valueOf(member.getGender());
+            point = member.getPoint();
+            isDelete = member.isDelete();
+            recentlyLogin = member.getRecentlyLogin();
             createdDate = member.getCreatedDate();
         }
     }
