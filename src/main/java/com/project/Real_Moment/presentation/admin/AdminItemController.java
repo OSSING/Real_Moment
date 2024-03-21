@@ -28,4 +28,9 @@ public class AdminItemController {
         CondDto.ItemListCond dto = new CondDto.ItemListCond(itemSort, categoryId, itemName, isDelete, nowPage);
         return ResponseEntity.ok().body(adminItemService.getItemList(dto));
     }
+
+    @GetMapping("/admin/item")
+    public ResponseEntity<ItemDto.AdminItemDef> getItemDef(@RequestParam("itemId") Long itemId) {
+        return ResponseEntity.ok().body(adminItemService.getItemDef(itemId));
+    }
 }

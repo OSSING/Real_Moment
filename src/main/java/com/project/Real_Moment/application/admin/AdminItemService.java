@@ -25,7 +25,6 @@ public class AdminItemService {
 
     private final ItemRepository itemRepository;
     private final OrderDetailRepository orderDetailRepository;
-    private final ItemFileRepository itemFileRepository;
     private final S3FileRepository s3FileRepository;
 
     @Transactional(readOnly = true)
@@ -43,13 +42,8 @@ public class AdminItemService {
             Item findItem = itemRepository.findById(item.getItemId())
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
 
-            List<OrderDetail> OrderedItem = orderDetailRepository.findByItemId(findItem);
+            int totalSales = getTotalSales(findItem);
 
-            // orderDetail에 저장된 데이터로 item의 총 매출을 계산
-            int totalSales = 0;
-            for (OrderDetail orderDetail : OrderedItem) {
-                totalSales += orderDetail.getTotalPrice();
-            }
             item.setTotalSales(totalSales);
 
             // item 객체에 맞는 fileUrl을 추출
@@ -58,5 +52,37 @@ public class AdminItemService {
         }
 
         return new ItemDto.AdminItemListWrapper(itemList, itemListPaging.getTotalPages(), pageNumber);
+    }
+
+    @Transactional(readOnly = true)
+    public ItemDto.AdminItemDef getItemDef(Long itemId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+
+        ItemDto.AdminItemDef itemDefDto = new ItemDto.AdminItemDef(item);
+
+        int totalSales = getTotalSales(item);
+        itemDefDto.setTotalSales(totalSales);
+
+        List<ItemDto.MainImgList> mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(item);
+        itemDefDto.setMainImg(mainImgUrl);
+
+        List<ItemDto.SubImaList> subImgUrl = s3FileRepository.findSubImg_UrlByItemId(item);
+        itemDefDto.setSubImg(subImgUrl);
+
+        return itemDefDto;
+    }
+
+    // orderDetail에 저장된 데이터로 item의 총 매출을 계산
+
+    private int getTotalSales(Item item) {
+        List<OrderDetail> OrderedItem = orderDetailRepository.findByItemId(item);
+
+        int totalSales = 0;
+        for (OrderDetail orderDetail : OrderedItem) {
+            totalSales += orderDetail.getTotalPrice();
+        }
+
+        return totalSales;
     }
 }
