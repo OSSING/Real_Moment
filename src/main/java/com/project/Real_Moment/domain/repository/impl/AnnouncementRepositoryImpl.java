@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import static com.project.Real_Moment.domain.entity.QAnnouncement.announcement;
+import static com.project.Real_Moment.domain.entity.QReview.review;
 
 @RequiredArgsConstructor
 public class AnnouncementRepositoryImpl implements AnnouncementRepositoryCustom {
@@ -25,6 +26,7 @@ public class AnnouncementRepositoryImpl implements AnnouncementRepositoryCustom 
 
         List<AnnouncementDto.AnnouncementList> announcementList = queryFactory
                 .selectFrom(announcement)
+                .orderBy(announcement.createdDate.desc().nullsLast())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch()
@@ -55,6 +57,7 @@ public class AnnouncementRepositoryImpl implements AnnouncementRepositoryCustom 
 
         List<Announcement> announcementList = queryFactory
                 .selectFrom(announcement)
+                .orderBy(announcement.createdDate.desc().nullsLast())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

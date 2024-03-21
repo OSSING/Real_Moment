@@ -5,9 +5,9 @@ import lombok.*;
 
 @Entity
 @Getter
-@ToString
+@Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Grade {
 
     @Id
@@ -17,7 +17,8 @@ public class Grade {
 
     private String gradeName;
 
-    private int rewardRate = 1;
+
+    private int rewardRate;
 
     private int gradePrice;
 }

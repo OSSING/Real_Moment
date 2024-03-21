@@ -52,6 +52,7 @@ public class ItemQARepositoryImpl implements ItemQARepositoryCustom {
         List<ItemQA> itemQAList = queryFactory
                 .selectFrom(itemQA)
                 .where(itemQA.memberId.id.eq(memberId))
+                .orderBy(itemQA.createdDate.desc().nullsLast())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

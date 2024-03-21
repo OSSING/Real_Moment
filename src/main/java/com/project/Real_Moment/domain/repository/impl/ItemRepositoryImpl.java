@@ -1,8 +1,16 @@
 package com.project.Real_Moment.domain.repository.impl;
 
 import com.project.Real_Moment.domain.entity.Item;
+<<<<<<< HEAD
 import com.project.Real_Moment.domain.repository.custom.ItemRepositoryCustom;
 import com.project.Real_Moment.presentation.dto.CondDto;
+=======
+import com.project.Real_Moment.domain.entity.QItemFile;
+import com.project.Real_Moment.domain.entity.QS3File;
+import com.project.Real_Moment.domain.repository.custom.ItemRepositoryCustom;
+import com.project.Real_Moment.presentation.dto.CondDto;
+import com.project.Real_Moment.presentation.dto.ItemDto;
+>>>>>>> gil_develop
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -14,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import static com.project.Real_Moment.domain.entity.QItem.item;
+import static com.project.Real_Moment.domain.entity.QItemFile.itemFile;
+import static com.project.Real_Moment.domain.entity.QS3File.s3File;
 
 @RequiredArgsConstructor
 public class ItemRepositoryImpl implements ItemRepositoryCustom {
@@ -43,51 +53,6 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
 
         return new PageImpl<>(itemList, pageable, total);
 
-//        if (categoryId != null) {
-//            query.where(item.categoryId.id.eq(categoryId));
-//            countQuery.where(item.categoryId.id.eq(categoryId));
-//        }
-//
-//        if (itemName != null) {
-//            query.where(item.name.eq(itemName));
-//            countQuery.where(item.name.eq(itemName));
-//        }
-//
-//        if (isDelete != null) {
-//            query.where(item.isDelete.eq(isDelete));
-//            countQuery.where(item.isDelete.eq(isDelete));
-//        }
-
-//        if (itemSort != null) {
-//            if (itemSort.equals("new")) {
-//                query.orderBy(item.createdDate.asc());
-//            } else if (itemSort.equals("sale")) {
-//                query.orderBy(item.discountRate.desc());
-//            }
-//        }
-
-//        List<ItemDto.ItemResponse> results = query
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch()
-//                .stream()
-//                .map(item -> new ItemDto.ItemResponse(
-//                        item.getId(),
-//                        item.getName(),
-//                        item.getPrice(),
-//                        item.getDiscountRate(),
-//                        item.getDiscountPrice(),
-//                        item.getSellPrice(),
-//                        item.isSell(),
-//                        item.getMainImg()
-//                ))
-//                .toList();
-//
-//        Long total = countQuery.fetchOne();
-
-//        int totalPages = (int) Math.ceil((double) total / pageable.getPageSize());
-//        return new ItemDto.ItemCondResponse(results, totalPages, nowPage);
-
     }
 
     private BooleanExpression categoryIdEq(Long categoryId) {
@@ -103,11 +68,23 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     }
 
     private OrderSpecifier<?> itemSortEq(String itemSort) {
-        if (itemSort != null) {
-            if (itemSort.equals("new")) {
-                return item.createdDate.asc();
-            } else if (itemSort.equals("sale")) {
-                return item.discountRate.desc();
+
+        if (itemSort == null || itemSort.equals("new")) {
+            return item.createdDate.desc();
+        } else {
+            switch (itemSort) {
+                case "sale" -> {
+                    return item.discountRate.desc();
+                }
+                case "low" -> {
+                    return item.price.asc();
+                }
+                case "high" -> {
+                    return item.price.desc();
+                }
+                case "sell" -> {
+                    return item.sellCount.desc();
+                }
             }
         }
         return null;

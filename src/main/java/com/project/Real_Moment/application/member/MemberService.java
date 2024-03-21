@@ -34,6 +34,9 @@ public class MemberService {
     private final CommentRepository commentRepository;
     private final GradeRepository gradeRepository;
 
+    private final S3FileRepository s3FileRepository;
+
+
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
@@ -247,9 +250,36 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public ReviewDto.MyReviewListResponse getMyReviewList(Long id, int nowPage) {
-        Member member = memberRepository.findById(id).orElseThrow(IllegalArgumentException::new);
-        return reviewRepository.findMyReviewListByMemberId(member, nowPage);
+
+    public ReviewDto.MyReviewListResponse getMyReviewList(Long id, Integer nowPage) {
+        int pageNumber = (nowPage != null && nowPage > 0) ? nowPage : 1;
+        Pageable pageable = PageRequest.of(pageNumber - 1, 9);
+
+
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
+        Page<Review> reviewListPaging = reviewRepository.findMyReviewListByMemberId(pageable, member);
+
+        List<ReviewDto.MyReview> reviewList = reviewListPaging.stream()
+                .map(ReviewDto.MyReview::new)
+                .toList();
+
+        for (ReviewDto.MyReview reviewDto : reviewList) {
+            Review review = reviewRepository.findById(reviewDto.getReviewId()).orElse(null);
+
+            ItemDto.ItemResponse itemDto = null;
+
+            if (review != null) {
+                itemDto = new ItemDto.ItemResponse(review.getItemId());
+                List<ItemDto.MainImgList> mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(review.getItemId());
+                itemDto.setMainImg(mainImgUrl);
+            }
+
+            reviewDto.setItem(itemDto);
+        }
+
+        return new ReviewDto.MyReviewListResponse(reviewList, reviewListPaging.getTotalPages(), pageNumber);
     }
 
     @Transactional

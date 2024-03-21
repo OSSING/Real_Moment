@@ -5,6 +5,7 @@ import com.project.Real_Moment.auth.jwt.JwtFilter;
 import com.project.Real_Moment.auth.jwt.TokenProvider;
 import com.project.Real_Moment.auth.jwt.dto.TokenDto;
 import com.project.Real_Moment.presentation.dto.AdminDto;
+import com.project.Real_Moment.presentation.dto.CondDto;
 import com.project.Real_Moment.presentation.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -60,6 +61,38 @@ public class AdminController {
 
     @PostMapping("/admin/logout")
     public ResponseEntity<Void> logout() {
+        return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("/admin/adminList")
+    public ResponseEntity<AdminDto.AdminListWrapper> getAdminList(@RequestParam(value = "loginId", required = false) String loginId,
+                                                                  @RequestParam(value = "name", required = false) String name,
+                                                                  @RequestParam(value = "roles", required = false) String roles,
+                                                                  @RequestParam(value = "nowPage", required = false) Integer nowPage) {
+        CondDto.AdminListCond dto = new CondDto.AdminListCond(loginId, name, roles, nowPage);
+        return ResponseEntity.ok().body(adminService.getAdminList(dto));
+    }
+
+    @GetMapping("/admin/admin")
+    public ResponseEntity<AdminDto.AdminList> getAdminDet(@RequestParam("adminId") Long adminId) {
+        return ResponseEntity.ok().body(adminService.getAdminDet(adminId));
+    }
+
+    @PatchMapping("/admin/{id}")
+    public ResponseEntity<AdminDto.AdminList> editAdminInfo(@PathVariable("id") Long id, @RequestBody AdminDto.AdminInfo dto) {
+        return ResponseEntity.ok().body(adminService.editAdminInfo(id, dto));
+    }
+
+    @PatchMapping("/admin/admin/roles")
+    public ResponseEntity<Void> editAdminRoles(@RequestBody AdminDto.AdminRolesInfo dto) {
+        adminService.editAdminRoles(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/admin/admin")
+    public ResponseEntity<Void> deleteAdmin(@RequestParam("adminId") Long adminId) {
+        adminService.deleteAdmin(adminId);
         return ResponseEntity.ok().build();
     }
 }

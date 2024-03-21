@@ -37,21 +37,33 @@ public class AdminMemberService {
                 .toList();
 
         for (MemberDto.MemberList memberList : memberListDto) {
-            if (memberList.getGrade() == null) {
-                memberList.setGrade(null);
-            } else {
-                Grade grade = gradeRepository.findById(memberList.getGrade().getGradeId()).orElse(null);
 
-                GradeDto.GradeResponse gradeDto = null;
+            log.info("memberList.getGrade : {}", memberList.getGrade());
+            Grade grade = gradeRepository.findById(memberList.getGrade().getGradeId()).orElse(null);
 
-                if (grade != null) {
-                    gradeDto = new GradeDto.GradeResponse(grade);
-                }
+            GradeDto.GradeResponse gradeDto = null;
 
-                memberList.setGrade(gradeDto);
+            if (grade != null) {
+                gradeDto = new GradeDto.GradeResponse(grade);
             }
+
+            memberList.setGrade(gradeDto);
+
         }
 
         return new MemberDto.MemberListWrapper(memberListDto, memberListPaging.getTotalPages(), dto.getNowPage());
+    }
+
+    @Transactional(readOnly = true)
+    public MemberDto.memberDet getMemberDet(Long memberId) {
+        Member member = memberCheckValidity(memberId);
+
+        return new MemberDto.memberDet(member);
+    }
+
+    // 회원 검증
+    private Member memberCheckValidity(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
     }
 }
