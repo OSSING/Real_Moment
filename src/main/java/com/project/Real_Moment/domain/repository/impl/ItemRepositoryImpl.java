@@ -1,8 +1,10 @@
 package com.project.Real_Moment.domain.repository.impl;
 
+import com.project.Real_Moment.domain.entity.Category;
 import com.project.Real_Moment.domain.entity.Item;
 import com.project.Real_Moment.domain.repository.custom.ItemRepositoryCustom;
 import com.project.Real_Moment.presentation.dto.CondDto;
+import com.project.Real_Moment.presentation.dto.ItemDto;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -42,6 +44,23 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 .fetchOne();
 
         return new PageImpl<>(itemList, pageable, total);
+    }
+
+    @Override
+    public void updateItemByDto(ItemDto.EditItem dto, Category category) {
+        queryFactory
+                .update(item)
+                .set(item.categoryId, category)
+                .set(item.name, dto.getName())
+                .set(item.content, dto.getContent())
+                .set(item.price, dto.getPrice())
+                .set(item.discountRate, dto.getDiscountRate())
+                .set(item.discountPrice, dto.getDiscountPrice())
+                .set(item.sellPrice, dto.getSellPrice())
+                .set(item.stock, dto.getStock())
+                .set(item.isSell, dto.getIsSell())
+                .where(item.id.eq(dto.getItemId()))
+                .execute();
     }
 
     private BooleanExpression categoryIdEq(Long categoryId) {

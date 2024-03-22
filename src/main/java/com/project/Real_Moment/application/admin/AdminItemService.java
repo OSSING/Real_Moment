@@ -2,10 +2,7 @@ package com.project.Real_Moment.application.admin;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.project.Real_Moment.domain.entity.Category;
-import com.project.Real_Moment.domain.entity.Item;
-import com.project.Real_Moment.domain.entity.OrderDetail;
-import com.project.Real_Moment.domain.entity.S3File;
+import com.project.Real_Moment.domain.entity.*;
 import com.project.Real_Moment.domain.repository.*;
 import com.project.Real_Moment.presentation.dto.CondDto;
 import com.project.Real_Moment.presentation.dto.ItemDto;
@@ -140,7 +137,44 @@ public class AdminItemService {
         S3File s3File = s3FileRepository.save(s3FileDto.toEntity());
 
         // Item 객체와 S3File 객체 정보 ItemFile에 저장
-        ItemFileDto.SaveItemFile itemFileDto = new ItemFileDto.SaveItemFile(s3File, savedItem, "main");
+        ItemFileDto.SaveItemFile itemFileDto = new ItemFileDto.SaveItemFile(s3File, savedItem, imgType);
         itemFileRepository.save(itemFileDto.toEntity());
+    }
+
+    @Transactional(readOnly = true)
+    public ItemDto.EditItemClick editItemClick(Long itemId) {
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하는 상품이 아닙니다."));
+
+        ItemDto.EditItemClick editItemClick = new ItemDto.EditItemClick(item);
+
+        List<ItemFile> itemFileList = itemFileRepository.findByItemId(item);
+
+        List<S3FileDto.GetS3File> mainImgList = itemFileList.stream()
+                .filter(itemFile -> "main".equals(itemFile.getMainOrServe()))
+                .map(itemFile -> {
+                    return new S3FileDto.GetS3File(itemFile.getS3FileId());
+                })
+                .toList();
+
+        List<S3FileDto.GetS3File> subImgList = itemFileList.stream()
+                .filter(itemFile -> "serve".equals(itemFile.getMainOrServe()))
+                .map(itemFile -> {
+                    return new S3FileDto.GetS3File(itemFile.getS3FileId());
+                })
+                .toList();
+
+        editItemClick.setMainImgDataList(mainImgList);
+        editItemClick.setServeImgDataList(subImgList);
+
+        return editItemClick;
+    }
+
+    @Transactional
+    public void editItem(ItemDto.EditItem dto) {
+        Category category = categoryRepository.findById(dto.getCategoryId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하는 카테고리가 아닙니다."));
+
+        itemRepository.updateItemByDto(dto, category);
     }
 }

@@ -22,4 +22,19 @@ public class S3FileDto {
                     .build();
         }
     }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class GetS3File {
+        private Long s3FileId;
+        private String fileName;
+        private String fileUrl;
+
+        public GetS3File(S3File s3File) {
+            s3FileId = s3File.getId();
+            fileName = s3File.getFileName();
+            fileUrl = s3File.getFileUrl();
+        }
+    }
 }

@@ -43,4 +43,15 @@ public class AdminItemController {
         adminItemService.saveItem(dto, mainImgList, subImgList);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/admin/item/data")
+    public ResponseEntity<ItemDto.EditItemClick> editItemClick(@RequestParam("itemId") Long itemId) {
+        return ResponseEntity.ok().body(adminItemService.editItemClick(itemId));
+    }
+
+    @PatchMapping("/admin/item/data")
+    public ResponseEntity<Void> editItem(@RequestBody ItemDto.EditItem dto) {
+        adminItemService.editItem(dto);
+        return ResponseEntity.ok().build();
+    }
 }

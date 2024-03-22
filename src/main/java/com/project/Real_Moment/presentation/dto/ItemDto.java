@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -198,5 +197,54 @@ public class ItemDto {
     @NoArgsConstructor
     public static class SubImaListResponse {
         private String fileUrl;
+    }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class EditItemClick {
+        private Long itemId;
+        private Long categoryId;
+        private String name;
+        private String content;
+        private int price;
+        private int discountRate;
+        private int discountPrice;
+        private int sellPrice;
+        private int stock;
+        private Boolean isSell;
+        private Boolean isDelete;
+        private List<S3FileDto.GetS3File> mainImgDataList;
+        private List<S3FileDto.GetS3File> serveImgDataList;
+
+        public EditItemClick(Item item) {
+            itemId = item.getId();
+            categoryId = item.getCategoryId().getId();
+            name = item.getName();
+            content = item.getContent();
+            price = item.getPrice();
+            discountRate = item.getDiscountRate();
+            discountPrice = item.getDiscountPrice();
+            sellPrice = item.getSellPrice();
+            stock = item.getStock();
+            isSell = item.isSell();
+            isDelete = item.isDelete();
+        }
+    }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class EditItem {
+        private Long itemId;
+        private Long categoryId;
+        private String name;
+        private String content;
+        private int price;
+        private int discountRate;
+        private int discountPrice;
+        private int sellPrice;
+        private int stock;
+        private Boolean isSell;
     }
 }
