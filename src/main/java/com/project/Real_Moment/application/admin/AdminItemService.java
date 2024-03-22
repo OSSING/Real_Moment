@@ -143,27 +143,4 @@ public class AdminItemService {
         ItemFileDto.SaveItemFile itemFileDto = new ItemFileDto.SaveItemFile(s3File, savedItem, "main");
         itemFileRepository.save(itemFileDto.toEntity());
     }
-
-//    public void uploadSubImg(MultipartFile file, Item savedItem) throws IOException {
-//
-//        String fileName = file.getOriginalFilename();
-//
-//        ObjectMetadata metadata = new ObjectMetadata();
-//        metadata.setContentType((file.getContentType()));
-//        metadata.setContentLength(file.getSize());
-//
-//        // AWS S3에 이미지 업로드
-//        amazonS3Client.putObject(bucket, fileName, file.getInputStream(), metadata);
-//
-//        // 업로드 후 받아온 S3의 Url
-//        String fileUrl = amazonS3Client.getUrl(bucket, fileName).toString();
-//
-//        // S3에 저장한 파일 정보 DB에 저장
-//        S3FileDto.SaveS3File s3FileDto = new S3FileDto.SaveS3File(fileName, fileUrl);
-//        S3File s3File = s3FileRepository.save(s3FileDto.toEntity());
-//
-//        // Item 객체와 S3File 객체 정보 ItemFile에 저장
-//        ItemFileDto.SaveItemFile itemFileDto = new ItemFileDto.SaveItemFile(s3File, savedItem, "serve");
-//        itemFileRepository.save(itemFileDto.toEntity());
-//    }
 }

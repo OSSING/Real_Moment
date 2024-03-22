@@ -1,11 +1,8 @@
 package com.project.Real_Moment.domain.repository.impl;
 
 import com.project.Real_Moment.domain.entity.Item;
-import com.project.Real_Moment.domain.entity.QItemFile;
-import com.project.Real_Moment.domain.entity.QS3File;
 import com.project.Real_Moment.domain.repository.custom.ItemRepositoryCustom;
 import com.project.Real_Moment.presentation.dto.CondDto;
-import com.project.Real_Moment.presentation.dto.ItemDto;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -17,8 +14,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import static com.project.Real_Moment.domain.entity.QItem.item;
-import static com.project.Real_Moment.domain.entity.QItemFile.itemFile;
-import static com.project.Real_Moment.domain.entity.QS3File.s3File;
 
 @RequiredArgsConstructor
 public class ItemRepositoryImpl implements ItemRepositoryCustom {
@@ -54,7 +49,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
     }
 
     private BooleanExpression itemNameEq(String itemName) {
-        return itemName != null ? item.name.eq(itemName) : null;
+        return itemName != null ? item.name.contains(itemName) : null;
     }
 
     private BooleanExpression isDeleteEq(Boolean isDelete) {
