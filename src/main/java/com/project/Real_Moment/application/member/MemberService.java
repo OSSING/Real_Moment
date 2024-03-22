@@ -269,7 +269,7 @@ public class MemberService {
 
             if (review != null) {
                 itemDto = new ItemDto.ItemResponse(review.getItemId());
-                List<ItemDto.MainImgList> mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(review.getItemId());
+                List<ItemDto.MainImgListResponse> mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(review.getItemId());
                 itemDto.setMainImg(mainImgUrl);
             }
 

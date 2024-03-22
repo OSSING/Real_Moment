@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface S3FileRepositoryCustom {
 
-    List<ItemDto.MainImgList> findMainImg_UrlByItemId(Item item);
+    List<ItemDto.MainImgListResponse> findMainImg_UrlByItemId(Item item);
 
-    List<ItemDto.SubImaList> findSubImg_UrlByItemId(Item item);
+    List<ItemDto.SubImaListResponse> findSubImg_UrlByItemId(Item item);
 }

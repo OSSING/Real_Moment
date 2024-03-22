@@ -39,7 +39,7 @@ public class ItemService {
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
 
             // item 객체에 맞는 fileUrl을 추출
-            List<ItemDto.MainImgList> mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(findItem);
+            List<ItemDto.MainImgListResponse> mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(findItem);
             item.setMainImg(mainImgUrl);
         }
 
@@ -51,8 +51,8 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
 
-        List<ItemDto.MainImgList> mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(item);
-        List<ItemDto.SubImaList> subImgUrl = s3FileRepository.findSubImg_UrlByItemId(item);
+        List<ItemDto.MainImgListResponse> mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(item);
+        List<ItemDto.SubImaListResponse> subImgUrl = s3FileRepository.findSubImg_UrlByItemId(item);
 
         ItemDto.ItemDetResponse itemDetResponse = new ItemDto.ItemDetResponse(item);
         itemDetResponse.setMainImg(mainImgUrl);

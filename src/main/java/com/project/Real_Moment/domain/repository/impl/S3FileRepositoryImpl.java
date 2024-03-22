@@ -19,7 +19,7 @@ public class S3FileRepositoryImpl implements S3FileRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ItemDto.MainImgList> findMainImg_UrlByItemId(Item findItem) {
+    public List<ItemDto.MainImgListResponse> findMainImg_UrlByItemId(Item findItem) {
         return queryFactory
                 .select(s3File.fileUrl)
                 .from(s3File)
@@ -29,12 +29,12 @@ public class S3FileRepositoryImpl implements S3FileRepositoryCustom {
                         itemFile.mainOrServe.eq("main"))
                 .fetch()
                 .stream()
-                .map(ItemDto.MainImgList::new)
+                .map(ItemDto.MainImgListResponse::new)
                 .toList();
     }
 
     @Override
-    public List<ItemDto.SubImaList> findSubImg_UrlByItemId(Item findItem) {
+    public List<ItemDto.SubImaListResponse> findSubImg_UrlByItemId(Item findItem) {
         return queryFactory
                 .select(s3File.fileUrl)
                 .from(s3File)
@@ -44,7 +44,7 @@ public class S3FileRepositoryImpl implements S3FileRepositoryCustom {
                         itemFile.mainOrServe.eq("serve"))
                 .fetch()
                 .stream()
-                .map(ItemDto.SubImaList::new)
+                .map(ItemDto.SubImaListResponse::new)
                 .toList();
     }
 }

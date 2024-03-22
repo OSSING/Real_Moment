@@ -1,10 +1,12 @@
 package com.project.Real_Moment.presentation.dto;
 
+import com.project.Real_Moment.domain.entity.Category;
 import com.project.Real_Moment.domain.entity.Item;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,8 +29,8 @@ public class ItemDto {
         private int stock;
         private Boolean isSell;
         private Boolean isDelete;
-        private List<ItemDto.MainImgList> mainImg;
-        private List<ItemDto.SubImaList> serveImg;
+        private List<ItemDto.MainImgListResponse> mainImg;
+        private List<ItemDto.SubImaListResponse> serveImg;
 
         public ItemDetResponse(Item item) {
             itemId = item.getId();
@@ -57,7 +59,7 @@ public class ItemDto {
         private int discountPrice;
         private int sellPrice;
         private Boolean isSell;
-        private List<ItemDto.MainImgList> mainImg;
+        private List<ItemDto.MainImgListResponse> mainImg;
 
         public ItemResponse(Item item) {
             this.itemId = item.getId();
@@ -102,7 +104,7 @@ public class ItemDto {
         private int sellCount;
         private int totalSales; // 상품 총 매출
         private Boolean isSell;
-        private List<ItemDto.MainImgList> mainImg;
+        private List<ItemDto.MainImgListResponse> mainImg;
 
         public AdminItemList(Item item) {
             itemId = item.getId();
@@ -135,8 +137,8 @@ public class ItemDto {
         private LocalDateTime lastModifiedDate;
         private Boolean isSell;
         private Boolean isDelete;
-        private List<ItemDto.MainImgList> mainImg;
-        private List<ItemDto.SubImaList> subImg;
+        private List<ItemDto.MainImgListResponse> mainImg;
+        private List<ItemDto.SubImaListResponse> subImg;
 
         public AdminItemDef(Item item) {
             itemId = item.getId();
@@ -155,17 +157,46 @@ public class ItemDto {
         }
     }
 
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class SaveItem {
+        private Long categoryId;
+        private String name;
+        private String content;
+        private int price;
+        private int discountRate;
+        private int discountPrice;
+        private int sellPrice;
+        private int stock;
+        private Boolean isSell;
+
+        public Item toEntity(Category category) {
+            return Item.builder()
+                    .categoryId(category)
+                    .name(name)
+                    .content(content)
+                    .price(price)
+                    .discountRate(discountRate)
+                    .discountPrice(discountPrice)
+                    .sellPrice(sellPrice)
+                    .stock(stock)
+                    .isSell(isSell)
+                    .build();
+        }
+    }
+
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class MainImgList {
+    public static class MainImgListResponse {
         private String fileUrl;
     }
 
     @Getter
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class SubImaList {
+    public static class SubImaListResponse {
         private String fileUrl;
     }
 }

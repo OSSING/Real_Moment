@@ -6,8 +6,9 @@ import lombok.*;
 
 @Entity
 @Getter
+@Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Item extends AuditingUserEntity {
 
     @Id
@@ -34,15 +35,12 @@ public class Item extends AuditingUserEntity {
 
     private int stock;
 
+    @Builder.Default
     private int sellCount = 0;
 
     private boolean isSell;
 
-    private boolean isDelete;
-
-    private String mainImg;
-
-    private String serveImg;
-
+    @Builder.Default
+    private boolean isDelete = false;
     // 재고 변경 로직은 이 곳에서 구현 (Setter 말고 비즈니스 로직 메서드로 구현)
 }

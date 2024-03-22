@@ -7,9 +7,11 @@ import com.project.Real_Moment.presentation.dto.ItemDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -32,5 +34,13 @@ public class AdminItemController {
     @GetMapping("/admin/item")
     public ResponseEntity<ItemDto.AdminItemDef> getItemDef(@RequestParam("itemId") Long itemId) {
         return ResponseEntity.ok().body(adminItemService.getItemDef(itemId));
+    }
+
+    @PostMapping("/admin/item")
+    public ResponseEntity<Void> saveItem(@RequestPart(name = "request") ItemDto.SaveItem dto,
+                                         @RequestPart(name = "mainImg") List<MultipartFile> mainImgList,
+                                         @RequestPart(name = "serveImg") List<MultipartFile> subImgList) throws IOException {
+        adminItemService.saveItem(dto, mainImgList, subImgList);
+        return ResponseEntity.ok().build();
     }
 }

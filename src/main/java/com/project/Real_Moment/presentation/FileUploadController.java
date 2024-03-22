@@ -28,7 +28,7 @@ public class FileUploadController {
     public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
             String fileName = file.getOriginalFilename();
-            String fileUrl = "http://" + bucket + "/test" + fileName;
+            String fileUrl = "http://" + bucket + "/" + fileName;
 
             ObjectMetadata metadata = new ObjectMetadata();
             metadata.setContentType(file.getContentType());
