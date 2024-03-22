@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 public class S3FileDto {
 
     @Getter @Setter
@@ -36,5 +38,12 @@ public class S3FileDto {
             fileName = s3File.getFileName();
             fileUrl = s3File.getFileUrl();
         }
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class s3FileIdRequestPart {
+        private List<Long> s3FileId;
     }
 }

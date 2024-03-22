@@ -247,4 +247,11 @@ public class ItemDto {
         private int stock;
         private Boolean isSell;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ItemIdRequestPart {
+        private Long itemId;
+    }
 }

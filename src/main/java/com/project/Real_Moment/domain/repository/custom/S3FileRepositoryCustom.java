@@ -10,4 +10,7 @@ public interface S3FileRepositoryCustom {
     List<ItemDto.MainImgListResponse> findMainImg_UrlByItemId(Item item);
 
     List<ItemDto.SubImaListResponse> findSubImg_UrlByItemId(Item item);
+
+    void updateImg(Long s3FileId, String fileName, String fileUrl);
+
 }

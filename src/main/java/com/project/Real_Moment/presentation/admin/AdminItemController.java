@@ -4,6 +4,7 @@ import com.amazonaws.services.s3.AmazonS3Client;
 import com.project.Real_Moment.application.admin.AdminItemService;
 import com.project.Real_Moment.presentation.dto.CondDto;
 import com.project.Real_Moment.presentation.dto.ItemDto;
+import com.project.Real_Moment.presentation.dto.S3FileDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -37,9 +38,9 @@ public class AdminItemController {
     }
 
     @PostMapping("/admin/item")
-    public ResponseEntity<Void> saveItem(@RequestPart(name = "request") ItemDto.SaveItem dto,
-                                         @RequestPart(name = "mainImg") List<MultipartFile> mainImgList,
-                                         @RequestPart(name = "serveImg") List<MultipartFile> subImgList) throws IOException {
+    public ResponseEntity<Void> saveItem(@RequestPart("request") ItemDto.SaveItem dto,
+                                         @RequestPart("mainImg") List<MultipartFile> mainImgList,
+                                         @RequestPart("serveImg") List<MultipartFile> subImgList) throws IOException {
         adminItemService.saveItem(dto, mainImgList, subImgList);
         return ResponseEntity.ok().build();
     }
@@ -52,6 +53,14 @@ public class AdminItemController {
     @PatchMapping("/admin/item/data")
     public ResponseEntity<Void> editItem(@RequestBody ItemDto.EditItem dto) {
         adminItemService.editItem(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/admin/item/mainImg")
+    public ResponseEntity<Void> editItemMainImg(@RequestPart("itemId") ItemDto.ItemIdRequestPart itemId,
+                                                @RequestPart("mainImg") List<MultipartFile> mainImgList,
+                                                @RequestPart("s3FileId") S3FileDto.s3FileIdRequestPart s3FileId) {
+        adminItemService.editItemMainImg(itemId, mainImgList, s3FileId);
         return ResponseEntity.ok().build();
     }
 }

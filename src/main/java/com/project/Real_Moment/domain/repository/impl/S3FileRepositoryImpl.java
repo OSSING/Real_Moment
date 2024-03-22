@@ -47,4 +47,14 @@ public class S3FileRepositoryImpl implements S3FileRepositoryCustom {
                 .map(ItemDto.SubImaListResponse::new)
                 .toList();
     }
+
+    @Override
+    public void updateImg(Long s3FileId, String fileName, String fileUrl) {
+        queryFactory
+                .update(s3File)
+                .set(s3File.fileName, fileName)
+                .set(s3File.fileUrl, fileUrl)
+                .where(s3File.id.eq(s3FileId))
+                .execute();
+    }
 }
