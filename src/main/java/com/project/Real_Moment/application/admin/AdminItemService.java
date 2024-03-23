@@ -234,6 +234,34 @@ public class AdminItemService {
         }
     }
 
+    @Transactional
+    public void deleteItem(Long itemId) {
+
+        Item item = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+
+        /**
+         * 1. 삭제할 item에 대한 itemFile 객체를 찾는다.
+         * 2. itemFile가 참조한 S3File 객체를 찾는다.
+         * 3. S3File에 저장된 이미지들을 AWS S3에서 삭제한다.
+         * 4. 상품에 대한 이미지를 모두 삭제한 뒤 마지막으로 Item 객체를 isDelete = true 처리한다.
+         */
+
+        itemRepository.deleteItem(itemId);
+
+        List<ItemFile> itemFileList = itemFileRepository.findByItemId(item);
+
+        for (ItemFile itemFile : itemFileList) {
+            S3File s3File = itemFile.getS3FileId();
+
+            deleteImgFromS3(s3File);
+
+            // 상품 이미지 삭제 후 데이터 삭제
+            s3FileRepository.delete(s3File);
+            itemFileRepository.delete(itemFile);
+        }
+    }
+
     private String uploadImageToS3(String fileName, MultipartFile img) {
         try {
             // AWS S3에 이미지 업로드

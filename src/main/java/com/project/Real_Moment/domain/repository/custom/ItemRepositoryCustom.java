@@ -14,4 +14,6 @@ public interface ItemRepositoryCustom {
     Page<Item> findItemListByCond(Pageable pageable, CondDto.ItemListCond dto);
 
     void updateItemByDto(ItemDto.EditItem dto, Category category);
+
+    void deleteItem(Long itemId);
 }

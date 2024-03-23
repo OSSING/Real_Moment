@@ -71,4 +71,10 @@ public class AdminItemController {
         adminItemService.editItemServeImg(itemId, serveImgList, s3FileId);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/admin/item")
+    public ResponseEntity<Void> deleteItem(@RequestParam("itemId") Long itemId) {
+        adminItemService.deleteItem(itemId);
+        return ResponseEntity.ok().build();
+    }
 }

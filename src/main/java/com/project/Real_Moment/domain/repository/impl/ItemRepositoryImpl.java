@@ -63,6 +63,15 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 .execute();
     }
 
+    @Override
+    public void deleteItem(Long itemId) {
+        queryFactory
+                .update(item)
+                .set(item.isDelete, true)
+                .where(item.id.eq(itemId))
+                .execute();
+    }
+
     private BooleanExpression categoryIdEq(Long categoryId) {
         return categoryId != null ? item.categoryId.id.eq(categoryId) : null;
     }
