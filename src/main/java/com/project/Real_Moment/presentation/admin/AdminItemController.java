@@ -63,4 +63,12 @@ public class AdminItemController {
         adminItemService.editItemMainImg(itemId, mainImgList, s3FileId);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/admin/item/serveImg")
+    public ResponseEntity<Void> editItemServeImg(@RequestPart("itemId") ItemDto.ItemIdRequestPart itemId,
+                                                @RequestPart("serveImg") List<MultipartFile> serveImgList,
+                                                @RequestPart("s3FileId") S3FileDto.s3FileIdRequestPart s3FileId) {
+        adminItemService.editItemServeImg(itemId, serveImgList, s3FileId);
+        return ResponseEntity.ok().build();
+    }
 }

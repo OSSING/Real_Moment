@@ -210,6 +210,30 @@ public class AdminItemService {
         }
     }
 
+    @Transactional
+    public void editItemServeImg(ItemDto.ItemIdRequestPart itemId, List<MultipartFile> serveImgList, S3FileDto.s3FileIdRequestPart s3FileIdList) {
+
+        Item item = itemRepository
+                .findById(itemId.getItemId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+
+        for (int i = 0; i < s3FileIdList.getS3FileId().size(); i++) {
+
+            Long s3FileId = s3FileIdList.getS3FileId().get(i);
+
+            S3File s3File = s3FileRepository
+                    .findById(s3FileId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이미지입니다."));
+
+            MultipartFile serveImg = serveImgList.get(i);
+
+            // 이미지 업로드
+            String fileName = serveImg.getOriginalFilename();
+            String fileUrl = uploadImageToS3(fileName, serveImg);
+
+            updateS3File(s3FileId, fileName, fileUrl);
+            deleteImgFromS3(s3File);
+        }
+    }
+
     private String uploadImageToS3(String fileName, MultipartFile img) {
         try {
             // AWS S3에 이미지 업로드
