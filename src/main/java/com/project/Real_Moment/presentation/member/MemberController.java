@@ -263,5 +263,17 @@ public class MemberController {
         memberService.deleteOneOnOne(id, oneOnOneId);
         return ResponseEntity.ok().build();
     }
-}
 
+    // 주문 전 구매 페이지에서 구매 견적 요청
+    // get에서 List를 받기 위해서는 로직이 복잡해지기 때문에 Post로 요청
+    @PostMapping("/{id}/order/page")
+    public ResponseEntity<OrderDto.OrderItemList> getOrderQuote(@PathVariable("id") Long id, @RequestBody OrderDto.OrderItemListRequest dto) {
+        return ResponseEntity.ok().body(memberService.getOrderQuote(id, dto));
+    }
+
+    // 주문 버튼 클릭 (임시 order, orderDetail 생성 및 결제창에 필요한 데이터 응답)
+    @PostMapping("/{id}/payment/first")
+    public ResponseEntity<OrderDto.PaymentResponse> getPaymentFirst(@PathVariable("id") Long id, @RequestBody OrderDto.PaymentFirst dto) {
+        return ResponseEntity.ok().body(memberService.getPaymentFirst(id, dto));
+    }
+}

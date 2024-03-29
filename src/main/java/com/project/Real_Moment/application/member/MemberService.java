@@ -1,6 +1,7 @@
 package com.project.Real_Moment.application.member;
 
 import com.project.Real_Moment.domain.entity.*;
+import com.project.Real_Moment.domain.enumuration.PaymentStatus;
 import com.project.Real_Moment.domain.repository.*;
 import com.project.Real_Moment.presentation.dto.*;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +14,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -474,5 +477,127 @@ public class MemberService {
         }
 
         return oneOnOne;
+    }
+
+    @Transactional
+    public OrderDto.OrderItemList getOrderQuote(Long id, OrderDto.OrderItemListRequest requestDto) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        List<OrderDto.OrderItemRequest> requestList = requestDto.getRequestList();
+        List<OrderDto.OrderItem> orderItems = new ArrayList<>();
+        int totalPrice = 0;
+        int totalDiscountPrice = 0;
+        int totalSellPrice = 0;
+
+        // 요청 Dto itemId, count
+        for (OrderDto.OrderItemRequest itemRequest : requestList) {
+            Long itemId = itemRequest.getItemId();
+            int count = itemRequest.getCount();
+
+            // request에 담긴 itemId로 상품 조회
+            Optional<Item> itemOptional = itemRepository.findById(itemId);
+            if (itemOptional.isPresent()) {
+                Item item = itemOptional.get();
+
+                // 상품의 메인 이미지 가져오기
+                List<ItemDto.MainImgListResponse> mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(item);
+
+                // 주문 총 정가 계산
+                totalPrice = item.getPrice() * count;
+
+                // 주문 총 할인가격 계산
+                totalDiscountPrice = item.getDiscountPrice() * count;
+
+                // 주문 총 가격 계산
+                totalSellPrice += item.getSellPrice() * count;
+
+                // 상품 정보로 응답 Dto 값 채우기
+                OrderDto.OrderItem orderItem = new OrderDto.OrderItem(item, count, mainImgUrl);
+
+                orderItems.add(orderItem);
+            }
+        }
+
+        /**
+         * 적립금은 결제하는 회원의 등급으로 적립 수치가 결정되며
+         * 할인을 적용하기 전 상품의 정가를 기준으로 적립된다.
+         */
+
+        // 회원이 현재 보유 중인 적립금
+        int point = member.getPoint();
+
+        // 회원이 주문을 통해 획득할 예상 적립금
+        int getPoint = (int) (totalPrice * (member.getGradeId().getRewardRate() / 100.0));
+
+        // 주문 Dto 생성
+        OrderDto.OrderPrice orderPrice = new OrderDto.OrderPrice(totalPrice, totalDiscountPrice, totalSellPrice, point, getPoint);
+
+        // 주문 상세 리스트와 주문 Dto 객체 반환
+        return new OrderDto.OrderItemList(orderItems, orderPrice);
+    }
+
+    @Transactional
+    public OrderDto.PaymentResponse getPaymentFirst(Long memberId, OrderDto.PaymentFirst requestDto) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하는 회원이 아닙니다."));
+
+        String merchantUid = UUID.randomUUID().toString();
+
+        // 임시로 Order 객체를 생성
+        Order order = Order.builder()
+                .memberId(member)
+                .totalPrice(requestDto.getTotalPrice())
+                .totalDiscountPrice(requestDto.getTotalDiscountPrice())
+                .usePoint(requestDto.getUsePoint())
+                .getPoint(requestDto.getGetPoint())
+                .buyPrice(requestDto.getBuyPrice())
+                .name(requestDto.getName())
+                .mainAddress(requestDto.getMainAddress())
+                .detAddress(requestDto.getDetAddress())
+                .requestText(requestDto.getRequestText())
+                .tel(requestDto.getTel())
+                .status(PaymentStatus.PAYMENT_READY)
+                .merchantUid(merchantUid)
+                .build();
+
+        List<OrderDto.OrderItemRequest> requestItems = requestDto.getItems();
+
+        // 여러 종류를 한 번에 결제 할 때 PG사에 요청할 상품 이름 지정
+        Item firstItem = itemRepository.findById(requestItems.get(0).getItemId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        int itemTypeCount = requestItems.size();
+        String itemName;
+        if (itemTypeCount > 1) {
+            itemName = firstItem.getName() + "외 " + itemTypeCount + "개";
+        } else {
+            itemName = firstItem.getName();
+        }
+
+        for (OrderDto.OrderItemRequest requestItem : requestItems) {
+            Long itemId = requestItem.getItemId();
+            int count = requestItem.getCount();
+
+            Optional<Item> itemOptional = itemRepository.findById(itemId);
+            if (itemOptional.isPresent()) {
+                Item item = itemOptional.get();
+
+                // 임시 OrderDetail 객체 생성
+                OrderDetail orderDetail = OrderDetail.builder()
+                        .itemId(item)
+                        .orderId(order)
+                        .price(item.getPrice())
+                        .discountRate(item.getDiscountRate())
+                        .discountPrice(item.getDiscountPrice())
+                        .sellPrice(item.getSellPrice())
+                        .itemCount(count)
+                        .totalPrice(item.getSellPrice() * count)
+                        .build();
+            }
+        }
+
+        // 기본 배송지
+        Address address = addressRepository.findByMemberIdAndIsDefAddressIsTrue(member);
+        String responseAddress = address.getMainAddress() + " " + address.getDetAddress();
+
+        return new OrderDto.PaymentResponse(merchantUid, itemName, requestDto.getBuyPrice(), member.getName(), member.getEmail(), responseAddress);
     }
 }

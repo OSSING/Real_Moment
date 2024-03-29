@@ -5,8 +5,9 @@ import lombok.*;
 
 @Entity
 @Getter
+@Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderDetail {
 
     @Id
