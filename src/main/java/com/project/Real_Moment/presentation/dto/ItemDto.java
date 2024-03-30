@@ -254,4 +254,29 @@ public class ItemDto {
     public static class ItemIdRequestPart {
         private Long itemId;
     }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class OrderedItemList {
+        private Long itemId;
+        private String name;
+        private int price;
+        private int discountRate;
+        private int discountPrice;
+        private int sellPrice;
+        private Boolean isSell;
+        private List<MainImgListResponse> mainImg;
+
+        public OrderedItemList(Item item, List<MainImgListResponse> mainImg) {
+            itemId = item.getId();
+            name = item.getName();
+            price = item.getPrice();
+            discountRate = item.getDiscountRate();
+            discountPrice = item.getDiscountPrice();
+            sellPrice = item.getSellPrice();
+            isSell = item.isSell();
+            this.mainImg = mainImg;
+        }
+    }
 }

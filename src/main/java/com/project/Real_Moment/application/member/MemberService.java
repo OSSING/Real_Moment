@@ -4,6 +4,11 @@ import com.project.Real_Moment.domain.entity.*;
 import com.project.Real_Moment.domain.enumuration.PaymentStatus;
 import com.project.Real_Moment.domain.repository.*;
 import com.project.Real_Moment.presentation.dto.*;
+import com.siot.IamportRestClient.IamportClient;
+import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.request.CancelData;
+import com.siot.IamportRestClient.response.IamportResponse;
+import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -13,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +44,9 @@ public class MemberService {
     private final CommentRepository commentRepository;
     private final GradeRepository gradeRepository;
     private final S3FileRepository s3FileRepository;
+    private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
+    private final IamportClient iamportClient;
 
     private final PasswordEncoder passwordEncoder;
 
@@ -560,6 +570,8 @@ public class MemberService {
                 .merchantUid(merchantUid)
                 .build();
 
+        orderRepository.save(order);
+
         List<OrderDto.OrderItemRequest> requestItems = requestDto.getItems();
 
         // 여러 종류를 한 번에 결제 할 때 PG사에 요청할 상품 이름 지정
@@ -591,6 +603,8 @@ public class MemberService {
                         .itemCount(count)
                         .totalPrice(item.getSellPrice() * count)
                         .build();
+
+                orderDetailRepository.save(orderDetail);
             }
         }
 
@@ -599,5 +613,85 @@ public class MemberService {
         String responseAddress = address.getMainAddress() + " " + address.getDetAddress();
 
         return new OrderDto.PaymentResponse(merchantUid, itemName, requestDto.getBuyPrice(), member.getName(), member.getEmail(), responseAddress);
+    }
+
+    @Transactional
+    public void getPaymentSecond(OrderDto.PaymentSecond requestDto) {
+        try {
+
+            // 결제 단건 조회
+            IamportResponse<Payment> iamportResponse = iamportClient.paymentByImpUid(requestDto.getImpUid());
+
+            // 주문 내역 조회
+            Order order = orderRepository.findByMerchantUid(requestDto.getMerchantUid())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하는 주문이 아닙니다."));
+
+            // 결제 완료가 아니라면
+            if (!iamportResponse.getResponse().getStatus().equals("paid")) {
+
+                // 주문, 주문 상세 내역 삭제
+                orderRepository.delete(order);
+
+                throw new RuntimeException("결제 미완료");
+            }
+
+            // DB에 저장된 결제 금액
+            int price = order.getBuyPrice();
+
+            // 실 결제 금액
+            int iamportPrice = iamportResponse.getResponse().getAmount().intValue();
+
+            // 결제 금액 검증
+            if (iamportPrice != price) {
+                // 주문, 주문 상세 내역 삭제
+                orderRepository.delete(order);
+
+                // 결제 금액 위변조로 의심되는 결제를 취소
+                iamportClient.cancelPaymentByImpUid(new CancelData(iamportResponse.getResponse().getImpUid(), true, new BigDecimal(iamportPrice)));
+
+                throw new RuntimeException("결제금액 위변조 의심이 감지되었습니다.");
+            }
+
+            // 결제 상태 변경 (결제 완료)
+            orderRepository.updatePaymentComplete(order.getId());
+        } catch (IamportResponseException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public OrderDto.OrderListPaging getOrderList(Long memberId, CondDto.OrderListCond requestDto) {
+        int pageNumber = (requestDto.getNowPage() != null && requestDto.getNowPage() > 0) ? requestDto.getNowPage() : 1;
+        Pageable pageable = PageRequest.of(pageNumber - 1, 9);
+
+        Page<Order> orderListPaging = orderRepository.findByOrderListPage(memberId, requestDto, pageable);
+
+        List<OrderDto.OrderList> orderListDto = orderListPaging.stream()
+                .map(OrderDto.OrderList::new)
+                .toList();
+
+        for (OrderDto.OrderList orderDto : orderListDto) {
+            Order order = orderRepository.findById(orderDto.getOrderId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
+
+            List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(order);
+
+            List<OrderDetailDto.OrderDetailList> orderDetailListDto = orderDetailList.stream()
+                    .map(orderDetail -> {
+                        Item item = itemRepository.findById(orderDetail.getItemId().getId())
+                                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+
+                        // 상품의 메인 이미지 가져오기
+                        List<ItemDto.MainImgListResponse> mainImgList = s3FileRepository.findMainImg_UrlByItemId(item);
+
+                        ItemDto.OrderedItemList orderedItemList = new ItemDto.OrderedItemList(item, mainImgList);
+
+                        return new OrderDetailDto.OrderDetailList(orderDetail, orderedItemList);
+                    })
+                    .toList();
+
+            orderDto.setOrderDetails(orderDetailListDto);
+        }
+
+        return new OrderDto.OrderListPaging(orderListDto, orderListPaging.getTotalPages(), pageNumber);
     }
 }

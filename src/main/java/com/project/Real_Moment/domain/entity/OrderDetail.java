@@ -2,6 +2,8 @@ package com.project.Real_Moment.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 @Entity
 @Getter
@@ -20,6 +22,7 @@ public class OrderDetail {
     private Item itemId;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "order_id")
     private Order orderId;
 

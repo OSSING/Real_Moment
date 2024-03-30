@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+
 public class CondDto {
 
     @Getter
@@ -70,6 +72,17 @@ public class CondDto {
         private String loginId;
         private String name;
         private String roles;
+        private Integer nowPage;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class OrderListCond {
+        private String itemName;
+        private LocalDate startDate;
+        private LocalDate lastDate;
+        private String status;
         private Integer nowPage;
     }
 }

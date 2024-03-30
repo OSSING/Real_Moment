@@ -1,11 +1,13 @@
 package com.project.Real_Moment.presentation.dto;
 
 import com.project.Real_Moment.domain.entity.Item;
+import com.project.Real_Moment.domain.entity.Order;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class OrderDto {
@@ -100,5 +102,50 @@ public class OrderDto {
         private String buyerName;
         private String buyerEmail;
         private String buyerAddress;
+    }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class PaymentSecond {
+        private String impUid;
+        private String merchantUid;
+    }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class OrderListPaging {
+        private List<OrderList> orderList;
+        private int totalPage;
+        private int nowPage;
+    }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class OrderList {
+        private Long orderId;
+        private LocalDateTime orderedDate;
+        private int buyPrice;
+        private String mainAddress;
+        private String detAddress;
+        private String requestText;
+        private String tel;
+        private String status;
+        private String merchantUid;
+        private List<OrderDetailDto.OrderDetailList> orderDetails;
+
+        public OrderList(Order order) {
+            orderId = order.getId();
+            orderedDate = order.getOrderedDate();
+            buyPrice = order.getBuyPrice();
+            mainAddress = order.getMainAddress();
+            detAddress = order.getDetAddress();
+            requestText = order.getRequestText();
+            tel = order.getTel();
+            status = String.valueOf(order.getStatus());
+            merchantUid = order.getMerchantUid();
+        }
     }
 }

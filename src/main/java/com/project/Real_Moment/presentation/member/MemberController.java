@@ -17,6 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -275,5 +276,23 @@ public class MemberController {
     @PostMapping("/{id}/payment/first")
     public ResponseEntity<OrderDto.PaymentResponse> getPaymentFirst(@PathVariable("id") Long id, @RequestBody OrderDto.PaymentFirst dto) {
         return ResponseEntity.ok().body(memberService.getPaymentFirst(id, dto));
+    }
+
+    // 결제창으로 결제 완료 후 반환받은 impUid를 요청
+    @PostMapping("/{id}/payment/second")
+    public ResponseEntity<Void> getPaymentSecond(@RequestBody OrderDto.PaymentSecond dto) {
+        memberService.getPaymentSecond(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/orderList")
+    public ResponseEntity<OrderDto.OrderListPaging> getOrderList(@PathVariable("id") Long id,
+                                         @RequestParam(name = "itemName", required = false) String itemName,
+                                         @RequestParam(name = "startDate", required = false) LocalDate startDate,
+                                         @RequestParam(name = "lastDate", required = false) LocalDate lastDate,
+                                         @RequestParam(name = "status", required = false) String status,
+                                         @RequestParam(name = "nowPage", required = false) Integer nowPage) {
+        CondDto.OrderListCond dto = new CondDto.OrderListCond(itemName, startDate, lastDate, status, nowPage);
+        return ResponseEntity.ok().body(memberService.getOrderList(id, dto));
     }
 }
