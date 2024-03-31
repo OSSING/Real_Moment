@@ -295,4 +295,10 @@ public class MemberController {
         CondDto.OrderListCond dto = new CondDto.OrderListCond(itemName, startDate, lastDate, status, nowPage);
         return ResponseEntity.ok().body(memberService.getOrderList(id, dto));
     }
+
+    @GetMapping("/{id}/order")
+    public ResponseEntity<OrderDto.OrderById> getOrder(@PathVariable("id") Long id,
+                                     @RequestParam("orderId") Long orderId) {
+        return ResponseEntity.ok().body(memberService.getOrder(id, orderId));
+    }
 }

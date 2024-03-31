@@ -148,4 +148,41 @@ public class OrderDto {
             merchantUid = order.getMerchantUid();
         }
     }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class OrderById {
+        private Long orderId;
+        private LocalDateTime orderedDate;
+        private int buyPrice;
+        private String mainAddress;
+        private String detAddress;
+        private String requestText;
+        private String tel;
+        private String status;
+        private String merchantUid;
+        private List<OrderDetailDto.OrderDetailList> orderDetails;
+        private int totalPrice;
+        private int totalDiscountPrice;
+        private int usePoint;
+        private int getPoint;
+
+        public OrderById(Order order, List<OrderDetailDto.OrderDetailList> orderDetailListDto) {
+            orderId = order.getId();
+            orderedDate = order.getOrderedDate();
+            buyPrice = order.getBuyPrice();
+            mainAddress = order.getMainAddress();
+            detAddress = order.getDetAddress();
+            requestText = order.getRequestText();
+            tel = order.getTel();
+            status = String.valueOf(order.getStatus());
+            merchantUid = order.getMerchantUid();
+            orderDetails = orderDetailListDto;
+            totalPrice = order.getTotalPrice();
+            totalDiscountPrice = order.getTotalDiscountPrice();
+            usePoint = order.getUsePoint();
+            getPoint = order.getGetPoint();
+        }
+    }
 }

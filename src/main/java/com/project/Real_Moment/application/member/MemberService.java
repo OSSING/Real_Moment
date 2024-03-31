@@ -671,27 +671,39 @@ public class MemberService {
                 .toList();
 
         for (OrderDto.OrderList orderDto : orderListDto) {
-            Order order = orderRepository.findById(orderDto.getOrderId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
-
-            List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(order);
-
-            List<OrderDetailDto.OrderDetailList> orderDetailListDto = orderDetailList.stream()
-                    .map(orderDetail -> {
-                        Item item = itemRepository.findById(orderDetail.getItemId().getId())
-                                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
-
-                        // 상품의 메인 이미지 가져오기
-                        List<ItemDto.MainImgListResponse> mainImgList = s3FileRepository.findMainImg_UrlByItemId(item);
-
-                        ItemDto.OrderedItemList orderedItemList = new ItemDto.OrderedItemList(item, mainImgList);
-
-                        return new OrderDetailDto.OrderDetailList(orderDetail, orderedItemList);
-                    })
-                    .toList();
-
-            orderDto.setOrderDetails(orderDetailListDto);
+            orderDto.setOrderDetails(getOrderDetailListDto(orderDto.getOrderId()));
         }
 
         return new OrderDto.OrderListPaging(orderListDto, orderListPaging.getTotalPages(), pageNumber);
+    }
+
+    @Transactional(readOnly = true)
+    public OrderDto.OrderById getOrder(Long memberId, Long orderId) {
+
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하는 주문이 아닙니다."));
+
+        return new OrderDto.OrderById(order, getOrderDetailListDto(orderId));
+    }
+
+    private List<OrderDetailDto.OrderDetailList> getOrderDetailListDto(Long orderId) {
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하는 주문이 아닙니다."));
+
+        List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(order);
+
+        return orderDetailList.stream()
+                .map(orderDetail -> {
+                    Item item = itemRepository.findById(orderDetail.getItemId().getId())
+                            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+
+                    // 상품의 메인 이미지 가져오기
+                    List<ItemDto.MainImgListResponse> mainImgList = s3FileRepository.findMainImg_UrlByItemId(item);
+
+                    ItemDto.OrderedItemList orderedItemList = new ItemDto.OrderedItemList(item, mainImgList);
+
+                    return new OrderDetailDto.OrderDetailList(orderDetail, orderedItemList);
+                })
+                .toList();
     }
 }
