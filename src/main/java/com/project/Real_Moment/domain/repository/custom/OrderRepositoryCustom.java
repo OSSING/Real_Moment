@@ -12,4 +12,11 @@ public interface OrderRepositoryCustom {
     Page<Order> findByOrderListPage(Long memberId, CondDto.OrderListCond requestDto, Pageable pageable);
 
     void updatePaymentCancel(Long orderId);
+
+    void updatePaymentRefundRequest(Long orderId);
+
+    void updateReasonText(Long orderId, String reasonText);
+
+    void updatePaymentDone(Long orderId);
+
 }

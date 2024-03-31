@@ -186,11 +186,18 @@ public class OrderDto {
         }
     }
 
-    @Getter @Setter
+    @Getter
     @AllArgsConstructor
     @NoArgsConstructor
     public static class OrderCancelRequest {
         private Long orderId;
         private String reasonText;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class OrderId {
+        private Long orderId;
     }
 }

@@ -310,4 +310,18 @@ public class MemberController {
         memberService.orderCancel(id, dto);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/{id}/order/refund")
+    public ResponseEntity<Void> orderRefundRequest(@PathVariable("id") Long id,
+                                                   @RequestBody OrderDto.OrderCancelRequest dto) {
+        memberService.orderRefundRequest(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{id}/order/done")
+    public ResponseEntity<Void> orderDone(@PathVariable("id") Long id,
+                                          @RequestBody OrderDto.OrderId dto) {
+        memberService.orderDone(id, dto);
+        return ResponseEntity.ok().build();
+    }
 }

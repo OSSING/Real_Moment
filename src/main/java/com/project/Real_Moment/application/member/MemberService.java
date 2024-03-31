@@ -714,6 +714,9 @@ public class MemberService {
 
         // 결제 취소
         paymentCancel(order);
+
+        // 결제 취소 사유
+        orderRepository.updateReasonText(requestDto.getOrderId(), requestDto.getReasonText());
     }
 
     // 결제 취소를 요청하는 메서드
@@ -732,5 +735,23 @@ public class MemberService {
         } else {
             throw new RuntimeException("결제 취소에 실패하였습니다. : " + cancelResponse.getMessage());
         }
+    }
+
+    @Transactional
+    public void orderRefundRequest(Long memberId, OrderDto.OrderCancelRequest requestDto) {
+
+        // 환불 요청
+        orderRepository.updatePaymentRefundRequest(requestDto.getOrderId());
+
+        // 환불 요청 사유
+        orderRepository.updateReasonText(requestDto.getOrderId(), requestDto.getReasonText());
+    }
+
+
+    @Transactional
+    public void orderDone(Long memberId, OrderDto.OrderId requestDto) {
+
+        // 결제 학정 요청
+        orderRepository.updatePaymentDone(requestDto.getOrderId());
     }
 }

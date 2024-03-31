@@ -44,6 +44,33 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     }
 
     @Override
+    public void updatePaymentRefundRequest(Long orderId) {
+        queryFactory
+                .update(order)
+                .set(order.status, PaymentStatus.REFUND_REQUEST)
+                .where(order.id.eq(orderId))
+                .execute();
+    }
+
+    @Override
+    public void updateReasonText(Long orderId, String reasonText) {
+        queryFactory
+                .update(order)
+                .set(order.reasonText, reasonText)
+                .where(order.id.eq(orderId))
+                .execute();
+    }
+
+    @Override
+    public void updatePaymentDone(Long orderId) {
+        queryFactory
+                .update(order)
+                .set(order.status, PaymentStatus.DONE)
+                .where(order.id.eq(orderId))
+                .execute();
+    }
+
+    @Override
     public Page<Order> findByOrderListPage(Long memberId, CondDto.OrderListCond requestDto, Pageable pageable) {
         QOrder orderAlias = new QOrder("order2");
         List<Order> orderList = queryFactory
