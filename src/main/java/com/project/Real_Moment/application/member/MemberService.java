@@ -706,4 +706,31 @@ public class MemberService {
                 })
                 .toList();
     }
+
+    @Transactional
+    public void orderCancel(Long memberId, OrderDto.OrderCancelRequest requestDto) throws IamportResponseException, IOException {
+        Order order = orderRepository.findById(requestDto.getOrderId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
+
+        // 결제 취소
+        paymentCancel(order);
+    }
+
+    // 결제 취소를 요청하는 메서드
+    private void paymentCancel(Order order) throws IamportResponseException, IOException {
+        IamportResponse<Payment> iamportResponse = iamportClient.paymentByImpUid(order.getImpUid());
+
+        // 결제된 가격 조회
+        int iamportPrice = iamportResponse.getResponse().getAmount().intValue();
+
+        // 결제 취소 (포트원)
+        IamportResponse<Payment> cancelResponse =
+                iamportClient.cancelPaymentByImpUid(new CancelData(iamportResponse.getResponse().getImpUid(), true, new BigDecimal(iamportPrice)));
+
+        if (cancelResponse.getCode() == 0) {
+            orderRepository.updatePaymentCancel(order.getId());
+        } else {
+            throw new RuntimeException("결제 취소에 실패하였습니다. : " + cancelResponse.getMessage());
+        }
+    }
 }

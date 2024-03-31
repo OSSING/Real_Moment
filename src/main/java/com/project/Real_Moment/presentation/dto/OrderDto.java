@@ -185,4 +185,12 @@ public class OrderDto {
             getPoint = order.getGetPoint();
         }
     }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class OrderCancelRequest {
+        private Long orderId;
+        private String reasonText;
+    }
 }

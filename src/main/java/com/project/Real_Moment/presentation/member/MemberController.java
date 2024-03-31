@@ -5,6 +5,7 @@ import com.project.Real_Moment.auth.jwt.dto.TokenDto;
 import com.project.Real_Moment.auth.jwt.JwtFilter;
 import com.project.Real_Moment.auth.jwt.TokenProvider;
 import com.project.Real_Moment.application.member.MemberService;
+import com.siot.IamportRestClient.exception.IamportResponseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -17,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -300,5 +302,12 @@ public class MemberController {
     public ResponseEntity<OrderDto.OrderById> getOrder(@PathVariable("id") Long id,
                                      @RequestParam("orderId") Long orderId) {
         return ResponseEntity.ok().body(memberService.getOrder(id, orderId));
+    }
+
+    @PostMapping("/{id}/order/cancel")
+    public ResponseEntity<Void> orderCancel(@PathVariable("id") Long id,
+                                            @RequestBody OrderDto.OrderCancelRequest dto) throws IamportResponseException, IOException {
+        memberService.orderCancel(id, dto);
+        return ResponseEntity.ok().build();
     }
 }

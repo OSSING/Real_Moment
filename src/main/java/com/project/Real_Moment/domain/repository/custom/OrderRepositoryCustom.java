@@ -10,4 +10,6 @@ public interface OrderRepositoryCustom {
     void updatePaymentComplete(Long orderId);
 
     Page<Order> findByOrderListPage(Long memberId, CondDto.OrderListCond requestDto, Pageable pageable);
+
+    void updatePaymentCancel(Long orderId);
 }
