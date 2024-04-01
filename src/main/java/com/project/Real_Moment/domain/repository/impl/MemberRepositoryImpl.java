@@ -5,6 +5,7 @@ import com.project.Real_Moment.domain.entity.Member;
 import com.project.Real_Moment.domain.repository.custom.MemberRepositoryCustom;
 import com.project.Real_Moment.presentation.dto.CondDto;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
 
 import static com.project.Real_Moment.domain.entity.QMember.member;
@@ -79,17 +81,17 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
     }
 
     @Override
-    public Long updateActivatedById(Long id) {
+    public Long updateActivatedById(Long memberId) {
         return queryFactory
                 .update(member)
                 .set(member.isDelete, true)
-                .set(member.email, "")
-                .set(member.loginPassword, "")
-                .set(member.name, "")
-                .set(member.tel, "")
+                .set(member.email, (String) null)
+                .set(member.loginPassword, (String) null)
+                .set(member.name, (String) null)
+                .set(member.tel, (String) null)
                 .set(member.birthDate, (LocalDate) null)
-                .set(member.gender, Gender.NONE)
-                .where(member.id.eq(id))
+                .set(member.gender, (Gender) null)
+                .where(member.id.eq(memberId))
                 .execute();
     }
 
