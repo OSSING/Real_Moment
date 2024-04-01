@@ -35,7 +35,7 @@ public enum PaymentStatus {
         throw new IllegalArgumentException("해당하는 문자열을 찾을 수 없습니다. : " + text);
     }
 
-    // 상수 문자열을 받아 알맞는 문자열로 변환
+    // 상수 문자열을 받아와 알맞는 문자열로 변환
     public static String getDescription(String text) {
         for (PaymentStatus status : PaymentStatus.values()) {
             if (status.name().equalsIgnoreCase(text)) {
