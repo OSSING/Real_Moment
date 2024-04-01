@@ -1,6 +1,8 @@
 package com.project.Real_Moment.presentation.member;
 
+import com.project.Real_Moment.domain.entity.Member;
 import com.project.Real_Moment.domain.enumuration.PaymentStatus;
+import com.project.Real_Moment.domain.repository.MemberRepository;
 import com.project.Real_Moment.presentation.dto.*;
 import com.project.Real_Moment.auth.jwt.dto.TokenDto;
 import com.project.Real_Moment.auth.jwt.JwtFilter;
@@ -31,6 +33,7 @@ public class MemberController {
 
     private final MemberService memberService;
     private final TokenProvider tokenProvider;
+    private final MemberRepository memberRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     // 회원가입 도중 id 중복체크 (중복 o -> true, 중복 x -> false)
@@ -73,6 +76,9 @@ public class MemberController {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(JwtFilter.ACCESSTOKEN_HEADER, "Bearer " + accessToken);
         httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + refreshToken);
+
+        // 최근 로그인 시간 갱신
+        memberService.memberLogin(dto.getLoginId());
 
         return new ResponseEntity<>(tokenDto, httpHeaders, HttpStatus.OK);
     }

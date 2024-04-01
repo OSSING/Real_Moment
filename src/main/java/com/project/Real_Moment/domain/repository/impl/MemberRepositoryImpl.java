@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
@@ -23,6 +24,15 @@ import static com.project.Real_Moment.domain.entity.QMember.member;
 public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+
+    @Override
+    public void updateRecentlyLogin(String loginId) {
+        queryFactory
+                .update(member)
+                .set(member.recentlyLogin, LocalDateTime.now())
+                .where(member.loginId.eq(loginId))
+                .execute();
+    }
 
     @Override
     public Member updatePasswordById(Long id, String password) {

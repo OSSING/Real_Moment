@@ -21,4 +21,5 @@ public interface MemberRepositoryCustom {
 
     Page<Member> findMemberListByCond(Pageable pageable, CondDto.MemberListCond dto);
 
+    void updateRecentlyLogin(String loginId);
 }
