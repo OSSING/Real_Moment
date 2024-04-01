@@ -1,6 +1,7 @@
 package com.project.Real_Moment.application.member;
 
 import com.project.Real_Moment.domain.entity.*;
+import com.project.Real_Moment.domain.enumuration.Gender;
 import com.project.Real_Moment.domain.enumuration.PaymentStatus;
 import com.project.Real_Moment.domain.repository.*;
 import com.project.Real_Moment.presentation.dto.*;
@@ -69,7 +70,8 @@ public class MemberService {
         }
 
         // 2. 요청받은 dto -> Entity로 변환
-        Member member = createMember(dto, grade);
+        Member member = dto.toEntity();
+//        Member member = createMember(dto, grade);
 
         log.info("member.toString() = {}", member.toString());
 
@@ -79,19 +81,19 @@ public class MemberService {
         return MemberDto.RegisterResponse.toDto(savedMember);
     }
 
-    private Member createMember(MemberDto.RegisterRequest dto, Grade grade) {
-        return Member.builder()
-                .gradeId(grade)
-                .loginId(dto.getLoginId())
-                .email(dto.getEmail())
-                .loginPassword(passwordEncoder.encode(dto.getLoginPassword()))
-                .name(dto.getName())
-                .tel(dto.getTel())
-                .birthDate(dto.getBirthDate())
-                .gender(dto.getGender())
-                .roles("ROLE_MEMBER")
-                .build();
-    }
+//    private Member createMember(MemberDto.RegisterRequest dto, Grade grade) {
+//        return Member.builder()
+//                .gradeId(grade)
+//                .loginId(dto.getLoginId())
+//                .email(dto.getEmail())
+//                .loginPassword(passwordEncoder.encode(dto.getLoginPassword()))
+//                .name(dto.getName())
+//                .tel(dto.getTel())
+//                .birthDate(dto.getBirthDate())
+//                .gender(Gender.getConstant(dto.getGender()))
+//                .roles("ROLE_MEMBER")
+//                .build();
+//    }
 
     @Transactional
     public MemberDto.MemberInfoUpdateResponse changePassword(Long id, String password) {

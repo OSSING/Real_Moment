@@ -26,7 +26,6 @@ public class MemberDto {
      * https://dev-coco.tistory.com/138
      */
     @Getter
-    @Builder
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class RegisterRequest {
@@ -53,20 +52,20 @@ public class MemberDto {
         @NotBlank(message = "생년월일을 입력해주세요.")
         private LocalDate birthDate;
 
-        private Gender gender;
+        private String gender;
 
         // 회원가입 시 요청받은 Dto -> Entity 변환
-//        public Member toEntity() {
-//            return Member.builder()
-//                    .loginId(loginId)
-//                    .email(email)
-//                    .loginPassword(loginPassword)
-//                    .name(name)
-//                    .tel(tel)
-//                    .birthDate(birthDate)
-//                    .gender(gender)
-//                    .build();
-//        }
+        public Member toEntity() {
+            return Member.builder()
+                    .loginId(loginId)
+                    .email(email)
+                    .loginPassword(loginPassword)
+                    .name(name)
+                    .tel(tel)
+                    .birthDate(birthDate)
+                    .gender(Gender.getConstant(gender))
+                    .build();
+        }
     }
 
     @Getter
@@ -145,14 +144,14 @@ public class MemberDto {
         private String loginId;
         private String email;
         private String name;
-        private Gender gender;
+        private String gender;
         private LocalDate birthDate;
 
         public MemberInfoUpdateResponse(Member member) {
             loginId = member.getLoginId();
             email = member.getEmail();
             name = member.getName();
-            gender = member.getGender();
+            gender = Gender.getDescription(String.valueOf(member.getGender()));
             birthDate = member.getBirthDate();
         }
     }
@@ -239,7 +238,7 @@ public class MemberDto {
             email = member.getEmail();
             name = member.getName();
             tel = member.getTel();
-            gender = String.valueOf(member.getGender());
+            gender = Gender.getDescription(String.valueOf(member.getGender()));
             point = member.getPoint();
             isDelete = member.isDelete();
             recentlyLogin = member.getRecentlyLogin();
