@@ -751,7 +751,7 @@ public class MemberService {
     @Transactional
     public void orderDone(Long memberId, OrderDto.OrderId requestDto) {
 
-        // 결제 학정 요청
+        // 구매 학정 요청
         orderRepository.updatePaymentDone(requestDto.getOrderId());
     }
 }

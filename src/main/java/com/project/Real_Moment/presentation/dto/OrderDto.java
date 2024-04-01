@@ -2,6 +2,7 @@ package com.project.Real_Moment.presentation.dto;
 
 import com.project.Real_Moment.domain.entity.Item;
 import com.project.Real_Moment.domain.entity.Order;
+import com.project.Real_Moment.domain.enumuration.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -144,7 +145,7 @@ public class OrderDto {
             detAddress = order.getDetAddress();
             requestText = order.getRequestText();
             tel = order.getTel();
-            status = String.valueOf(order.getStatus());
+            status = PaymentStatus.getDescription(String.valueOf(order.getStatus()));
             merchantUid = order.getMerchantUid();
         }
     }
@@ -176,7 +177,7 @@ public class OrderDto {
             detAddress = order.getDetAddress();
             requestText = order.getRequestText();
             tel = order.getTel();
-            status = String.valueOf(order.getStatus());
+            status = PaymentStatus.getDescription(String.valueOf(order.getStatus()));
             merchantUid = order.getMerchantUid();
             orderDetails = orderDetailListDto;
             totalPrice = order.getTotalPrice();

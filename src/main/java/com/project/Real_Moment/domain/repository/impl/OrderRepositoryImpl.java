@@ -115,6 +115,6 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     }
 
     private BooleanExpression statusEq(String status) {
-        return status != null ? order.status.eq(PaymentStatus.valueOf(status)) : null;
+        return status != null ? order.status.eq(PaymentStatus.getStatus(status)) : null;
     }
 }

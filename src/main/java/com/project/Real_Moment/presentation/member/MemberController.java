@@ -1,5 +1,6 @@
 package com.project.Real_Moment.presentation.member;
 
+import com.project.Real_Moment.domain.enumuration.PaymentStatus;
 import com.project.Real_Moment.presentation.dto.*;
 import com.project.Real_Moment.auth.jwt.dto.TokenDto;
 import com.project.Real_Moment.auth.jwt.JwtFilter;
