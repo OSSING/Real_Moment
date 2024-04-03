@@ -28,8 +28,8 @@ public class ItemDto {
         private int stock;
         private Boolean isSell;
         private Boolean isDelete;
-        private List<ItemDto.MainImgListResponse> mainImg;
-        private List<ItemDto.SubImaListResponse> serveImg;
+        private List<S3FileDto.GetS3File> mainImg;
+        private List<S3FileDto.GetS3File> subImg;
 
         public ItemDetResponse(Item item) {
             itemId = item.getId();
@@ -58,7 +58,7 @@ public class ItemDto {
         private int discountPrice;
         private int sellPrice;
         private Boolean isSell;
-        private List<ItemDto.MainImgListResponse> mainImg;
+        private String mainImg;
 
         public ItemResponse(Item item) {
             this.itemId = item.getId();
@@ -103,7 +103,7 @@ public class ItemDto {
         private int sellCount;
         private int totalSales; // 상품 총 매출
         private Boolean isSell;
-        private List<ItemDto.MainImgListResponse> mainImg;
+        private String mainImg;
 
         public AdminItemList(Item item) {
             itemId = item.getId();
@@ -136,8 +136,8 @@ public class ItemDto {
         private LocalDateTime lastModifiedDate;
         private Boolean isSell;
         private Boolean isDelete;
-        private List<ItemDto.MainImgListResponse> mainImg;
-        private List<ItemDto.SubImaListResponse> subImg;
+        private List<S3FileDto.GetS3File> mainImg;
+        private List<S3FileDto.GetS3File> subImg;
 
         public AdminItemDef(Item item) {
             itemId = item.getId();
@@ -168,7 +168,7 @@ public class ItemDto {
         private int discountPrice;
         private int sellPrice;
         private int stock;
-        private Boolean isSell;
+        private boolean sell;
 
         public Item toEntity(Category category) {
             return Item.builder()
@@ -180,24 +180,24 @@ public class ItemDto {
                     .discountPrice(discountPrice)
                     .sellPrice(sellPrice)
                     .stock(stock)
-                    .isSell(isSell)
+                    .isSell(sell)
                     .build();
         }
     }
 
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class MainImgListResponse {
-        private String fileUrl;
-    }
-
-    @Getter
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class SubImaListResponse {
-        private String fileUrl;
-    }
+//    @Getter
+//    @AllArgsConstructor
+//    @NoArgsConstructor
+//    public static class MainImgResponse {
+//        private String fileUrl;
+//    }
+//
+//    @Getter
+//    @AllArgsConstructor
+//    @NoArgsConstructor
+//    public static class SubImaResponse {
+//        private String fileUrl;
+//    }
 
     @Getter @Setter
     @AllArgsConstructor
@@ -215,7 +215,7 @@ public class ItemDto {
         private Boolean isSell;
         private Boolean isDelete;
         private List<S3FileDto.GetS3File> mainImgDataList;
-        private List<S3FileDto.GetS3File> serveImgDataList;
+        private List<S3FileDto.GetS3File> subImgDataList;
 
         public EditItemClick(Item item) {
             itemId = item.getId();
@@ -266,9 +266,9 @@ public class ItemDto {
         private int discountPrice;
         private int sellPrice;
         private Boolean isSell;
-        private List<MainImgListResponse> mainImg;
+        private String mainImg;
 
-        public OrderedItemList(Item item, List<MainImgListResponse> mainImg) {
+        public OrderedItemList(Item item, String mainImg) {
             itemId = item.getId();
             name = item.getName();
             price = item.getPrice();

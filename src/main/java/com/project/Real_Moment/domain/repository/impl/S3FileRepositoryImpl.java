@@ -1,9 +1,9 @@
 package com.project.Real_Moment.domain.repository.impl;
 
 import com.project.Real_Moment.domain.entity.Item;
-import com.project.Real_Moment.domain.entity.QS3File;
 import com.project.Real_Moment.domain.repository.custom.S3FileRepositoryCustom;
 import com.project.Real_Moment.presentation.dto.ItemDto;
+import com.project.Real_Moment.presentation.dto.S3FileDto;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
@@ -19,32 +19,46 @@ public class S3FileRepositoryImpl implements S3FileRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<ItemDto.MainImgListResponse> findMainImg_UrlByItemId(Item findItem) {
+    public List<S3FileDto.GetS3File> findMainImgList_UrlByItemId(Item findItem) {
         return queryFactory
-                .select(s3File.fileUrl)
-                .from(s3File)
+                .selectFrom(s3File)
                 .leftJoin(itemFile).on(s3File.eq(itemFile.s3FileId))
                 .leftJoin(item).on(itemFile.itemId.eq(item))
                 .where(item.eq(findItem),
-                        itemFile.mainOrServe.eq("main"))
+                        itemFile.mainOrSub.eq("main"))
+                .orderBy(itemFile.number.asc())
                 .fetch()
                 .stream()
-                .map(ItemDto.MainImgListResponse::new)
+                .map(S3FileDto.GetS3File::new)
                 .toList();
     }
 
+    // 우선순위가 0인 대표 이미지를 반환
     @Override
-    public List<ItemDto.SubImaListResponse> findSubImg_UrlByItemId(Item findItem) {
+    public String findMainImg_UrlByItemId(Item findItem) {
         return queryFactory
                 .select(s3File.fileUrl)
                 .from(s3File)
                 .leftJoin(itemFile).on(s3File.eq(itemFile.s3FileId))
+//                .leftJoin(item).on(itemFile.itemId.eq(item))
+                .where(itemFile.itemId.eq(findItem),
+                        itemFile.mainOrSub.eq("main"),
+                        itemFile.number.eq(0))
+                .fetchOne();
+    }
+
+    @Override
+    public List<S3FileDto.GetS3File> findSubImgList_UrlByItemId(Item findItem) {
+        return queryFactory
+                .selectFrom(s3File)
+                .leftJoin(itemFile).on(s3File.eq(itemFile.s3FileId))
                 .leftJoin(item).on(itemFile.itemId.eq(item))
                 .where(item.eq(findItem),
-                        itemFile.mainOrServe.eq("serve"))
+                        itemFile.mainOrSub.eq("sub"))
+                .orderBy(itemFile.number.asc())
                 .fetch()
                 .stream()
-                .map(ItemDto.SubImaListResponse::new)
+                .map(S3FileDto.GetS3File::new)
                 .toList();
     }
 

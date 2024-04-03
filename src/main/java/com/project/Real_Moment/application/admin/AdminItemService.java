@@ -56,7 +56,7 @@ public class AdminItemService {
             item.setTotalSales(totalSales);
 
             // item 객체에 맞는 fileUrl을 추출
-            List<ItemDto.MainImgListResponse> fileUrl = s3FileRepository.findMainImg_UrlByItemId(findItem);
+            String fileUrl = s3FileRepository.findMainImg_UrlByItemId(findItem);
             item.setMainImg(fileUrl);
         }
 
@@ -73,10 +73,10 @@ public class AdminItemService {
         int totalSales = getTotalSales(item);
         itemDefDto.setTotalSales(totalSales);
 
-        List<ItemDto.MainImgListResponse> mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(item);
+        List<S3FileDto.GetS3File> mainImgUrl = s3FileRepository.findMainImgList_UrlByItemId(item);
         itemDefDto.setMainImg(mainImgUrl);
 
-        List<ItemDto.SubImaListResponse> subImgUrl = s3FileRepository.findSubImg_UrlByItemId(item);
+        List<S3FileDto.GetS3File> subImgUrl = s3FileRepository.findSubImgList_UrlByItemId(item);
         itemDefDto.setSubImg(subImgUrl);
 
         return itemDefDto;
@@ -114,7 +114,7 @@ public class AdminItemService {
         }
 
         for (MultipartFile subImg : subImgList) {
-            uploadImg(subImg, savedItem, "serve");
+            uploadImg(subImg, savedItem, "sub");
         }
     }
 
@@ -151,21 +151,21 @@ public class AdminItemService {
         List<ItemFile> itemFileList = itemFileRepository.findByItemId(item);
 
         List<S3FileDto.GetS3File> mainImgList = itemFileList.stream()
-                .filter(itemFile -> "main".equals(itemFile.getMainOrServe()))
+                .filter(itemFile -> "main".equals(itemFile.getMainOrSub()))
                 .map(itemFile -> {
                     return new S3FileDto.GetS3File(itemFile.getS3FileId());
                 })
                 .toList();
 
         List<S3FileDto.GetS3File> subImgList = itemFileList.stream()
-                .filter(itemFile -> "serve".equals(itemFile.getMainOrServe()))
+                .filter(itemFile -> "sub".equals(itemFile.getMainOrSub()))
                 .map(itemFile -> {
                     return new S3FileDto.GetS3File(itemFile.getS3FileId());
                 })
                 .toList();
 
         editItemClick.setMainImgDataList(mainImgList);
-        editItemClick.setServeImgDataList(subImgList);
+        editItemClick.setSubImgDataList(subImgList);
 
         return editItemClick;
     }
@@ -211,7 +211,7 @@ public class AdminItemService {
     }
 
     @Transactional
-    public void editItemServeImg(ItemDto.ItemIdRequestPart itemId, List<MultipartFile> serveImgList, S3FileDto.s3FileIdRequestPart s3FileIdList) {
+    public void editItemSubImg(ItemDto.ItemIdRequestPart itemId, List<MultipartFile> subImgList, S3FileDto.s3FileIdRequestPart s3FileIdList) {
 
         Item item = itemRepository
                 .findById(itemId.getItemId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
@@ -223,11 +223,11 @@ public class AdminItemService {
             S3File s3File = s3FileRepository
                     .findById(s3FileId).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이미지입니다."));
 
-            MultipartFile serveImg = serveImgList.get(i);
+            MultipartFile subImg = subImgList.get(i);
 
             // 이미지 업로드
-            String fileName = serveImg.getOriginalFilename();
-            String fileUrl = uploadImageToS3(fileName, serveImg);
+            String fileName = subImg.getOriginalFilename();
+            String fileUrl = uploadImageToS3(fileName, subImg);
 
             updateS3File(s3FileId, fileName, fileUrl);
             deleteImgFromS3(s3File);

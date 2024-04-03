@@ -43,11 +43,11 @@ public class OrderDto {
         private int discountPrice;
         private int sellPrice;
         private Boolean isSell;
-        private List<ItemDto.MainImgListResponse> mainImg;
+        private String mainImg;
         private int count;
         private int totalSellPrice;
 
-        public OrderItem(Item item, int count, List<ItemDto.MainImgListResponse> mainImgUrl) {
+        public OrderItem(Item item, int count, String mainImgUrl) {
             itemId = item.getId();
             name = item.getName();
             price = item.getPrice();

@@ -17,13 +17,13 @@ public class ItemFileDto {
     public static class SaveItemFile {
         private S3File s3FileId;
         private Item itemId;
-        private String mainOrServe;
+        private String mainOrSub;
 
         public ItemFile toEntity() {
             return ItemFile.builder()
                     .s3FileId(s3FileId)
                     .itemId(itemId)
-                    .mainOrServe(mainOrServe)
+                    .mainOrSub(mainOrSub)
                     .build();
         }
     }

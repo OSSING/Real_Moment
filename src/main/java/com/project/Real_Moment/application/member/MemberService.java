@@ -1,7 +1,6 @@
 package com.project.Real_Moment.application.member;
 
 import com.project.Real_Moment.domain.entity.*;
-import com.project.Real_Moment.domain.enumuration.Gender;
 import com.project.Real_Moment.domain.enumuration.PaymentStatus;
 import com.project.Real_Moment.domain.repository.*;
 import com.project.Real_Moment.presentation.dto.*;
@@ -277,7 +276,7 @@ public class MemberService {
 
             if (review != null) {
                 itemDto = new ItemDto.ItemResponse(review.getItemId());
-                List<ItemDto.MainImgListResponse> mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(review.getItemId());
+                String mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(review.getItemId());
                 itemDto.setMainImg(mainImgUrl);
             }
 
@@ -505,7 +504,7 @@ public class MemberService {
                 Item item = itemOptional.get();
 
                 // 상품의 메인 이미지 가져오기
-                List<ItemDto.MainImgListResponse> mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(item);
+                String mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(item);
 
                 // 주문 총 정가 계산
                 totalPrice = item.getPrice() * count;
@@ -693,7 +692,7 @@ public class MemberService {
                             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
 
                     // 상품의 메인 이미지 가져오기
-                    List<ItemDto.MainImgListResponse> mainImgList = s3FileRepository.findMainImg_UrlByItemId(item);
+                    String mainImgList = s3FileRepository.findMainImg_UrlByItemId(item);
 
                     ItemDto.OrderedItemList orderedItemList = new ItemDto.OrderedItemList(item, mainImgList);
 

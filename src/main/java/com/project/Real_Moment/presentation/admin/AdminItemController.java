@@ -40,7 +40,7 @@ public class AdminItemController {
     @PostMapping("/admin/item")
     public ResponseEntity<Void> saveItem(@RequestPart("request") ItemDto.SaveItem dto,
                                          @RequestPart("mainImg") List<MultipartFile> mainImgList,
-                                         @RequestPart("serveImg") List<MultipartFile> subImgList) throws IOException {
+                                         @RequestPart("subImg") List<MultipartFile> subImgList) throws IOException {
         adminItemService.saveItem(dto, mainImgList, subImgList);
         return ResponseEntity.ok().build();
     }
@@ -64,11 +64,11 @@ public class AdminItemController {
         return ResponseEntity.ok().build();
     }
 
-    @PatchMapping("/admin/item/serveImg")
-    public ResponseEntity<Void> editItemServeImg(@RequestPart("itemId") ItemDto.ItemIdRequestPart itemId,
-                                                @RequestPart("serveImg") List<MultipartFile> serveImgList,
+    @PatchMapping("/admin/item/subImg")
+    public ResponseEntity<Void> editItemSubImg(@RequestPart("itemId") ItemDto.ItemIdRequestPart itemId,
+                                                @RequestPart("subImg") List<MultipartFile> subImgList,
                                                 @RequestPart("s3FileId") S3FileDto.s3FileIdRequestPart s3FileId) {
-        adminItemService.editItemServeImg(itemId, serveImgList, s3FileId);
+        adminItemService.editItemSubImg(itemId, subImgList, s3FileId);
         return ResponseEntity.ok().build();
     }
 

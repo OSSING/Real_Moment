@@ -136,13 +136,33 @@ VALUES
 ('fileName2', 'fileUrl2'),
 ('fileName3', 'fileUrl3'),
 ('fileName4', 'fileUrl4'),
-('fileName5', 'fileUrl5');
+('fileName5', 'fileUrl5'),
+('fileName6', 'fileUrl6'),
+('fileName7', 'fileUrl7'),
+('fileName8', 'fileUrl8'),
+('fileName9', 'fileUrl9'),
+('fileName10', 'fileUrl10'),
+('fileName11', 'fileUrl11'),
+('fileName12', 'fileUrl12'),
+('fileName13', 'fileUrl13'),
+('fileName14', 'fileUrl14'),
+('fileName15', 'fileUrl15');
 
 -- ItemFile Table 더미데이터
-INSERT INTO item_file (s3_file_id, item_id, main_or_serve)
+INSERT INTO item_file (s3_file_id, item_id, main_or_sub, number)
 VALUES
-(1, 1, 'main'),
-(2, 1, 'serve'),
-(3, 1, 'serve'),
-(4, 2, 'main'),
-(5, 2, 'serve');
+(1, 1, 'main', 0),
+(2, 1, 'main', 1),
+(3, 1, 'main', 2),
+(4, 1, 'sub', 0),
+(5, 1, 'sub', 1),
+(6, 1, 'sub', 2),
+(7, 2, 'main', 0),
+(8, 2, 'main', 1),
+(9, 2, 'main', 2),
+(10, 2, 'sub', 0),
+(11, 2, 'sub', 1),
+(12, 3, 'main', 0),
+(13, 3, 'main', 1),
+(14, 3, 'sub', 0),
+(15, 3, 'sub', 1);
