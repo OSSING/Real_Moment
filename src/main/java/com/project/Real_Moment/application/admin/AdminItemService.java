@@ -65,8 +65,7 @@ public class AdminItemService {
 
     @Transactional(readOnly = true)
     public ItemDto.AdminItemDef getItemDef(Long itemId) {
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        Item item = getItem(itemId);
 
         ItemDto.AdminItemDef itemDefDto = new ItemDto.AdminItemDef(item);
 
@@ -143,8 +142,7 @@ public class AdminItemService {
 
     @Transactional(readOnly = true)
     public ItemDto.EditItemClick editItemClick(Long itemId) {
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하는 상품이 아닙니다."));
+        Item item = getItem(itemId);
 
         ItemDto.EditItemClick editItemClick = new ItemDto.EditItemClick(item);
 
@@ -189,8 +187,7 @@ public class AdminItemService {
          * 4. 새로 저장된 AWS S3 이미지의 Url과 fileName을 s3File에 update한다.
          */
 
-        Item item = itemRepository
-                .findById(itemId.getItemId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        Item item = getItem(itemId.getItemId());
 
         for (int i = 0; i < s3FileIdList.getS3FileId().size(); i++) {
 
@@ -213,8 +210,7 @@ public class AdminItemService {
     @Transactional
     public void editItemSubImg(ItemDto.ItemIdRequestPart itemId, List<MultipartFile> subImgList, S3FileDto.s3FileIdRequestPart s3FileIdList) {
 
-        Item item = itemRepository
-                .findById(itemId.getItemId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        Item item = getItem(itemId.getItemId());
 
         for (int i = 0; i < s3FileIdList.getS3FileId().size(); i++) {
 
@@ -237,8 +233,7 @@ public class AdminItemService {
     @Transactional
     public void deleteItem(Long itemId) {
 
-        Item item = itemRepository.findById(itemId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        Item item = getItem(itemId);
 
         /**
          * 1. 삭제할 item에 대한 itemFile 객체를 찾는다.
@@ -288,8 +283,7 @@ public class AdminItemService {
     @Transactional
     public void addImg(ItemDto.AddImg dto) {
 
-        Item item = itemRepository.findById(dto.getItemId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하는 상품이 아닙니다."));
+        Item item = getItem(dto.getItemId());
 
         // 요청된 number와 같거나 큰 순서를 가진 객체 List 추출
         List<ItemFile> itemFileList = itemFileRepository.findListByGoeNumber(item, dto.getNumber());
@@ -311,10 +305,41 @@ public class AdminItemService {
 
     @Transactional
     public void numberChangeMainImg(ItemDto.NumberChangeImg dto) {
-        Item item = itemRepository.findById(dto.getItemId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하는 상품이 아닙니다."));
+        Item item = getItem(dto.getItemId());
 
         itemFileRepository.updateChangeNumber(item, dto.getNumber1(), dto.getNumber2());
+    }
+
+    @Transactional
+    public void deleteMainImg(Long itemId, Long s3FileId) {
+        Item item = getItem(itemId);
+
+        S3File s3File = s3FileRepository.findById(s3FileId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이미지입니다."));
+
+        ItemFile findItemFile = itemFileRepository.findByS3FileId(s3File);
+
+        if (findItemFile.getNumber() == 0) {
+            throw new RuntimeException("대표 이미지는 삭제할 수 없습니다.");
+        }
+
+        // S3에서 이미지 삭제
+        deleteImgFromS3(s3File);
+
+        // 이미지 순서 재구성
+        List<ItemFile> itemFileList = itemFileRepository.findListByGoeNumber(item, findItemFile.getNumber());
+        for (ItemFile itemFile : itemFileList) {
+            itemFileRepository.updateGoeNumberMinus(itemFile);
+        }
+
+        // 이미지 데이터 삭제
+        s3FileRepository.delete(s3File);
+        itemFileRepository.delete(findItemFile);
+    }
+
+    private Item getItem(Long itemId) {
+        return itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
     }
 
     private String uploadImageToS3(String fileName, MultipartFile img) {

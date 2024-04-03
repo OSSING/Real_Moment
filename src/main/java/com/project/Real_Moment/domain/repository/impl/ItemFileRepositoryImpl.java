@@ -53,8 +53,15 @@ public class ItemFileRepositoryImpl implements ItemFileRepositoryCustom {
                 .set(itemFile.number, itemFile.number.add(1))
                 .where(itemFile.id.eq(findItemFile.getId()))
                 .execute();
+    }
 
-
+    @Override
+    public void updateGoeNumberMinus(ItemFile findItemFile) {
+        queryFactory
+                .update(itemFile)
+                .set(itemFile.number, itemFile.number.subtract(1))
+                .where(itemFile.id.eq(findItemFile.getId()))
+                .execute();
     }
 
     @Override

@@ -80,14 +80,18 @@ public class AdminItemController {
 
     // 상품 메인 이미지 교체
     @PatchMapping("/admin/item/mainImg/replace")
-    public ResponseEntity<Void> replaceMainImg(@RequestBody ItemDto.ReplaceImg dto) {
+    public ResponseEntity<Void> replaceMainImg(@RequestPart("request") ItemDto.ReplaceImg dto,
+                                               @RequestPart("imgFile") MultipartFile imgFile) {
+        dto.setImgFile(imgFile);
         adminItemService.replaceImg(dto);
         return ResponseEntity.ok().build();
     }
 
     // 상품 메인 이미지 추가
     @PatchMapping("/admin/item/mainImg/add")
-    public ResponseEntity<Void> addMainImg(@RequestBody ItemDto.AddImg dto) {
+    public ResponseEntity<Void> addMainImg(@RequestPart("request") ItemDto.AddImg dto,
+                                           @RequestPart("imgFile") MultipartFile imgFile) {
+        dto.setImgFile(imgFile);
         adminItemService.addImg(dto);
         return ResponseEntity.ok().build();
     }
@@ -96,6 +100,14 @@ public class AdminItemController {
     @PatchMapping("/admin/item/mainImg/change")
     public ResponseEntity<Void> numberChangeMainImg(@RequestBody ItemDto.NumberChangeImg dto) {
         adminItemService.numberChangeMainImg(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    // 상품 메인 이미지 삭제
+    @DeleteMapping("/admin/item/mainImg/delete")
+    public ResponseEntity<Void> deleteMainImg(@RequestParam("itemId") Long itemId,
+                                              @RequestParam("s3FileId") Long s3FileId) {
+        adminItemService.deleteMainImg(itemId, s3FileId);
         return ResponseEntity.ok().build();
     }
 }
