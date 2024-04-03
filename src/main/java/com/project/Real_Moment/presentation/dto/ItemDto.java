@@ -2,10 +2,13 @@ package com.project.Real_Moment.presentation.dto;
 
 import com.project.Real_Moment.domain.entity.Category;
 import com.project.Real_Moment.domain.entity.Item;
+import com.project.Real_Moment.domain.entity.ItemFile;
+import com.project.Real_Moment.domain.entity.S3File;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -245,7 +248,7 @@ public class ItemDto {
         private int discountPrice;
         private int sellPrice;
         private int stock;
-        private Boolean isSell;
+        private boolean isSell;
     }
 
     @Getter
@@ -278,5 +281,57 @@ public class ItemDto {
             isSell = item.isSell();
             this.mainImg = mainImg;
         }
+    }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class ReplaceImg {
+        // 이미지를 교체할 상품의 ID
+        private Long itemId;
+        // 교체될 이미지
+        private MultipartFile imgFile;
+        // 교체될 대상 이미지의 ID
+        private Long s3FileId;
+    }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AddImg {
+        // 이미지를 추가할 상품의 ID
+        private Long itemId;
+        // 추가할 이미지
+        private MultipartFile imgFile;
+        // 추가할 위치
+        private int number;
+
+        public S3File toEntity(String fileName, String fileUrl) {
+            return S3File.builder()
+                    .fileName(fileName)
+                    .fileUrl(fileUrl)
+                    .build();
+        }
+
+        public ItemFile toEntity(Item item, S3File s3File, int number) {
+            return ItemFile.builder()
+                    .s3FileId(s3File)
+                    .itemId(item)
+                    .mainOrSub("main")
+                    .number(number)
+                    .build();
+        }
+    }
+
+    @Getter @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class NumberChangeImg {
+        // 순서를 바꿀 상품 ID
+        private Long itemId;
+
+        // 서로 바꿔줄 number
+        private int number1;
+        private int number2;
     }
 }

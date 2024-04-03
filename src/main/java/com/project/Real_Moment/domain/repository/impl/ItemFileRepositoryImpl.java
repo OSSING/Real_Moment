@@ -8,6 +8,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 
 import static com.project.Real_Moment.domain.entity.QItemFile.itemFile;
 
@@ -31,5 +32,64 @@ public class ItemFileRepositoryImpl implements ItemFileRepositoryCustom {
                 .leftJoin(itemFile.s3FileId).fetchJoin()
                 .where(itemFile.itemId.id.eq(itemId))
                 .fetch();
+    }
+
+    // 요청된 number보다 크거나 같은 객체 리스트 반환
+    @Override
+    public List<ItemFile> findListByGoeNumber(Item findItem, int number) {
+        return queryFactory
+                .selectFrom(itemFile)
+                .where(itemFile.itemId.eq(findItem),
+                        itemFile.number.goe(number))
+                .orderBy(itemFile.number.asc())
+                .fetch();
+    }
+
+    // 객체의 number + 1 순서 조정
+    @Override
+    public void updateGoeNumberPlus(ItemFile findItemFile) {
+        queryFactory
+                .update(itemFile)
+                .set(itemFile.number, itemFile.number.add(1))
+                .where(itemFile.id.eq(findItemFile.getId()))
+                .execute();
+
+
+    }
+
+    @Override
+    public void updateChangeNumber(Item findItem, int number1, int number2) {
+
+        Long itemFileId1 = Objects.requireNonNull(queryFactory
+                        .selectFrom(itemFile)
+                        .where(itemFile.number.eq(number1),
+                                itemFile.itemId.eq(findItem),
+                                itemFile.mainOrSub.eq("main"))
+                        .fetchOne())
+                        .getId();
+
+        Long itemFileId2 = Objects.requireNonNull(queryFactory
+                        .selectFrom(itemFile)
+                        .where(itemFile.number.eq(number2),
+                                itemFile.itemId.eq(findItem),
+                                itemFile.mainOrSub.eq("main"))
+                        .fetchOne())
+                        .getId();
+
+        queryFactory
+                .update(itemFile)
+                .set(itemFile.number, number2)
+                .where(itemFile.itemId.eq(findItem),
+                        itemFile.mainOrSub.eq("main"),
+                        itemFile.id.eq(itemFileId1))
+                .execute();
+
+        queryFactory
+                .update(itemFile)
+                .set(itemFile.number, number1)
+                .where(itemFile.itemId.eq(findItem),
+                        itemFile.mainOrSub.eq("main"),
+                        itemFile.id.eq(itemFileId2))
+                .execute();
     }
 }

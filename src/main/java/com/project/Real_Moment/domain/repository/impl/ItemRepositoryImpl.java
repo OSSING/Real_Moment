@@ -58,7 +58,7 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
                 .set(item.discountPrice, dto.getDiscountPrice())
                 .set(item.sellPrice, dto.getSellPrice())
                 .set(item.stock, dto.getStock())
-                .set(item.isSell, dto.getIsSell())
+                .set(item.isSell, dto.isSell())
                 .where(item.id.eq(dto.getItemId()))
                 .execute();
     }

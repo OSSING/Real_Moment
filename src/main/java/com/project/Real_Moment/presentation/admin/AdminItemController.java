@@ -77,4 +77,25 @@ public class AdminItemController {
         adminItemService.deleteItem(itemId);
         return ResponseEntity.ok().build();
     }
+
+    // 상품 메인 이미지 교체
+    @PatchMapping("/admin/item/mainImg/replace")
+    public ResponseEntity<Void> replaceMainImg(@RequestBody ItemDto.ReplaceImg dto) {
+        adminItemService.replaceImg(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    // 상품 메인 이미지 추가
+    @PatchMapping("/admin/item/mainImg/add")
+    public ResponseEntity<Void> addMainImg(@RequestBody ItemDto.AddImg dto) {
+        adminItemService.addImg(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    // 상품 메인 이미지 순서 교체
+    @PatchMapping("/admin/item/mainImg/change")
+    public ResponseEntity<Void> numberChangeMainImg(@RequestBody ItemDto.NumberChangeImg dto) {
+        adminItemService.numberChangeMainImg(dto);
+        return ResponseEntity.ok().build();
+    }
 }
