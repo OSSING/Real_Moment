@@ -83,7 +83,18 @@ public class AdminItemController {
     public ResponseEntity<Void> replaceMainImg(@RequestPart("request") ItemDto.ReplaceImg dto,
                                                @RequestPart("imgFile") MultipartFile imgFile) {
         dto.setImgFile(imgFile);
-        adminItemService.replaceImg(dto);
+        String imgType = "main";
+        adminItemService.replaceImg(dto, imgType);
+        return ResponseEntity.ok().build();
+    }
+
+    // 상품 서브 이미지 교체
+    @PatchMapping("/admin/item/subImg/replace")
+    public ResponseEntity<Void> replaceSubImg(@RequestPart("request") ItemDto.ReplaceImg dto,
+                                              @RequestPart("imgFile") MultipartFile imgFile) {
+        dto.setImgFile(imgFile);
+        String imgType = "sub";
+        adminItemService.replaceImg(dto, imgType);
         return ResponseEntity.ok().build();
     }
 
@@ -92,7 +103,18 @@ public class AdminItemController {
     public ResponseEntity<Void> addMainImg(@RequestPart("request") ItemDto.AddImg dto,
                                            @RequestPart("imgFile") MultipartFile imgFile) {
         dto.setImgFile(imgFile);
-        adminItemService.addImg(dto);
+        String imgType = "main";
+        adminItemService.addImg(dto, imgType);
+        return ResponseEntity.ok().build();
+    }
+
+    // 상품 서브 이미지 추가
+    @PatchMapping("/admin/item/subImg/add")
+    public ResponseEntity<Void> addSubImg(@RequestPart("request") ItemDto.AddImg dto,
+                                           @RequestPart("imgFile") MultipartFile imgFile) {
+        dto.setImgFile(imgFile);
+        String imgType = "sub";
+        adminItemService.addImg(dto, imgType);
         return ResponseEntity.ok().build();
     }
 

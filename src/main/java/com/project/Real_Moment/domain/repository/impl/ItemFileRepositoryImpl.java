@@ -34,12 +34,13 @@ public class ItemFileRepositoryImpl implements ItemFileRepositoryCustom {
                 .fetch();
     }
 
-    // 요청된 number보다 크거나 같은 객체 리스트 반환
+    // 요청된 number보다 크거나 같은 main 객체 리스트 반환
     @Override
-    public List<ItemFile> findListByGoeNumber(Item findItem, int number) {
+    public List<ItemFile> findImgListByGoeNumber(Item findItem, int number, String imgType) {
         return queryFactory
                 .selectFrom(itemFile)
                 .where(itemFile.itemId.eq(findItem),
+                        itemFile.mainOrSub.eq(imgType),
                         itemFile.number.goe(number))
                 .orderBy(itemFile.number.asc())
                 .fetch();

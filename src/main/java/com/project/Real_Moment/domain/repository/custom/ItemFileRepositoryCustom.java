@@ -11,7 +11,7 @@ public interface ItemFileRepositoryCustom {
 
     List<ItemFile> findByItemIdWithS3File(Long itemId);
 
-    List<ItemFile> findListByGoeNumber(Item item, int number);
+    List<ItemFile> findImgListByGoeNumber(Item item, int number, String imgType);
 
     void updateGoeNumberPlus(ItemFile itemFile);
 

@@ -258,15 +258,15 @@ public class AdminItemService {
     }
 
     @Transactional
-    public void replaceImg(ItemDto.ReplaceImg dto) {
+    public void replaceImg(ItemDto.ReplaceImg dto, String imgType) {
 
         S3File s3File = s3FileRepository.findById(dto.getS3FileId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 이미지입니다."));
 
         ItemFile itemFile = itemFileRepository.findByS3FileId(s3File);
 
-        if (!itemFile.getMainOrSub().equalsIgnoreCase("main")) {
-            throw new IllegalArgumentException("메인 이미지가 아닙니다.");
+        if (!itemFile.getMainOrSub().equalsIgnoreCase(imgType)) {
+            throw new IllegalArgumentException(imgType + " 이미지가 아닙니다.");
         }
 
         // 기존 이미지 삭제
@@ -281,12 +281,12 @@ public class AdminItemService {
     }
 
     @Transactional
-    public void addImg(ItemDto.AddImg dto) {
+    public void addImg(ItemDto.AddImg dto, String imgType) {
 
         Item item = getItem(dto.getItemId());
 
         // 요청된 number와 같거나 큰 순서를 가진 객체 List 추출
-        List<ItemFile> itemFileList = itemFileRepository.findListByGoeNumber(item, dto.getNumber());
+        List<ItemFile> itemFileList = itemFileRepository.findImgListByGoeNumber(item, dto.getNumber(), imgType);
 
         // 객체들의 순서를 +1
         for (ItemFile itemFile : itemFileList) {
@@ -327,7 +327,8 @@ public class AdminItemService {
         deleteImgFromS3(s3File);
 
         // 이미지 순서 재구성
-        List<ItemFile> itemFileList = itemFileRepository.findListByGoeNumber(item, findItemFile.getNumber());
+        String imgType = "main";
+        List<ItemFile> itemFileList = itemFileRepository.findImgListByGoeNumber(item, findItemFile.getNumber(), imgType);
         for (ItemFile itemFile : itemFileList) {
             itemFileRepository.updateGoeNumberMinus(itemFile);
         }
