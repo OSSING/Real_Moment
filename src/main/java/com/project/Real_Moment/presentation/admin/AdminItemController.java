@@ -121,7 +121,16 @@ public class AdminItemController {
     // 상품 메인 이미지 순서 교체
     @PatchMapping("/admin/item/mainImg/change")
     public ResponseEntity<Void> numberChangeMainImg(@RequestBody ItemDto.NumberChangeImg dto) {
-        adminItemService.numberChangeMainImg(dto);
+        String imgType = "main";
+        adminItemService.numberChangeImg(dto, imgType);
+        return ResponseEntity.ok().build();
+    }
+
+    // 상품 서브 이미지 순서 교체
+    @PatchMapping("/admin/item/subImg/change")
+    public ResponseEntity<Void> numberChangeSubImg(@RequestBody ItemDto.NumberChangeImg dto) {
+        String imgType = "sub";
+        adminItemService.numberChangeImg(dto, imgType);
         return ResponseEntity.ok().build();
     }
 
@@ -129,7 +138,17 @@ public class AdminItemController {
     @DeleteMapping("/admin/item/mainImg/delete")
     public ResponseEntity<Void> deleteMainImg(@RequestParam("itemId") Long itemId,
                                               @RequestParam("s3FileId") Long s3FileId) {
-        adminItemService.deleteMainImg(itemId, s3FileId);
+        String imgType = "main";
+        adminItemService.deleteImg(itemId, s3FileId, imgType);
+        return ResponseEntity.ok().build();
+    }
+
+    // 상품 서브 이미지 삭제
+    @DeleteMapping("/admin/item/subImg/delete")
+    public ResponseEntity<Void> deleteSubImg(@RequestParam("itemId") Long itemId,
+                                              @RequestParam("s3FileId") Long s3FileId) {
+        String imgType = "sub";
+        adminItemService.deleteImg(itemId, s3FileId, imgType);
         return ResponseEntity.ok().build();
     }
 }

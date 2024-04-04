@@ -17,5 +17,5 @@ public interface ItemFileRepositoryCustom {
 
     void updateGoeNumberMinus(ItemFile itemFile);
 
-    void updateChangeNumber(Item item, int number1, int number2);
+    void updateChangeNumber(Item item, int number1, int number2, String imgType);
 }

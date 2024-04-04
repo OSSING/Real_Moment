@@ -66,13 +66,13 @@ public class ItemFileRepositoryImpl implements ItemFileRepositoryCustom {
     }
 
     @Override
-    public void updateChangeNumber(Item findItem, int number1, int number2) {
+    public void updateChangeNumber(Item findItem, int number1, int number2, String imgType) {
 
         Long itemFileId1 = Objects.requireNonNull(queryFactory
                         .selectFrom(itemFile)
                         .where(itemFile.number.eq(number1),
                                 itemFile.itemId.eq(findItem),
-                                itemFile.mainOrSub.eq("main"))
+                                itemFile.mainOrSub.eq(imgType))
                         .fetchOne())
                         .getId();
 
@@ -80,7 +80,7 @@ public class ItemFileRepositoryImpl implements ItemFileRepositoryCustom {
                         .selectFrom(itemFile)
                         .where(itemFile.number.eq(number2),
                                 itemFile.itemId.eq(findItem),
-                                itemFile.mainOrSub.eq("main"))
+                                itemFile.mainOrSub.eq(imgType))
                         .fetchOne())
                         .getId();
 
@@ -88,7 +88,7 @@ public class ItemFileRepositoryImpl implements ItemFileRepositoryCustom {
                 .update(itemFile)
                 .set(itemFile.number, number2)
                 .where(itemFile.itemId.eq(findItem),
-                        itemFile.mainOrSub.eq("main"),
+                        itemFile.mainOrSub.eq(imgType),
                         itemFile.id.eq(itemFileId1))
                 .execute();
 
@@ -96,7 +96,7 @@ public class ItemFileRepositoryImpl implements ItemFileRepositoryCustom {
                 .update(itemFile)
                 .set(itemFile.number, number1)
                 .where(itemFile.itemId.eq(findItem),
-                        itemFile.mainOrSub.eq("main"),
+                        itemFile.mainOrSub.eq(imgType),
                         itemFile.id.eq(itemFileId2))
                 .execute();
     }

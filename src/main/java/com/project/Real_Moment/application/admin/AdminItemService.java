@@ -304,14 +304,14 @@ public class AdminItemService {
     }
 
     @Transactional
-    public void numberChangeMainImg(ItemDto.NumberChangeImg dto) {
+    public void numberChangeImg(ItemDto.NumberChangeImg dto, String imgType) {
         Item item = getItem(dto.getItemId());
 
-        itemFileRepository.updateChangeNumber(item, dto.getNumber1(), dto.getNumber2());
+        itemFileRepository.updateChangeNumber(item, dto.getNumber1(), dto.getNumber2(), imgType);
     }
 
     @Transactional
-    public void deleteMainImg(Long itemId, Long s3FileId) {
+    public void deleteImg(Long itemId, Long s3FileId, String imgType) {
         Item item = getItem(itemId);
 
         S3File s3File = s3FileRepository.findById(s3FileId)
@@ -319,7 +319,8 @@ public class AdminItemService {
 
         ItemFile findItemFile = itemFileRepository.findByS3FileId(s3File);
 
-        if (findItemFile.getNumber() == 0) {
+        // 메인 이미지 중 대표 이미지 (number = 0)은 삭제할 수 없다.
+        if (imgType.equalsIgnoreCase("main") && findItemFile.getNumber() == 0) {
             throw new RuntimeException("대표 이미지는 삭제할 수 없습니다.");
         }
 
@@ -327,7 +328,6 @@ public class AdminItemService {
         deleteImgFromS3(s3File);
 
         // 이미지 순서 재구성
-        String imgType = "main";
         List<ItemFile> itemFileList = itemFileRepository.findImgListByGoeNumber(item, findItemFile.getNumber(), imgType);
         for (ItemFile itemFile : itemFileList) {
             itemFileRepository.updateGoeNumberMinus(itemFile);
