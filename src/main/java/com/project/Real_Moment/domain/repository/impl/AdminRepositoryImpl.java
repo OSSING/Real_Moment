@@ -69,9 +69,9 @@ public class AdminRepositoryImpl implements AdminRepositoryCustom {
         queryFactory
                 .update(admin)
                 .set(admin.isDelete, true)
-                .set(admin.loginPassword, "")
-                .set(admin.email, "")
-                .set(admin.name, "")
+                .set(admin.loginPassword, (String) null)
+                .set(admin.email, (String) null)
+                .set(admin.name, (String) null)
                 .where(admin.id.eq(adminId))
                 .execute();
     }

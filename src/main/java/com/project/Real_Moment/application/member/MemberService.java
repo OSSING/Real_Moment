@@ -131,7 +131,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public AddressDto.AddressListPage findAddress(Long id, int nowPage) {
-        Pageable pageable = PageRequest.of(nowPage - 1, 10);
+        Pageable pageable = PageRequest.of(nowPage - 1, 9);
 
         Page<Address> addressList = addressRepository.findAddressByPaging(id, pageable);
 
@@ -166,7 +166,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public WishDto.WishListResponseWrapper getWishList(Long id, int nowPage) {
-        Pageable pageable = PageRequest.of(nowPage - 1, 10);
+        Pageable pageable = PageRequest.of(nowPage - 1, 9);
 
 
         Page<Wish> wishList = wishRepository.findWishByMemberIdPaging(pageable, id, nowPage);
@@ -255,12 +255,10 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public ReviewDto.MyReviewListResponse getMyReviewList(Long id, Integer nowPage) {
-        int pageNumber = (nowPage != null && nowPage > 0) ? nowPage : 1;
-        Pageable pageable = PageRequest.of(pageNumber - 1, 9);
+    public ReviewDto.MyReviewListResponse getMyReviewList(Long memberId, int nowPage) {
+        Pageable pageable = PageRequest.of(nowPage - 1, 9);
 
-
-        Member member = memberRepository.findById(id)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
         Page<Review> reviewListPaging = reviewRepository.findMyReviewListByMemberId(pageable, member);
@@ -283,7 +281,7 @@ public class MemberService {
             reviewDto.setItem(itemDto);
         }
 
-        return new ReviewDto.MyReviewListResponse(reviewList, reviewListPaging.getTotalPages(), pageNumber);
+        return new ReviewDto.MyReviewListResponse(reviewList, reviewListPaging.getTotalPages(), nowPage);
     }
 
     @Transactional
@@ -337,7 +335,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public ItemQADto.MyItemQAListPage getMyItemQAList(Long memberId, int nowPage) {
-        Pageable pageable = PageRequest.of(nowPage - 1, 10);
+        Pageable pageable = PageRequest.of(nowPage - 1, 9);
 
         Page<ItemQA> itemQAList = itemQARepository.findMyItemQAListPage(memberId, pageable);
 
@@ -420,7 +418,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public OneOnOneDto.OneOnOneWrapper getOneOnOneList(Long id, CondDto.OneOnOneListCond dto) {
-        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 10);
+        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 9);
 
         Page<OneOnOne> oneOnOneListByPaging = oneonOneRepository.findOneOnOneListByPaging(id, dto, pageable);
 

@@ -107,7 +107,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                 .from(orderDetail)
                 .innerJoin(orderDetail.orderId, orderAlias)
                 .where(itemNameEq(requestDto.getItemName()),
-//                        dateEq(requestDto.getStartDate(), requestDto.getLastDate()),
+                        dateEq(requestDto.getStartDate(), requestDto.getLastDate()),
                         statusEq(requestDto.getStatus()),
                         loginIdEq(requestDto.getLoginId()),
                         merchantUidEq(requestDto.getMerchantUid()))
@@ -121,7 +121,7 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                 .from(orderDetail)
                 .innerJoin(orderDetail.orderId, order)
                 .where(itemNameEq(requestDto.getItemName()),
-//                        dateEq(requestDto.getStartDate(), requestDto.getLastDate()),
+                        dateEq(requestDto.getStartDate(), requestDto.getLastDate()),
                         statusEq(requestDto.getStatus()),
                         loginIdEq(requestDto.getLoginId()),
                         merchantUidEq(requestDto.getMerchantUid()))

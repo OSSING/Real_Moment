@@ -26,7 +26,7 @@ public class CondDto {
         private Long categoryId;
         private String itemName;
         private Boolean isDelete;
-        private Integer nowPage;
+        private int nowPage;
     }
 
     @Getter
@@ -73,7 +73,7 @@ public class CondDto {
         private String loginId;
         private String name;
         private String roles;
-        private Integer nowPage;
+        private int nowPage;
     }
 
     @Getter
@@ -94,8 +94,8 @@ public class CondDto {
         private String itemName;
         private String loginId;
         private String merchantUid;
-        private LocalDateTime startDate;
-        private LocalDateTime lastDate;
+        private LocalDate startDate;
+        private LocalDate lastDate;
         private String status;
         private int nowPage;
     }

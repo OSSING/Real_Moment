@@ -1,7 +1,5 @@
 package com.project.Real_Moment.presentation.member;
 
-import com.project.Real_Moment.domain.entity.Member;
-import com.project.Real_Moment.domain.enumuration.PaymentStatus;
 import com.project.Real_Moment.domain.repository.MemberRepository;
 import com.project.Real_Moment.presentation.dto.*;
 import com.project.Real_Moment.auth.jwt.dto.TokenDto;
@@ -14,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -40,7 +37,6 @@ public class MemberController {
     @GetMapping("/{id}/exists")
     public ResponseEntity<Boolean> checkIdDuplicate(@PathVariable("id") String id) {
         log.info("controller.id = {}", id);
-//        return ResponseEntity.status(HttpStatus.OK).body(memberService.checkIdDuplicate(id));
         return ResponseEntity.ok(memberService.checkIdDuplicate(id));
     }
 
@@ -122,7 +118,8 @@ public class MemberController {
     }
 
     @GetMapping("/{id}/addressList")
-    public ResponseEntity<AddressDto.AddressListPage> findAddress(@PathVariable("id") Long id, @RequestParam("nowPage") int nowPage) {
+    public ResponseEntity<AddressDto.AddressListPage> findAddress(@PathVariable("id") Long id,
+                                                                  @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         return ResponseEntity.ok(memberService.findAddress(id, nowPage));
     }
 
@@ -146,7 +143,8 @@ public class MemberController {
     }
 
     @GetMapping("/{id}/wishList")
-    public ResponseEntity<WishDto.WishListResponseWrapper> getWishList(@PathVariable("id") Long id, @RequestParam("nowPage") int nowPage) {
+    public ResponseEntity<WishDto.WishListResponseWrapper> getWishList(@PathVariable("id") Long id,
+                                                                       @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         return ResponseEntity.ok().body(memberService.getWishList(id, nowPage));
     }
 
@@ -188,7 +186,8 @@ public class MemberController {
     }
 
     @GetMapping("/{id}/reviewList")
-    public ResponseEntity<ReviewDto.MyReviewListResponse> getMyReviewList(@PathVariable("id") Long id, @RequestParam("nowPage") Integer nowPage) {
+    public ResponseEntity<ReviewDto.MyReviewListResponse> getMyReviewList(@PathVariable("id") Long id,
+                                                                          @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         return ResponseEntity.ok().body(memberService.getMyReviewList(id, nowPage));
     }
 
@@ -216,7 +215,8 @@ public class MemberController {
     }
 
     @GetMapping("/{id}/QAList")
-    public ResponseEntity<ItemQADto.MyItemQAListPage> getMyItemQAList(@PathVariable("id") Long id, @RequestParam("nowPage") int nowPage) {
+    public ResponseEntity<ItemQADto.MyItemQAListPage> getMyItemQAList(@PathVariable("id") Long id,
+                                                                      @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         return ResponseEntity.ok().body(memberService.getMyItemQAList(id, nowPage));
     }
 
@@ -246,7 +246,7 @@ public class MemberController {
     @GetMapping("/{id}/oneOnOneList")
     public ResponseEntity<OneOnOneDto.OneOnOneWrapper> getOneOnOneList(@PathVariable("id") Long id,
                                             @RequestParam("answer") Boolean answer,
-                                            @RequestParam("nowPage") int nowPage) {
+                                            @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         CondDto.OneOnOneListCond dto = new CondDto.OneOnOneListCond(answer, nowPage);
         return ResponseEntity.ok().body(memberService.getOneOnOneList(id, dto));
     }
@@ -300,7 +300,7 @@ public class MemberController {
                                          @RequestParam(name = "startDate", required = false) LocalDate startDate,
                                          @RequestParam(name = "lastDate", required = false) LocalDate lastDate,
                                          @RequestParam(name = "status", required = false) String status,
-                                         @RequestParam(name = "nowPage", required = false, defaultValue = "1") Integer nowPage) {
+                                         @RequestParam(name = "nowPage", required = false, defaultValue = "1") int nowPage) {
         CondDto.MemberOrderListCond dto = new CondDto.MemberOrderListCond(itemName, startDate, lastDate, status, nowPage);
         return ResponseEntity.ok().body(memberService.getOrderList(id, dto));
     }

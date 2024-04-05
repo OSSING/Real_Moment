@@ -202,7 +202,7 @@ public class MemberDto {
         private GradeDto.GradeResponse grade;
         private String loginId;
         private String name;
-        private Boolean isDelete;
+        private boolean isDelete;
         private LocalDateTime createdDate;
 
         public MemberList(Member member) {

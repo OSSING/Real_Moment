@@ -29,9 +29,7 @@ public class AdminService {
     @Transactional(readOnly = true)
     public AdminDto.AdminListWrapper getAdminList(CondDto.AdminListCond dto) {
 
-        int pageNumber = (dto.getNowPage() != null && dto.getNowPage() > 0) ? dto.getNowPage() : 1;
-
-        Pageable pageable = PageRequest.of(pageNumber - 1, 10);
+        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 9);
 
         Page<Admin> adminListPaging = adminRepository.findAdminListByPaging(pageable, dto);
 
@@ -39,7 +37,7 @@ public class AdminService {
                 .map(AdminDto.AdminList::new)
                 .toList();
 
-        return new AdminDto.AdminListWrapper(adminListDto, adminListPaging.getTotalPages(), pageNumber);
+        return new AdminDto.AdminListWrapper(adminListDto, adminListPaging.getTotalPages(), dto.getNowPage());
     }
 
     @Transactional(readOnly = true)

@@ -21,7 +21,7 @@ public class AdminOneOnOneController {
     @GetMapping("/admin/oneOnOneList")
     public ResponseEntity<OneOnOneDto.OneOnOneWrapper> getOneOnOneList(@RequestParam("loginId") String loginId,
                                                                        @RequestParam("isAnswer") Boolean isAnswer,
-                                                                       @RequestParam("nowPage") int nowPage) {
+                                                                       @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         CondDto.AdminOneOnOneListCond dto = new CondDto.AdminOneOnOneListCond(loginId, isAnswer, nowPage);
         return ResponseEntity.ok().body(adminOneOnOneService.getOneOnOneList(dto));
     }

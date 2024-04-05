@@ -22,7 +22,7 @@ public class AdminMemberController {
                                                    @RequestParam(value = "loginId", required = false) String loginId,
                                                    @RequestParam(value = "gradeId", required = false) Long gradeId,
                                                    @RequestParam(value = "isDelete", required = false) Boolean isDelete,
-                                                   @RequestParam("nowPage") int nowPage) {
+                                                   @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         CondDto.MemberListCond dto = new CondDto.MemberListCond(memberSort, loginId, gradeId, isDelete, nowPage);
         return ResponseEntity.ok().body(adminMemberService.getMemberList(dto));
     }

@@ -27,7 +27,7 @@ public class AdminMemberService {
 
     @Transactional(readOnly = true)
     public MemberDto.MemberListWrapper getMemberList(CondDto.MemberListCond dto) {
-        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 10);
+        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 9);
 
         Page<Member> memberListPaging = memberRepository.findMemberListByCond(pageable, dto);
 

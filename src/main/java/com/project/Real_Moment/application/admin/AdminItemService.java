@@ -38,8 +38,7 @@ public class AdminItemService {
 
     @Transactional(readOnly = true)
     public ItemDto.AdminItemListWrapper getItemList(CondDto.ItemListCond dto) {
-        int pageNumber = (dto.getNowPage() != null && dto.getNowPage() > 0) ? dto.getNowPage() : 1;
-        Pageable pageable = PageRequest.of(pageNumber - 1, 9);
+        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 9);
 
         Page<Item> itemListPaging = itemRepository.findItemListByCond(pageable, dto);
 
@@ -60,7 +59,7 @@ public class AdminItemService {
             item.setMainImg(fileUrl);
         }
 
-        return new ItemDto.AdminItemListWrapper(itemList, itemListPaging.getTotalPages(), pageNumber);
+        return new ItemDto.AdminItemListWrapper(itemList, itemListPaging.getTotalPages(), dto.getNowPage());
     }
 
     @Transactional(readOnly = true)

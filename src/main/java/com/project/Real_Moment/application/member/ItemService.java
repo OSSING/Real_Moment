@@ -26,8 +26,7 @@ public class ItemService {
 
     @Transactional(readOnly = true)
     public ItemDto.ItemCondResponse getItemList(CondDto.ItemListCond dto) {
-        int pageNumber = (dto.getNowPage() != null && dto.getNowPage() > 0) ? dto.getNowPage() : 1;
-        Pageable pageable = PageRequest.of(pageNumber - 1, 9);
+        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 9);
 
         Page<Item> itemList = itemRepository.findItemListByCond(pageable, dto);
 
@@ -44,7 +43,7 @@ public class ItemService {
             item.setMainImg(mainImgUrl);
         }
 
-        return new ItemDto.ItemCondResponse(itemListDto, itemList.getTotalPages(), pageNumber);
+        return new ItemDto.ItemCondResponse(itemListDto, itemList.getTotalPages(), dto.getNowPage());
     }
 
     @Transactional(readOnly = true)
