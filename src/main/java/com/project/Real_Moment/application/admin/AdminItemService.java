@@ -242,6 +242,7 @@ public class AdminItemService {
          * 4. 상품에 대한 이미지를 모두 삭제한 뒤 마지막으로 Item 객체를 isDelete = true 처리한다.
          */
 
+        // 상품 삭제 처리 (isDelete = true)
         itemRepository.deleteItem(itemId);
 
         List<ItemFile> itemFileList = itemFileRepository.findByItemId(item);
@@ -300,7 +301,7 @@ public class AdminItemService {
         // 새로 추가한 이미지 데이터 저장
         S3File savedS3File = s3FileRepository.save(dto.toEntity(fileName, fileUrl));
 
-        itemFileRepository.save(dto.toEntity(item, savedS3File, dto.getNumber()));
+        itemFileRepository.save(dto.toEntity(item, savedS3File, dto.getNumber(), imgType));
     }
 
     @Transactional

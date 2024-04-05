@@ -300,13 +300,13 @@ public class MemberController {
                                          @RequestParam(name = "startDate", required = false) LocalDate startDate,
                                          @RequestParam(name = "lastDate", required = false) LocalDate lastDate,
                                          @RequestParam(name = "status", required = false) String status,
-                                         @RequestParam(name = "nowPage", required = false) Integer nowPage) {
-        CondDto.OrderListCond dto = new CondDto.OrderListCond(itemName, startDate, lastDate, status, nowPage);
+                                         @RequestParam(name = "nowPage", required = false, defaultValue = "1") Integer nowPage) {
+        CondDto.MemberOrderListCond dto = new CondDto.MemberOrderListCond(itemName, startDate, lastDate, status, nowPage);
         return ResponseEntity.ok().body(memberService.getOrderList(id, dto));
     }
 
     @GetMapping("/{id}/order")
-    public ResponseEntity<OrderDto.OrderById> getOrder(@PathVariable("id") Long id,
+    public ResponseEntity<OrderDto.OrderList> getOrder(@PathVariable("id") Long id,
                                      @RequestParam("orderId") Long orderId) {
         return ResponseEntity.ok().body(memberService.getOrder(id, orderId));
     }

@@ -654,35 +654,32 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public OrderDto.OrderListPaging getOrderList(Long memberId, CondDto.OrderListCond requestDto) {
-        int pageNumber = (requestDto.getNowPage() != null && requestDto.getNowPage() > 0) ? requestDto.getNowPage() : 1;
-        Pageable pageable = PageRequest.of(pageNumber - 1, 9);
+    public OrderDto.OrderListPaging getOrderList(Long memberId, CondDto.MemberOrderListCond requestDto) {
+        Pageable pageable = PageRequest.of(requestDto.getNowPage() - 1, 9);
 
-        Page<Order> orderListPaging = orderRepository.findByOrderListPage(memberId, requestDto, pageable);
+        Page<Order> orderListPaging = orderRepository.findByOrderListPage_Member(memberId, requestDto, pageable);
 
         List<OrderDto.OrderList> orderListDto = orderListPaging.stream()
                 .map(OrderDto.OrderList::new)
                 .toList();
 
         for (OrderDto.OrderList orderDto : orderListDto) {
-            orderDto.setOrderDetails(getOrderDetailListDto(orderDto.getOrderId()));
+            Order order = getOrderEntity(orderDto.getOrderId());
+            orderDto.setOrderDetails(getOrderDetailListDto(order, orderDto.getOrderId()));
         }
 
-        return new OrderDto.OrderListPaging(orderListDto, orderListPaging.getTotalPages(), pageNumber);
+        return new OrderDto.OrderListPaging(orderListDto, orderListPaging.getTotalPages(), requestDto.getNowPage());
     }
 
     @Transactional(readOnly = true)
-    public OrderDto.OrderById getOrder(Long memberId, Long orderId) {
+    public OrderDto.OrderList getOrder(Long memberId, Long orderId) {
 
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하는 주문이 아닙니다."));
+        Order order = getOrderEntity(orderId);
 
-        return new OrderDto.OrderById(order, getOrderDetailListDto(orderId));
+        return new OrderDto.OrderList(order, getOrderDetailListDto(order, orderId));
     }
 
-    private List<OrderDetailDto.OrderDetailList> getOrderDetailListDto(Long orderId) {
-        Order order = orderRepository.findById(orderId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하는 주문이 아닙니다."));
+    private List<OrderDetailDto.OrderDetailList> getOrderDetailListDto(Order order, Long orderId) {
 
         List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(order);
 
@@ -703,8 +700,8 @@ public class MemberService {
 
     @Transactional
     public void orderCancel(Long memberId, OrderDto.OrderCancelRequest requestDto) throws IamportResponseException, IOException {
-        Order order = orderRepository.findById(requestDto.getOrderId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
+
+        Order order = getOrderEntity(requestDto.getOrderId());
 
         // 결제 취소
         paymentCancel(order);
@@ -747,5 +744,9 @@ public class MemberService {
 
         // 구매 학정 요청
         orderRepository.updatePaymentDone(requestDto.getOrderId());
+    }
+
+    private Order getOrderEntity(Long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("존재하는 주문이 아닙니다."));
     }
 }

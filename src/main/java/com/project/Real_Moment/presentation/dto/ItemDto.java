@@ -313,11 +313,11 @@ public class ItemDto {
                     .build();
         }
 
-        public ItemFile toEntity(Item item, S3File s3File, int number) {
+        public ItemFile toEntity(Item item, S3File s3File, int number, String imgType) {
             return ItemFile.builder()
                     .s3FileId(s3File)
                     .itemId(item)
-                    .mainOrSub("main")
+                    .mainOrSub(imgType)
                     .number(number)
                     .build();
         }

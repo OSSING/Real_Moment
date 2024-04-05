@@ -71,27 +71,60 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     }
 
     @Override
-    public Page<Order> findByOrderListPage(Long memberId, CondDto.OrderListCond requestDto, Pageable pageable) {
+    public Page<Order> findByOrderListPage_Member(Long memberId, CondDto.MemberOrderListCond requestDto, Pageable pageable) {
         QOrder orderAlias = new QOrder("order2");
         List<Order> orderList = queryFactory
                 .selectFrom(order)
                 .from(orderDetail)
                 .innerJoin(orderDetail.orderId, orderAlias)
-                .where(order.memberId.id.eq(memberId))
-                .where(itemNameEq(requestDto.getItemName()))
-                .where(dateEq(requestDto.getStartDate(), requestDto.getLastDate()))
-                .where(statusEq(requestDto.getStatus()))
+                .where(order.memberId.id.eq(memberId),
+                        itemNameEq(requestDto.getItemName()),
+                        dateEq(requestDto.getStartDate(), requestDto.getLastDate()),
+                        statusEq(requestDto.getStatus()))
                 .orderBy(order.orderedDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
                 .fetch();
 
         Long total = queryFactory
                 .select(order.count())
                 .from(orderDetail)
                 .innerJoin(orderDetail.orderId, order)
-                .where(order.memberId.id.eq(memberId))
-                .where(itemNameEq(requestDto.getItemName()))
-                .where(dateEq(requestDto.getStartDate(), requestDto.getLastDate()))
-                .where(statusEq(requestDto.getStatus()))
+                .where(order.memberId.id.eq(memberId),
+                        itemNameEq(requestDto.getItemName()),
+                        dateEq(requestDto.getStartDate(), requestDto.getLastDate()),
+                        statusEq(requestDto.getStatus()))
+                .fetchOne();
+
+        return new PageImpl<>(orderList, pageable, total);
+    }
+
+    @Override
+    public Page<Order> findByOrderListPage_Admin(CondDto.AdminOrderListCond requestDto, Pageable pageable) {
+        QOrder orderAlias = new QOrder("order2");
+        List<Order> orderList = queryFactory
+                .selectFrom(order)
+                .from(orderDetail)
+                .innerJoin(orderDetail.orderId, orderAlias)
+                .where(itemNameEq(requestDto.getItemName()),
+//                        dateEq(requestDto.getStartDate(), requestDto.getLastDate()),
+                        statusEq(requestDto.getStatus()),
+                        loginIdEq(requestDto.getLoginId()),
+                        merchantUidEq(requestDto.getMerchantUid()))
+                .orderBy(order.orderedDate.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        Long total = queryFactory
+                .select(order.count())
+                .from(orderDetail)
+                .innerJoin(orderDetail.orderId, order)
+                .where(itemNameEq(requestDto.getItemName()),
+//                        dateEq(requestDto.getStartDate(), requestDto.getLastDate()),
+                        statusEq(requestDto.getStatus()),
+                        loginIdEq(requestDto.getLoginId()),
+                        merchantUidEq(requestDto.getMerchantUid()))
                 .fetchOne();
 
         return new PageImpl<>(orderList, pageable, total);
@@ -116,5 +149,13 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
 
     private BooleanExpression statusEq(String status) {
         return status != null ? order.status.eq(PaymentStatus.getStatus(status)) : null;
+    }
+
+    private BooleanExpression loginIdEq(String loginId) {
+        return loginId != null ? order.memberId.loginId.eq(loginId) : null;
+    }
+
+    private BooleanExpression merchantUidEq(String merchantUid) {
+        return merchantUid != null ? order.merchantUid.eq(merchantUid) : null;
     }
 }
