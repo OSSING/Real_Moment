@@ -36,7 +36,6 @@ public class AdminMemberService {
                 .toList();
 
         for (MemberDto.MemberList memberList : memberListDto) {
-            log.info("memberList.getGrade : {}", memberList.getGrade());
             Grade grade = gradeRepository.findById(memberList.getGrade().getGradeId()).orElse(null);
 
             GradeDto.GradeResponse gradeDto = null;

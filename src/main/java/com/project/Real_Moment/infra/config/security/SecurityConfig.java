@@ -8,6 +8,7 @@ import com.project.Real_Moment.domain.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -49,13 +50,13 @@ public class SecurityConfig {
                         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
                 )
 
-                // 회원가입가 로그인 API는 토큰이 없는 상태에서 접근하기 때문에 .permitAll()로 허용
                 .authorizeHttpRequests(authorizeHttpRequests -> authorizeHttpRequests
                         .requestMatchers(
-                                "/member/join",
-                                "/member/login",
-                                "/member/logout",
-                                "/main",
+                                "/join",
+                                "/memberIdCheck",
+                                "/login",
+                                "/member/{id}/logout",
+                                "/admin/{id}/logout",
                                 "/category",
                                 "/itemList",
                                 "/item",
@@ -67,9 +68,57 @@ public class SecurityConfig {
                                 "/admin/logout",
                                 "/adminIdCheck",
                                 "/admin/reissue/accessToken",
-                        "/member/reissue/accessToken",
+                                "/member/reissue/accessToken",
                                 "/upload").permitAll()
-                        .anyRequest().authenticated()
+
+                        .requestMatchers(
+                                "/admin/orderList",
+                                "/admin/announcementList",
+                                "/admin/reviewList",
+                                "/admin/QAList",
+                                "/admin/oneOnOneList",
+                                "/admin/itemList",
+                                "/admin/memberList",
+                                "/admin/member",
+                                "/admin/gradeList"
+                                ).hasAnyRole("REPRESENTATIVE", "OPERATOR", "CUSTOMER")
+                        .requestMatchers(HttpMethod.GET, "/admin/order").hasAnyRole("REPRESENTATIVE", "OPERATOR", "CUSTOMER")
+                        .requestMatchers(HttpMethod.GET, "/admin/announcement").hasAnyRole("REPRESENTATIVE", "OPERATOR", "CUSTOMER")
+                        .requestMatchers(HttpMethod.GET, "/admin/item").hasAnyRole("REPRESENTATIVE", "OPERATOR", "CUSTOMER")
+                        .requestMatchers(HttpMethod.GET, "/admin/category").hasAnyRole("REPRESENTATIVE", "OPERATOR", "CUSTOMER")
+
+                        .requestMatchers(
+                                "/adminJoin",
+                                "/adminIdCheck",
+                                "/admin/adminList",
+                                "/admin/admin",
+                                "/admin/{id}",
+                                "/admin/admin/roles",
+                                "/admin/grade"
+                                ).hasAnyRole("REPRESENTATIVE")
+
+                        .requestMatchers(
+                                "/admin/announcement",
+                                "/admin/{id}/announcement",
+                                "/admin/{id}/announcement/data",
+                                "/admin/announcement",
+                                "/admin/{id}/QAComment/data",
+                                "/admin/{id}/QAComment",
+                                "/admin/QAComment",
+                                "/admin/{id}/comment"
+                                ).hasAnyRole("CUSTOMER")
+
+                        .requestMatchers(
+                                "/admin/order",
+                                "/admin/order/cancel",
+                                "/admin/item",
+                                "/admin/item/data",
+                                "/admin/item/mainImg/**",
+                                "/admin/item/subImg/**",
+                                "/admin/category"
+                        ).hasAnyRole("OPERATOR")
+
+                        .anyRequest().hasAnyRole("MEMBER")
                 )
 
                 // 세션을 사용하지 않기 때문에 STATELESS로 설정

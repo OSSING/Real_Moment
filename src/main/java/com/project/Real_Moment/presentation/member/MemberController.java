@@ -33,65 +33,12 @@ public class MemberController {
     private final MemberRepository memberRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    // 회원가입 도중 id 중복체크 (중복 o -> true, 중복 x -> false)
-    @GetMapping("/{id}/exists")
-    public ResponseEntity<Boolean> checkIdDuplicate(@PathVariable("id") String id) {
-        log.info("controller.id = {}", id);
-        return ResponseEntity.ok(memberService.checkIdDuplicate(id));
-    }
-
-    // 회원가입 요청
-    @PostMapping("/join")
-    public ResponseEntity<MemberDto.RegisterResponse> join(@RequestBody MemberDto.RegisterRequest dto) {
-        log.info("RegisterDto.toString() = {}", dto.toString());
-
-        // Service에 요청받은 회원 정보를 전송 후 반환받은 dto를 클라이언트에게 전송
-        return ResponseEntity.ok(memberService.memberSave(dto));
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody MemberDto.MemberLoginDto dto) {
-
-        log.info("LoginDto = {}", dto.toString());
-
-        // 요청받은 id와 password를 가지고 인증 전 객체 생성
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(dto.getLoginId(), dto.getLoginPassword());
-
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String accessToken = tokenProvider.createAccessToken(authentication);
-        String refreshToken = tokenProvider.createRefreshToken(authentication);
-
-        TokenDto tokenDto = new TokenDto(accessToken, refreshToken);
-
-        log.info("로그인 성공 후 생성된 Access: {}", accessToken);
-        log.info("로그인 성공 후 생성된 Refresh: {}", refreshToken);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.ACCESSTOKEN_HEADER, "Bearer " + accessToken);
-        httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + refreshToken);
-
-        // 최근 로그인 시간 갱신
-        memberService.memberLogin(dto.getLoginId());
-
-        return new ResponseEntity<>(tokenDto, httpHeaders, HttpStatus.OK);
-    }
-
-    // 마이 페이지 (주문 목록)
-//    @GetMapping("/{id}")
-//    @PreAuthorize("hasAnyRole('MEMBER')")
-//    public ResponseEntity<List<MemberDto.OrdersListDto>> myPageMain(@PathVariable("id") Long id) {
-//
-//        return ResponseEntity.ok(memberService.findOrdersList(id));
-//    }
-
-    @PostMapping("/logout")
+    @PostMapping("/{id}/logout")
     public ResponseEntity<Void> logout(@RequestHeader("RefreshToken") String refreshToken) {
         return ResponseEntity.ok().build();
     }
 
+    // 비밀번호 변경 후 자동 로그아웃
     @PatchMapping("/{id}/password")
     public ResponseEntity<MemberDto.MemberInfoUpdateResponse> changePassword(@PathVariable("id") Long id, @RequestBody MemberDto.PasswordChangeRequest request) {
         return ResponseEntity.ok().body(memberService.changePassword(id, request.getLoginPassword()));
@@ -245,7 +192,7 @@ public class MemberController {
 
     @GetMapping("/{id}/oneOnOneList")
     public ResponseEntity<OneOnOneDto.OneOnOneWrapper> getOneOnOneList(@PathVariable("id") Long id,
-                                            @RequestParam("answer") Boolean answer,
+                                            @RequestParam(value = "answer", required = false) Boolean answer,
                                             @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         CondDto.OneOnOneListCond dto = new CondDto.OneOnOneListCond(answer, nowPage);
         return ResponseEntity.ok().body(memberService.getOneOnOneList(id, dto));

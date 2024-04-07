@@ -50,10 +50,11 @@ public class MemberService {
 
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean checkIdDuplicate(String loginId) {
-        log.info("service.id = {}", loginId);
-        return memberRepository.existsByLoginId(loginId);
+        log.info("요청받은 loginId : {}", loginId);
+
+        return !memberRepository.existsByLoginId(loginId);
     }
 
     // 회원가입시 요청받은 Dto를 Entity로 변환 후 저장
