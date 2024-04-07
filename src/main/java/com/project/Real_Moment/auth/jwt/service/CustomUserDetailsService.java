@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -56,7 +57,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 //    }
 
     // DB에서 가져온 정보를 기준으로 Admin이 activated 상태라면 Admin의 권한 정보와 이름, 비밀번호를 담아 userdetails.User 객체를 return
-    private org.springframework.security.core.userdetails.User createAdmin(String AdminName, Admin admin) {
+    private UserDetails createAdmin(String AdminName, Admin admin) {
         if (admin.isDelete()) {
             log.info("활성화 되어 있지 않은 사용자입니다.");
             throw new RuntimeException(AdminName + " -> 활성화 되어 있지 않습니다.");
@@ -68,14 +69,14 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .collect(Collectors.toList());
         log.info("admin's authority: {}", authorities);
 
-        return new org.springframework.security.core.userdetails.User(
+        return new User(
                 admin.getLoginId(),
                 admin.getLoginPassword(),
                 authorities);
     }
 
     // DB에 가져온 정보를 기준으로 Member가 activated 상태라면 Member의 권한 정보와 이름, 비밀번호를 담아 userdetails.User 객체를 return
-    private org.springframework.security.core.userdetails.User createMember(String MemberName, Member member) {
+    private UserDetails createMember(String MemberName, Member member) {
         if (member.isDelete()) {
             log.info("활성화 되어 있지 않은 사용자입니다.");
             throw new RuntimeException(MemberName + " -> 활성화 되어 있지 않습니다.");
@@ -84,9 +85,23 @@ public class CustomUserDetailsService implements UserDetailsService {
         GrantedAuthority authority = new SimpleGrantedAuthority(member.getRoles());
         log.info("member's authority: {}", authority);
 
-        return new org.springframework.security.core.userdetails.User(
+        return new User(
                 member.getLoginId(),
                 member.getLoginPassword(),
                 Collections.singletonList(authority));
+    }
+
+    public Long getMemberByLoginId(String loginId) {
+        Member member = memberRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
+        return member.getId();
+    }
+
+    public Long getAdminByLoginId(String loginId) {
+        Admin admin = adminRepository.findByLoginId(loginId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
+        return admin.getId();
     }
 }

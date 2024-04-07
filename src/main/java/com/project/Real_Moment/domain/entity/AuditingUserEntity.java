@@ -26,7 +26,7 @@ public abstract class AuditingUserEntity {
 
     @CreatedBy
     @Column(updatable = false)
-    private String createdBy;
+    private Long createdBy;
 
     @LastModifiedDate
 //    @Column(nullable = false)
@@ -35,5 +35,5 @@ public abstract class AuditingUserEntity {
 
     @LastModifiedBy
 //    @Column(nullable = false)
-    private String lastModifiedBy;
+    private Long lastModifiedBy;
 }
