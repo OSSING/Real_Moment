@@ -72,7 +72,7 @@ public class AnnouncementDto {
             title = announcement.getTitle();
             content = announcement.getContent();
             isFix = announcement.isFix();
-            viewCount = announcement.getViewCount();
+            viewCount = announcement.getViewCount() + 1;
             createdDate = announcement.getCreatedDate();
             lastModifiedDate = announcement.getLastModifiedDate();
         }

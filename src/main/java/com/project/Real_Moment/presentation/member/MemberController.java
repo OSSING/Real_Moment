@@ -2,20 +2,13 @@ package com.project.Real_Moment.presentation.member;
 
 import com.project.Real_Moment.domain.repository.MemberRepository;
 import com.project.Real_Moment.presentation.dto.*;
-import com.project.Real_Moment.auth.jwt.dto.TokenDto;
-import com.project.Real_Moment.auth.jwt.JwtFilter;
 import com.project.Real_Moment.auth.jwt.TokenProvider;
 import com.project.Real_Moment.application.member.MemberService;
 import com.siot.IamportRestClient.exception.IamportResponseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -29,9 +22,6 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
-    private final TokenProvider tokenProvider;
-    private final MemberRepository memberRepository;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @PostMapping("/{id}/logout")
     public ResponseEntity<Void> logout(@RequestHeader("RefreshToken") String refreshToken) {
