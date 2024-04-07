@@ -22,22 +22,26 @@ public class UserAuditorAware implements AuditorAware<Long> {
 
     @Override
     public Optional<Long> getCurrentAuditor() {
+
+        // authentication 객체
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
+        // 객체가 null 이거나 인증되지 않았다면 empty 반환
         if (authentication == null || !authentication.isAuthenticated()) {
             return Optional.empty();
         }
 
+        // 인증된 사용자의 로그인 Id
         String loginId = authentication.getName();
 
         try {
-            UserDetails userDetails = customUserDetailsService.loadUserByUsername(loginId);
 
-            if (userDetails.getAuthorities().stream().anyMatch(authority -> new SimpleGrantedAuthority("ROLE_MEMBER").equals(authority))) {
-                Long memberId = customUserDetailsService.getMemberByLoginId(userDetails.getUsername());
+            // authentication의 Authorities가 ROLE_MEMBER라면 회원, 아니라면 관리자에서 식별자를 추출하여 반환
+            if (authentication.getAuthorities().stream().anyMatch(authority -> new SimpleGrantedAuthority("ROLE_MEMBER").equals(authority))) {
+                Long memberId = customUserDetailsService.getMemberByLoginId(loginId);
                 return Optional.of(memberId);
             } else {
-                Long adminId = customUserDetailsService.getAdminByLoginId(userDetails.getUsername());
+                Long adminId = customUserDetailsService.getAdminByLoginId(loginId);
                 return Optional.of(adminId);
             }
 
