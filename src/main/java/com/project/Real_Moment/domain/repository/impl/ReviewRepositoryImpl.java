@@ -25,48 +25,24 @@ public class ReviewRepositoryImpl implements ReviewRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
 
-
     @Override
-    public ReviewDto.ItemDetReviewResponse findReviewListByItemIdOrStar(Long id, Integer star, int nowPage) {
-        Pageable pageable = PageRequest.of(nowPage - 1, 5);
-
-        JPAQuery<Review> query = queryFactory
+    public Page<Review> findMyReviewListByPaging(Pageable pageable, CondDto.ReviewListCond requestDto) {
+        List<Review> reviewList = queryFactory
                 .selectFrom(review)
-                .where(review.itemId.id.eq(id));
-
-        JPAQuery<Long> countQuery = queryFactory
-                .select(review.count())
-                .from(review)
-                .where(review.itemId.id.eq(id));
-
-        if (star != null) {
-            query.where(review.star.eq(star));
-            countQuery.where(review.star.eq(star));
-        }
-
-        query.orderBy(review.createdDate.desc().nullsLast());
-
-        List<ReviewDto.ReviewListResponse> results = query
+                .where(starEq(requestDto.getStar()),
+                        review.itemId.id.eq(requestDto.getItemId()))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .fetch()
-                .stream()
-                .map(review -> new ReviewDto.ReviewListResponse(
-                        review.getId(),
-                        review.getMemberId().getLoginId(),
-                        review.getTitle(),
-                        review.getContent(),
-                        review.getStar(),
-                        review.getCreatedDate(),
-                        review.getLastModifiedDate()
-                ))
-                .toList();
+                .fetch();
 
-        Long total = countQuery.fetchOne();
+        Long total = queryFactory
+                .select(review.count())
+                .from(review)
+                .where(starEq(requestDto.getStar()),
+                        review.itemId.id.eq(requestDto.getItemId()))
+                .fetchOne();
 
-        int totalPages = (int) Math.ceil((double) total / pageable.getPageSize());
-        return new ReviewDto.ItemDetReviewResponse(results, totalPages, nowPage);
-
+        return new PageImpl<>(reviewList, pageable, total);
     }
 
     @Override

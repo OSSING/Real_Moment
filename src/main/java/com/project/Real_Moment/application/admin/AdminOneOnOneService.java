@@ -27,7 +27,7 @@ public class AdminOneOnOneService {
 
     @Transactional(readOnly = true)
     public OneOnOneDto.OneOnOneWrapper getOneOnOneList(CondDto.AdminOneOnOneListCond dto) {
-        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 10);
+        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 9);
 
         Page<OneOnOne> oneOnOnePaging = oneOnOneRepository.findOneOnOneListByPaging_admin(pageable, dto);
 

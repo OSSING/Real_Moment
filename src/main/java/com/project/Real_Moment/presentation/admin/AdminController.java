@@ -68,7 +68,7 @@ public class AdminController {
     public ResponseEntity<AdminDto.AdminListWrapper> getAdminList(@RequestParam(value = "loginId", required = false) String loginId,
                                                                   @RequestParam(value = "name", required = false) String name,
                                                                   @RequestParam(value = "roles", required = false) String roles,
-                                                                  @RequestParam(value = "nowPage", required = false) Integer nowPage) {
+                                                                  @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         CondDto.AdminListCond dto = new CondDto.AdminListCond(loginId, name, roles, nowPage);
         return ResponseEntity.ok().body(adminService.getAdminList(dto));
     }

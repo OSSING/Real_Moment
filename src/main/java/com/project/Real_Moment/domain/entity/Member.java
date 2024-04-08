@@ -12,7 +12,6 @@ import java.util.List;
 @Getter
 @Entity
 @Builder
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = "loginId")})
@@ -65,16 +64,4 @@ public class Member extends BaseTimeEntity {
     @Builder.Default
     private String roles = "ROLE_MEMBER";
 
-    // 회원가입 시 Entity -> Dto 변환
-    public MemberDto.RegisterRequest toDto() {
-        return MemberDto.RegisterRequest.builder()
-                .loginId(loginId)
-                .email(email)
-                .loginPassword(loginPassword)
-                .name(name)
-                .tel(tel)
-                .birthDate(birthDate)
-                .gender(gender)
-                .build();
-    }
 }

@@ -9,11 +9,11 @@ import org.springframework.data.domain.Pageable;
 
 public interface ReviewRepositoryCustom {
 
-    ReviewDto.ItemDetReviewResponse findReviewListByItemIdOrStar(Long id, Integer star, int nowPage);
-
     Page<Review> findMyReviewListByMemberId(Pageable pageable, Member member);
 
     void updateReview(ReviewDto.editReviewClick dto);
 
     Page<Review> findReviewListByCond(Pageable pageable, CondDto.ReviewListCond dto);
+
+    Page<Review> findMyReviewListByPaging(Pageable pageable, CondDto.ReviewListCond requestDto);
 }

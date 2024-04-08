@@ -20,9 +20,3 @@ public class JwtAccessDeniedHandler implements AccessDeniedHandler {
         response.sendError(HttpServletResponse.SC_FORBIDDEN);
     }
 }
-
-// presentation - controller
-// application - service
-// domain - entity, repository
-// infra - persistence(repositoryImpl), config
-// member, admin, wishList, carts, item, order, review, QA, announcement

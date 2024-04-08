@@ -21,7 +21,6 @@ import static com.project.Real_Moment.domain.entity.QAdmin.admin;
 public class AdminRepositoryImpl implements AdminRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
-    private final EntityManager em;
 
     @Override
     public Page<Admin> findAdminListByPaging(Pageable pageable, CondDto.AdminListCond dto) {
@@ -60,7 +59,7 @@ public class AdminRepositoryImpl implements AdminRepositoryCustom {
     public void updateRolesByAdminInfo(AdminDto.AdminRolesInfo dto) {
         queryFactory
                 .update(admin)
-                .set(admin.roles, AdminAuthority.valueOf(dto.getRoles()))
+                .set(admin.roles, AdminAuthority.getAuthority(dto.getRoles()))
                 .where(admin.id.eq(dto.getAdminId()))
                 .execute();
     }
@@ -70,9 +69,9 @@ public class AdminRepositoryImpl implements AdminRepositoryCustom {
         queryFactory
                 .update(admin)
                 .set(admin.isDelete, true)
-                .set(admin.loginPassword, "")
-                .set(admin.email, "")
-                .set(admin.name, "")
+                .set(admin.loginPassword, (String) null)
+                .set(admin.email, (String) null)
+                .set(admin.name, (String) null)
                 .where(admin.id.eq(adminId))
                 .execute();
     }
@@ -86,6 +85,6 @@ public class AdminRepositoryImpl implements AdminRepositoryCustom {
     }
 
     private BooleanExpression rolesEq(String roles) {
-        return roles != null ? admin.roles.eq(AdminAuthority.valueOf(roles)) : null;
+        return roles != null ? admin.roles.eq(AdminAuthority.getAuthority(roles)) : null;
     }
 }

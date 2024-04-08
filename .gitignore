@@ -39,5 +39,5 @@ out/
 ### application.yml ###
 src/main/resources/application.yml
 
-### application.yml ###
-src/main/resources/application.preperties
+### application.properties ###
+src/main/resources/application.properties

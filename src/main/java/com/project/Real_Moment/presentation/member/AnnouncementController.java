@@ -17,7 +17,7 @@ public class AnnouncementController {
     private final AnnouncementService announcementService;
 
     @GetMapping("/announcementList")
-    public ResponseEntity<AnnouncementDto.AnnouncementListWrapper> getAnnouncementList(@RequestParam("nowPage") int nowPage) {
+    public ResponseEntity<AnnouncementDto.AnnouncementListWrapper> getAnnouncementList(@RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         return ResponseEntity.ok().body(announcementService.getAnnouncementList(nowPage));
     }
 

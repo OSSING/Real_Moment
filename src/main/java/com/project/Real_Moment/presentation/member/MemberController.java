@@ -1,22 +1,18 @@
 package com.project.Real_Moment.presentation.member;
 
+import com.project.Real_Moment.domain.repository.MemberRepository;
 import com.project.Real_Moment.presentation.dto.*;
-import com.project.Real_Moment.auth.jwt.dto.TokenDto;
-import com.project.Real_Moment.auth.jwt.JwtFilter;
 import com.project.Real_Moment.auth.jwt.TokenProvider;
 import com.project.Real_Moment.application.member.MemberService;
+import com.siot.IamportRestClient.exception.IamportResponseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -26,66 +22,13 @@ import java.util.List;
 public class MemberController {
 
     private final MemberService memberService;
-    private final TokenProvider tokenProvider;
-    private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    // 회원가입 도중 id 중복체크 (중복 o -> true, 중복 x -> false)
-    @GetMapping("/{id}/exists")
-    public ResponseEntity<Boolean> checkIdDuplicate(@PathVariable("id") String id) {
-        log.info("controller.id = {}", id);
-//        return ResponseEntity.status(HttpStatus.OK).body(memberService.checkIdDuplicate(id));
-        return ResponseEntity.ok(memberService.checkIdDuplicate(id));
-    }
-
-    // 회원가입 요청
-    @PostMapping("/join")
-    public ResponseEntity<MemberDto.RegisterResponse> join(@RequestBody MemberDto.RegisterRequest dto) {
-        log.info("RegisterDto.toString() = {}", dto.toString());
-
-        // Service에 요청받은 회원 정보를 전송 후 반환받은 dto를 클라이언트에게 전송
-        return ResponseEntity.ok(memberService.memberSave(dto));
-    }
-
-    @PostMapping("/login")
-    public ResponseEntity<TokenDto> login(@RequestBody MemberDto.MemberLoginDto dto) {
-
-        log.info("LoginDto = {}", dto.toString());
-
-        // 요청받은 id와 password를 가지고 인증 전 객체 생성
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(dto.getLoginId(), dto.getLoginPassword());
-
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        String accessToken = tokenProvider.createAccessToken(authentication);
-        String refreshToken = tokenProvider.createRefreshToken(authentication);
-
-        TokenDto tokenDto = new TokenDto(accessToken, refreshToken);
-
-        log.info("로그인 성공 후 생성된 Access: {}", accessToken);
-        log.info("로그인 성공 후 생성된 Refresh: {}", refreshToken);
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.ACCESSTOKEN_HEADER, "Bearer " + accessToken);
-        httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + refreshToken);
-
-        return new ResponseEntity<>(tokenDto, httpHeaders, HttpStatus.OK);
-    }
-
-    // 마이 페이지 (주문 목록)
-//    @GetMapping("/{id}")
-//    @PreAuthorize("hasAnyRole('MEMBER')")
-//    public ResponseEntity<List<MemberDto.OrdersListDto>> myPageMain(@PathVariable("id") Long id) {
-//
-//        return ResponseEntity.ok(memberService.findOrdersList(id));
-//    }
-
-    @PostMapping("/logout")
+    @PostMapping("/{id}/logout")
     public ResponseEntity<Void> logout(@RequestHeader("RefreshToken") String refreshToken) {
         return ResponseEntity.ok().build();
     }
 
+    // 비밀번호 변경 후 자동 로그아웃
     @PatchMapping("/{id}/password")
     public ResponseEntity<MemberDto.MemberInfoUpdateResponse> changePassword(@PathVariable("id") Long id, @RequestBody MemberDto.PasswordChangeRequest request) {
         return ResponseEntity.ok().body(memberService.changePassword(id, request.getLoginPassword()));
@@ -112,7 +55,8 @@ public class MemberController {
     }
 
     @GetMapping("/{id}/addressList")
-    public ResponseEntity<AddressDto.AddressListPage> findAddress(@PathVariable("id") Long id, @RequestParam("nowPage") int nowPage) {
+    public ResponseEntity<AddressDto.AddressListPage> findAddress(@PathVariable("id") Long id,
+                                                                  @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         return ResponseEntity.ok(memberService.findAddress(id, nowPage));
     }
 
@@ -136,7 +80,8 @@ public class MemberController {
     }
 
     @GetMapping("/{id}/wishList")
-    public ResponseEntity<WishDto.WishListResponseWrapper> getWishList(@PathVariable("id") Long id, @RequestParam("nowPage") int nowPage) {
+    public ResponseEntity<WishDto.WishListResponseWrapper> getWishList(@PathVariable("id") Long id,
+                                                                       @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         return ResponseEntity.ok().body(memberService.getWishList(id, nowPage));
     }
 
@@ -178,7 +123,8 @@ public class MemberController {
     }
 
     @GetMapping("/{id}/reviewList")
-    public ResponseEntity<ReviewDto.MyReviewListResponse> getMyReviewList(@PathVariable("id") Long id, @RequestParam("nowPage") Integer nowPage) {
+    public ResponseEntity<ReviewDto.MyReviewListResponse> getMyReviewList(@PathVariable("id") Long id,
+                                                                          @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         return ResponseEntity.ok().body(memberService.getMyReviewList(id, nowPage));
     }
 
@@ -206,7 +152,8 @@ public class MemberController {
     }
 
     @GetMapping("/{id}/QAList")
-    public ResponseEntity<ItemQADto.MyItemQAListPage> getMyItemQAList(@PathVariable("id") Long id, @RequestParam("nowPage") int nowPage) {
+    public ResponseEntity<ItemQADto.MyItemQAListPage> getMyItemQAList(@PathVariable("id") Long id,
+                                                                      @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         return ResponseEntity.ok().body(memberService.getMyItemQAList(id, nowPage));
     }
 
@@ -235,8 +182,8 @@ public class MemberController {
 
     @GetMapping("/{id}/oneOnOneList")
     public ResponseEntity<OneOnOneDto.OneOnOneWrapper> getOneOnOneList(@PathVariable("id") Long id,
-                                            @RequestParam("answer") Boolean answer,
-                                            @RequestParam("nowPage") int nowPage) {
+                                            @RequestParam(value = "answer", required = false) Boolean answer,
+                                            @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         CondDto.OneOnOneListCond dto = new CondDto.OneOnOneListCond(answer, nowPage);
         return ResponseEntity.ok().body(memberService.getOneOnOneList(id, dto));
     }
@@ -263,5 +210,62 @@ public class MemberController {
         memberService.deleteOneOnOne(id, oneOnOneId);
         return ResponseEntity.ok().build();
     }
-}
 
+    // 주문 전 구매 페이지에서 구매 견적 요청
+    // get에서 List를 받기 위해서는 로직이 복잡해지기 때문에 Post로 요청
+    @PostMapping("/{id}/order/page")
+    public ResponseEntity<OrderDto.OrderItemList> getOrderQuote(@PathVariable("id") Long id, @RequestBody OrderDto.OrderItemListRequest dto) {
+        return ResponseEntity.ok().body(memberService.getOrderQuote(id, dto));
+    }
+
+    // 주문 버튼 클릭 (임시 order, orderDetail 생성 및 결제창에 필요한 데이터 응답)
+    @PostMapping("/{id}/payment/first")
+    public ResponseEntity<OrderDto.PaymentResponse> getPaymentFirst(@PathVariable("id") Long id, @RequestBody OrderDto.PaymentFirst dto) {
+        return ResponseEntity.ok().body(memberService.getPaymentFirst(id, dto));
+    }
+
+    // 결제창으로 결제 완료 후 반환받은 impUid를 요청
+    @PostMapping("/{id}/payment/second")
+    public ResponseEntity<Void> getPaymentSecond(@RequestBody OrderDto.PaymentSecond dto) {
+        memberService.getPaymentSecond(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/orderList")
+    public ResponseEntity<OrderDto.OrderListPaging> getOrderList(@PathVariable("id") Long id,
+                                         @RequestParam(name = "itemName", required = false) String itemName,
+                                         @RequestParam(name = "startDate", required = false) LocalDate startDate,
+                                         @RequestParam(name = "lastDate", required = false) LocalDate lastDate,
+                                         @RequestParam(name = "status", required = false) String status,
+                                         @RequestParam(name = "nowPage", required = false, defaultValue = "1") int nowPage) {
+        CondDto.MemberOrderListCond dto = new CondDto.MemberOrderListCond(itemName, startDate, lastDate, status, nowPage);
+        return ResponseEntity.ok().body(memberService.getOrderList(id, dto));
+    }
+
+    @GetMapping("/{id}/order")
+    public ResponseEntity<OrderDto.OrderList> getOrder(@PathVariable("id") Long id,
+                                     @RequestParam("orderId") Long orderId) {
+        return ResponseEntity.ok().body(memberService.getOrder(id, orderId));
+    }
+
+    @PostMapping("/{id}/order/cancel")
+    public ResponseEntity<Void> orderCancel(@PathVariable("id") Long id,
+                                            @RequestBody OrderDto.OrderCancelRequest dto) throws IamportResponseException, IOException {
+        memberService.orderCancel(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{id}/order/refund")
+    public ResponseEntity<Void> orderRefundRequest(@PathVariable("id") Long id,
+                                                   @RequestBody OrderDto.OrderCancelRequest dto) {
+        memberService.orderRefundRequest(id, dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{id}/order/done")
+    public ResponseEntity<Void> orderDone(@PathVariable("id") Long id,
+                                          @RequestBody OrderDto.OrderId dto) {
+        memberService.orderDone(id, dto);
+        return ResponseEntity.ok().build();
+    }
+}

@@ -93,6 +93,7 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
         return null;
     }
 
+    // 회원 AccessToken을 통해 얻은 Authentication 객체로 URL에 담긴 회원ID와 비교하여 검증
     private void validateMemberAuthorization(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         String[] urlSegments = request.getRequestURI().split("/");
 

@@ -1,8 +1,14 @@
 package com.project.Real_Moment.application.member;
 
 import com.project.Real_Moment.domain.entity.*;
+import com.project.Real_Moment.domain.enumuration.PaymentStatus;
 import com.project.Real_Moment.domain.repository.*;
 import com.project.Real_Moment.presentation.dto.*;
+import com.siot.IamportRestClient.IamportClient;
+import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.request.CancelData;
+import com.siot.IamportRestClient.response.IamportResponse;
+import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -12,8 +18,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -33,12 +44,17 @@ public class MemberService {
     private final CommentRepository commentRepository;
     private final GradeRepository gradeRepository;
     private final S3FileRepository s3FileRepository;
+    private final OrderRepository orderRepository;
+    private final OrderDetailRepository orderDetailRepository;
+    private final IamportClient iamportClient;
+
     private final PasswordEncoder passwordEncoder;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public boolean checkIdDuplicate(String loginId) {
-        log.info("service.id = {}", loginId);
-        return memberRepository.existsByLoginId(loginId);
+        log.info("요청받은 loginId : {}", loginId);
+
+        return !memberRepository.existsByLoginId(loginId);
     }
 
     // 회원가입시 요청받은 Dto를 Entity로 변환 후 저장
@@ -54,7 +70,7 @@ public class MemberService {
         }
 
         // 2. 요청받은 dto -> Entity로 변환
-        Member member = createMember(dto, grade);
+        Member member = dto.toEntity();
 
         log.info("member.toString() = {}", member.toString());
 
@@ -64,18 +80,12 @@ public class MemberService {
         return MemberDto.RegisterResponse.toDto(savedMember);
     }
 
-    private Member createMember(MemberDto.RegisterRequest dto, Grade grade) {
-        return Member.builder()
-                .gradeId(grade)
-                .loginId(dto.getLoginId())
-                .email(dto.getEmail())
-                .loginPassword(passwordEncoder.encode(dto.getLoginPassword()))
-                .name(dto.getName())
-                .tel(dto.getTel())
-                .birthDate(dto.getBirthDate())
-                .gender(dto.getGender())
-                .roles("ROLE_MEMBER")
-                .build();
+    // 최근 로그인 시간 갱신
+    @Transactional
+    public void memberLogin(String loginId) {
+
+        // 최근 로그인 시간 갱신
+        memberRepository.updateRecentlyLogin(loginId);
     }
 
     @Transactional
@@ -122,7 +132,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public AddressDto.AddressListPage findAddress(Long id, int nowPage) {
-        Pageable pageable = PageRequest.of(nowPage - 1, 10);
+        Pageable pageable = PageRequest.of(nowPage - 1, 9);
 
         Page<Address> addressList = addressRepository.findAddressByPaging(id, pageable);
 
@@ -157,7 +167,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public WishDto.WishListResponseWrapper getWishList(Long id, int nowPage) {
-        Pageable pageable = PageRequest.of(nowPage - 1, 10);
+        Pageable pageable = PageRequest.of(nowPage - 1, 9);
 
 
         Page<Wish> wishList = wishRepository.findWishByMemberIdPaging(pageable, id, nowPage);
@@ -246,12 +256,10 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public ReviewDto.MyReviewListResponse getMyReviewList(Long id, Integer nowPage) {
-        int pageNumber = (nowPage != null && nowPage > 0) ? nowPage : 1;
-        Pageable pageable = PageRequest.of(pageNumber - 1, 9);
+    public ReviewDto.MyReviewListResponse getMyReviewList(Long memberId, int nowPage) {
+        Pageable pageable = PageRequest.of(nowPage - 1, 9);
 
-
-        Member member = memberRepository.findById(id)
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
 
         Page<Review> reviewListPaging = reviewRepository.findMyReviewListByMemberId(pageable, member);
@@ -267,14 +275,14 @@ public class MemberService {
 
             if (review != null) {
                 itemDto = new ItemDto.ItemResponse(review.getItemId());
-                List<ItemDto.MainImgList> mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(review.getItemId());
+                String mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(review.getItemId());
                 itemDto.setMainImg(mainImgUrl);
             }
 
             reviewDto.setItem(itemDto);
         }
 
-        return new ReviewDto.MyReviewListResponse(reviewList, reviewListPaging.getTotalPages(), pageNumber);
+        return new ReviewDto.MyReviewListResponse(reviewList, reviewListPaging.getTotalPages(), nowPage);
     }
 
     @Transactional
@@ -328,7 +336,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public ItemQADto.MyItemQAListPage getMyItemQAList(Long memberId, int nowPage) {
-        Pageable pageable = PageRequest.of(nowPage - 1, 10);
+        Pageable pageable = PageRequest.of(nowPage - 1, 9);
 
         Page<ItemQA> itemQAList = itemQARepository.findMyItemQAListPage(memberId, pageable);
 
@@ -411,7 +419,7 @@ public class MemberService {
 
     @Transactional(readOnly = true)
     public OneOnOneDto.OneOnOneWrapper getOneOnOneList(Long id, CondDto.OneOnOneListCond dto) {
-        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 10);
+        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 9);
 
         Page<OneOnOne> oneOnOneListByPaging = oneonOneRepository.findOneOnOneListByPaging(id, dto, pageable);
 
@@ -472,5 +480,272 @@ public class MemberService {
         }
 
         return oneOnOne;
+    }
+
+    @Transactional
+    public OrderDto.OrderItemList getOrderQuote(Long id, OrderDto.OrderItemListRequest requestDto) {
+        Member member = memberRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+        List<OrderDto.OrderItemRequest> requestList = requestDto.getRequestList();
+        List<OrderDto.OrderItem> orderItems = new ArrayList<>();
+        int totalPrice = 0;
+        int totalDiscountPrice = 0;
+        int totalSellPrice = 0;
+
+        // 요청 Dto itemId, count
+        for (OrderDto.OrderItemRequest itemRequest : requestList) {
+            Long itemId = itemRequest.getItemId();
+            int count = itemRequest.getCount();
+
+            // request에 담긴 itemId로 상품 조회
+            Optional<Item> itemOptional = itemRepository.findById(itemId);
+            if (itemOptional.isPresent()) {
+                Item item = itemOptional.get();
+
+                // 상품의 메인 이미지 가져오기
+                String mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(item);
+
+                // 주문 총 정가 계산
+                totalPrice = item.getPrice() * count;
+
+                // 주문 총 할인가격 계산
+                totalDiscountPrice = item.getDiscountPrice() * count;
+
+                // 주문 총 가격 계산
+                totalSellPrice += item.getSellPrice() * count;
+
+                // 상품 정보로 응답 Dto 값 채우기
+                OrderDto.OrderItem orderItem = new OrderDto.OrderItem(item, count, mainImgUrl);
+
+                orderItems.add(orderItem);
+            }
+        }
+
+        /**
+         * 적립금은 결제하는 회원의 등급으로 적립 수치가 결정되며
+         * 할인을 적용하기 전 상품의 정가를 기준으로 적립된다.
+         */
+
+        // 회원이 현재 보유 중인 적립금
+        int point = member.getPoint();
+
+        // 회원이 주문을 통해 획득할 예상 적립금
+        int getPoint = (int) (totalPrice * (member.getGradeId().getRewardRate() / 100.0));
+
+        // 주문 Dto 생성
+        OrderDto.OrderPrice orderPrice = new OrderDto.OrderPrice(totalPrice, totalDiscountPrice, totalSellPrice, point, getPoint);
+
+        // 주문 상세 리스트와 주문 Dto 객체 반환
+        return new OrderDto.OrderItemList(orderItems, orderPrice);
+    }
+
+    @Transactional
+    public OrderDto.PaymentResponse getPaymentFirst(Long memberId, OrderDto.PaymentFirst requestDto) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하는 회원이 아닙니다."));
+
+        String merchantUid = UUID.randomUUID().toString();
+
+        // 임시로 Order 객체를 생성
+        Order order = Order.builder()
+                .memberId(member)
+                .totalPrice(requestDto.getTotalPrice())
+                .totalDiscountPrice(requestDto.getTotalDiscountPrice())
+                .usePoint(requestDto.getUsePoint())
+                .getPoint(requestDto.getGetPoint())
+                .buyPrice(requestDto.getBuyPrice())
+                .name(requestDto.getName())
+                .mainAddress(requestDto.getMainAddress())
+                .detAddress(requestDto.getDetAddress())
+                .requestText(requestDto.getRequestText())
+                .tel(requestDto.getTel())
+                .status(PaymentStatus.PAYMENT_READY)
+                .merchantUid(merchantUid)
+                .build();
+
+        orderRepository.save(order);
+
+        List<OrderDto.OrderItemRequest> requestItems = requestDto.getItems();
+
+        // 여러 종류를 한 번에 결제 할 때 PG사에 요청할 상품 이름 지정
+        Item firstItem = itemRepository.findById(requestItems.get(0).getItemId()).orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+        int itemTypeCount = requestItems.size();
+        String itemName;
+        if (itemTypeCount > 1) {
+            itemName = firstItem.getName() + "외 " + itemTypeCount + "개";
+        } else {
+            itemName = firstItem.getName();
+        }
+
+        for (OrderDto.OrderItemRequest requestItem : requestItems) {
+            Long itemId = requestItem.getItemId();
+            int count = requestItem.getCount();
+
+            Optional<Item> itemOptional = itemRepository.findById(itemId);
+            if (itemOptional.isPresent()) {
+                Item item = itemOptional.get();
+
+                // 임시 OrderDetail 객체 생성
+                OrderDetail orderDetail = OrderDetail.builder()
+                        .itemId(item)
+                        .orderId(order)
+                        .price(item.getPrice())
+                        .discountRate(item.getDiscountRate())
+                        .discountPrice(item.getDiscountPrice())
+                        .sellPrice(item.getSellPrice())
+                        .itemCount(count)
+                        .totalPrice(item.getSellPrice() * count)
+                        .build();
+
+                orderDetailRepository.save(orderDetail);
+            }
+        }
+
+        // 기본 배송지
+        Address address = addressRepository.findByMemberIdAndIsDefAddressIsTrue(member);
+        String responseAddress = address.getMainAddress() + " " + address.getDetAddress();
+
+        return new OrderDto.PaymentResponse(merchantUid, itemName, requestDto.getBuyPrice(), member.getName(), member.getEmail(), responseAddress);
+    }
+
+    @Transactional
+    public void getPaymentSecond(OrderDto.PaymentSecond requestDto) {
+        try {
+
+            // 결제 단건 조회
+            IamportResponse<Payment> iamportResponse = iamportClient.paymentByImpUid(requestDto.getImpUid());
+
+            // 주문 내역 조회
+            Order order = orderRepository.findByMerchantUid(requestDto.getMerchantUid())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하는 주문이 아닙니다."));
+
+            // 결제 완료가 아니라면
+            if (!iamportResponse.getResponse().getStatus().equals("paid")) {
+
+                // 주문, 주문 상세 내역 삭제
+                orderRepository.delete(order);
+
+                throw new RuntimeException("결제 미완료");
+            }
+
+            // DB에 저장된 결제 금액
+            int price = order.getBuyPrice();
+
+            // 실 결제 금액
+            int iamportPrice = iamportResponse.getResponse().getAmount().intValue();
+
+            // 결제 금액 검증
+            if (iamportPrice != price) {
+                // 주문, 주문 상세 내역 삭제
+                orderRepository.delete(order);
+
+                // 결제 금액 위변조로 의심되는 결제를 취소
+                iamportClient.cancelPaymentByImpUid(new CancelData(iamportResponse.getResponse().getImpUid(), true, new BigDecimal(iamportPrice)));
+
+                throw new RuntimeException("결제금액 위변조 의심이 감지되었습니다.");
+            }
+
+            // 결제 상태 변경 (결제 완료)
+            orderRepository.updatePaymentComplete(order.getId());
+        } catch (IamportResponseException | IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Transactional(readOnly = true)
+    public OrderDto.OrderListPaging getOrderList(Long memberId, CondDto.MemberOrderListCond requestDto) {
+        Pageable pageable = PageRequest.of(requestDto.getNowPage() - 1, 9);
+
+        Page<Order> orderListPaging = orderRepository.findByOrderListPage_Member(memberId, requestDto, pageable);
+
+        List<OrderDto.OrderList> orderListDto = orderListPaging.stream()
+                .map(OrderDto.OrderList::new)
+                .toList();
+
+        for (OrderDto.OrderList orderDto : orderListDto) {
+            Order order = getOrderEntity(orderDto.getOrderId());
+            orderDto.setOrderDetails(getOrderDetailListDto(order, orderDto.getOrderId()));
+        }
+
+        return new OrderDto.OrderListPaging(orderListDto, orderListPaging.getTotalPages(), requestDto.getNowPage());
+    }
+
+    @Transactional(readOnly = true)
+    public OrderDto.OrderList getOrder(Long memberId, Long orderId) {
+
+        Order order = getOrderEntity(orderId);
+
+        return new OrderDto.OrderList(order, getOrderDetailListDto(order, orderId));
+    }
+
+    private List<OrderDetailDto.OrderDetailList> getOrderDetailListDto(Order order, Long orderId) {
+
+        List<OrderDetail> orderDetailList = orderDetailRepository.findByOrderId(order);
+
+        return orderDetailList.stream()
+                .map(orderDetail -> {
+                    Item item = itemRepository.findById(orderDetail.getItemId().getId())
+                            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
+
+                    // 상품의 메인 이미지 가져오기
+                    String mainImgList = s3FileRepository.findMainImg_UrlByItemId(item);
+
+                    ItemDto.OrderedItemList orderedItemList = new ItemDto.OrderedItemList(item, mainImgList);
+
+                    return new OrderDetailDto.OrderDetailList(orderDetail, orderedItemList);
+                })
+                .toList();
+    }
+
+    @Transactional
+    public void orderCancel(Long memberId, OrderDto.OrderCancelRequest requestDto) throws IamportResponseException, IOException {
+
+        Order order = getOrderEntity(requestDto.getOrderId());
+
+        // 결제 취소
+        paymentCancel(order);
+
+        // 결제 취소 사유
+        orderRepository.updateReasonText(requestDto.getOrderId(), requestDto.getReasonText());
+    }
+
+    // 결제 취소를 요청하는 메서드
+    private void paymentCancel(Order order) throws IamportResponseException, IOException {
+        IamportResponse<Payment> iamportResponse = iamportClient.paymentByImpUid(order.getImpUid());
+
+        // 결제된 가격 조회
+        int iamportPrice = iamportResponse.getResponse().getAmount().intValue();
+
+        // 결제 취소 (포트원)
+        IamportResponse<Payment> cancelResponse =
+                iamportClient.cancelPaymentByImpUid(new CancelData(iamportResponse.getResponse().getImpUid(), true, new BigDecimal(iamportPrice)));
+
+        if (cancelResponse.getCode() == 0) {
+            orderRepository.updatePaymentCancel(order.getId());
+        } else {
+            throw new RuntimeException("결제 취소에 실패하였습니다. : " + cancelResponse.getMessage());
+        }
+    }
+
+    @Transactional
+    public void orderRefundRequest(Long memberId, OrderDto.OrderCancelRequest requestDto) {
+
+        // 환불 요청
+        orderRepository.updatePaymentRefundRequest(requestDto.getOrderId());
+
+        // 환불 요청 사유
+        orderRepository.updateReasonText(requestDto.getOrderId(), requestDto.getReasonText());
+    }
+
+
+    @Transactional
+    public void orderDone(Long memberId, OrderDto.OrderId requestDto) {
+
+        // 구매 학정 요청
+        orderRepository.updatePaymentDone(requestDto.getOrderId());
+    }
+
+    private Order getOrderEntity(Long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("존재하는 주문이 아닙니다."));
     }
 }

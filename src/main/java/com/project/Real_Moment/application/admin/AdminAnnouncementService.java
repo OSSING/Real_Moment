@@ -25,7 +25,7 @@ public class AdminAnnouncementService {
 
     @Transactional(readOnly = true)
     public AnnouncementDto.AnnouncementDefWrapper getAnnouncementList(int nowPage) {
-        Pageable pageable = PageRequest.of(nowPage - 1, 10);
+        Pageable pageable = PageRequest.of(nowPage - 1, 9);
 
         Page<Announcement> announcementPaging = announcementRepository.findAnnouncementListByPaging_admin(nowPage, pageable);
 

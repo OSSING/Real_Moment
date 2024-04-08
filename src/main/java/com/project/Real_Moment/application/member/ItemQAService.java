@@ -27,7 +27,7 @@ public class ItemQAService {
 
     @Transactional
     public ItemQADto.ItemQAListPage getItemQAList(CondDto.QAListCond dto) {
-        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 5);
+        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 4);
 
         Page<ItemQA> itemQAList = itemQARepository.findQAListByCond(pageable, dto);
 
@@ -47,8 +47,6 @@ public class ItemQAService {
             itemQA.setQaComment(qaCommentDto);
         }
 
-        ItemQADto.ItemQAListPage itemQAPage = new ItemQADto.ItemQAListPage(itemQAListDto, itemQAList.getTotalPages(), dto.getNowPage());
-
-        return itemQAPage;
+        return new ItemQADto.ItemQAListPage(itemQAListDto, itemQAList.getTotalPages(), dto.getNowPage());
     }
 }

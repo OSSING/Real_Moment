@@ -20,30 +20,13 @@ INSERT INTO address (member_id, name, tel, main_address, det_address, is_def_add
 (3, 'address5', '010-3187-5352', '대전 중구', '508호', TRUE),
 (3, 'address6', '010-1287-4871', '대전 중구', '509호', FALSE);
 
----- Authority Table 더미데이터
---INSERT INTO authority (authority_name) VALUES
---('ROLE_ADMIN1'),
---('ROLE_ADMIN2'),
---('ROLE_ADMIN3');
-
 -- Admin Table 더미데이터
 INSERT INTO admin (login_id, login_password, email, name, is_delete, roles) VALUES
-('adminId1', '$2a$10$3rNtn9JeSQmg3MTk1uBxS.Y1Ks.qdG2WKmiOxWSqbHVh0aYkJyg22', 'admin1@example.com', 'adminName1', false, 'ROLE_CUSTOMER_MANAGER'),
-('adminId2', '$2a$10$1mVZ/tnAvI9NqFZEULjf2OJt7BorY1vXlukgyPxJ83DZ0ocRpY5sC', 'admin2@example.com', 'adminName2', false, 'ROLE_PRODUCT_MANAGER'),
-('adminId3', '$2a$10$qkiojc.QSXcGxOOPKDo0Ruu2TlPR5d3VhGkOOQf80BLBIWadvgTbO', 'admin2@example.com', 'adminName3', false, 'ROLE_ORDER_MANAGER'),
-('adminId4', '$2a$10$HK7tpwoV4THD9Hb1Fs3bGunn13UudbdM7DtploEHBa72Qg3RCOIV.', 'admin4@example.com', 'adminName4', false, 'ROLE_PRODUCT_MANAGER'),
-('adminId5', '$2a$10$tXCITPXWabNySF2yF149XOME4QpcL87jCKlvgsGBHf7PbQQvE9iNy', 'admin5@example.com', 'adminName5', false, 'ROLE_ADMIN_SUPERVISOR');
-
----- admin_authority Table 더미데이터 (Authority와 Admin 테이블의 중간 테이블)
---INSERT INTO admin_authority (admin_id, authority_name) VALUES
---(1, 'ROLE_ADMIN1'),
---(1, 'ROLE_ADMIN2'),
---(1, 'ROLE_ADMIN3'),
---(2, 'ROLE_ADMIN2'),
---(2, 'ROLE_ADMIN3'),
---(3, 'ROLE_ADMIN3'),
---(4, 'ROLE_ADMIN3'),
---(5, 'ROLE_ADMIN3');
+('adminId1', '$2a$10$3rNtn9JeSQmg3MTk1uBxS.Y1Ks.qdG2WKmiOxWSqbHVh0aYkJyg22', 'admin1@example.com', 'adminName1', false, 'ROLE_CUSTOMER'),
+('adminId2', '$2a$10$1mVZ/tnAvI9NqFZEULjf2OJt7BorY1vXlukgyPxJ83DZ0ocRpY5sC', 'admin2@example.com', 'adminName2', false, 'ROLE_CUSTOMER'),
+('adminId3', '$2a$10$qkiojc.QSXcGxOOPKDo0Ruu2TlPR5d3VhGkOOQf80BLBIWadvgTbO', 'admin2@example.com', 'adminName3', false, 'ROLE_OPERATOR'),
+('adminId4', '$2a$10$HK7tpwoV4THD9Hb1Fs3bGunn13UudbdM7DtploEHBa72Qg3RCOIV.', 'admin4@example.com', 'adminName4', false, 'ROLE_OPERATOR'),
+('adminId5', '$2a$10$tXCITPXWabNySF2yF149XOME4QpcL87jCKlvgsGBHf7PbQQvE9iNy', 'admin5@example.com', 'adminName5', false, 'ROLE_REPRESENTATIVE');
 
 -- Announcement Table 더미데이터
 INSERT INTO announcement (admin_id, title, content, is_fix, view_count)
@@ -100,7 +83,7 @@ INSERT INTO qa_comment (admin_id, item_qa_id, content)
 VALUES
 (1, 1, 'QA_comments content1'),
 (2, 2, 'QA_comments content2'),
-(3, 3, 'QA_comments content3');
+(3, 2, 'QA_comments content3');
 
 -- Reviews Table 더미데이터
 INSERT INTO review (member_id, item_id, title, content, star)
@@ -136,13 +119,33 @@ VALUES
 ('fileName2', 'fileUrl2'),
 ('fileName3', 'fileUrl3'),
 ('fileName4', 'fileUrl4'),
-('fileName5', 'fileUrl5');
+('fileName5', 'fileUrl5'),
+('fileName6', 'fileUrl6'),
+('fileName7', 'fileUrl7'),
+('fileName8', 'fileUrl8'),
+('fileName9', 'fileUrl9'),
+('fileName10', 'fileUrl10'),
+('fileName11', 'fileUrl11'),
+('fileName12', 'fileUrl12'),
+('fileName13', 'fileUrl13'),
+('fileName14', 'fileUrl14'),
+('fileName15', 'fileUrl15');
 
 -- ItemFile Table 더미데이터
-INSERT INTO item_file (s3_file_id, item_id, main_or_serve)
+INSERT INTO item_file (s3_file_id, item_id, main_or_sub, number)
 VALUES
-(1, 1, 'main'),
-(2, 1, 'serve'),
-(3, 1, 'serve'),
-(4, 2, 'main'),
-(5, 2, 'serve');
+(1, 1, 'main', 0),
+(2, 1, 'main', 1),
+(3, 1, 'main', 2),
+(4, 1, 'sub', 0),
+(5, 1, 'sub', 1),
+(6, 1, 'sub', 2),
+(7, 2, 'main', 0),
+(8, 2, 'main', 1),
+(9, 2, 'main', 2),
+(10, 2, 'sub', 0),
+(11, 2, 'sub', 1),
+(12, 3, 'main', 0),
+(13, 3, 'main', 1),
+(14, 3, 'sub', 0),
+(15, 3, 'sub', 1);

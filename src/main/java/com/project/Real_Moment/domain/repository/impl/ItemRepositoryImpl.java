@@ -1,8 +1,7 @@
 package com.project.Real_Moment.domain.repository.impl;
 
+import com.project.Real_Moment.domain.entity.Category;
 import com.project.Real_Moment.domain.entity.Item;
-import com.project.Real_Moment.domain.entity.QItemFile;
-import com.project.Real_Moment.domain.entity.QS3File;
 import com.project.Real_Moment.domain.repository.custom.ItemRepositoryCustom;
 import com.project.Real_Moment.presentation.dto.CondDto;
 import com.project.Real_Moment.presentation.dto.ItemDto;
@@ -17,8 +16,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 import static com.project.Real_Moment.domain.entity.QItem.item;
-import static com.project.Real_Moment.domain.entity.QItemFile.itemFile;
-import static com.project.Real_Moment.domain.entity.QS3File.s3File;
 
 @RequiredArgsConstructor
 public class ItemRepositoryImpl implements ItemRepositoryCustom {
@@ -49,12 +46,38 @@ public class ItemRepositoryImpl implements ItemRepositoryCustom {
         return new PageImpl<>(itemList, pageable, total);
     }
 
+    @Override
+    public void updateItemByDto(ItemDto.EditItem dto, Category category) {
+        queryFactory
+                .update(item)
+                .set(item.categoryId, category)
+                .set(item.name, dto.getName())
+                .set(item.content, dto.getContent())
+                .set(item.price, dto.getPrice())
+                .set(item.discountRate, dto.getDiscountRate())
+                .set(item.discountPrice, dto.getDiscountPrice())
+                .set(item.sellPrice, dto.getSellPrice())
+                .set(item.stock, dto.getStock())
+                .set(item.isSell, dto.isSell())
+                .where(item.id.eq(dto.getItemId()))
+                .execute();
+    }
+
+    @Override
+    public void deleteItem(Long itemId) {
+        queryFactory
+                .update(item)
+                .set(item.isDelete, true)
+                .where(item.id.eq(itemId))
+                .execute();
+    }
+
     private BooleanExpression categoryIdEq(Long categoryId) {
         return categoryId != null ? item.categoryId.id.eq(categoryId) : null;
     }
 
     private BooleanExpression itemNameEq(String itemName) {
-        return itemName != null ? item.name.eq(itemName) : null;
+        return itemName != null ? item.name.contains(itemName) : null;
     }
 
     private BooleanExpression isDeleteEq(Boolean isDelete) {

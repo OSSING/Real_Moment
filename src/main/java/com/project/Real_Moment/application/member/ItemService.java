@@ -5,6 +5,7 @@ import com.project.Real_Moment.domain.repository.ItemRepository;
 import com.project.Real_Moment.domain.repository.S3FileRepository;
 import com.project.Real_Moment.presentation.dto.CondDto;
 import com.project.Real_Moment.presentation.dto.ItemDto;
+import com.project.Real_Moment.presentation.dto.S3FileDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -25,8 +26,7 @@ public class ItemService {
 
     @Transactional(readOnly = true)
     public ItemDto.ItemCondResponse getItemList(CondDto.ItemListCond dto) {
-        int pageNumber = (dto.getNowPage() != null && dto.getNowPage() > 0) ? dto.getNowPage() : 1;
-        Pageable pageable = PageRequest.of(pageNumber - 1, 9);
+        Pageable pageable = PageRequest.of(dto.getNowPage() - 1, 9);
 
         Page<Item> itemList = itemRepository.findItemListByCond(pageable, dto);
 
@@ -39,11 +39,11 @@ public class ItemService {
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
 
             // item 객체에 맞는 fileUrl을 추출
-            List<ItemDto.MainImgList> mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(findItem);
+            String mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(findItem);
             item.setMainImg(mainImgUrl);
         }
 
-        return new ItemDto.ItemCondResponse(itemListDto, itemList.getTotalPages(), pageNumber);
+        return new ItemDto.ItemCondResponse(itemListDto, itemList.getTotalPages(), dto.getNowPage());
     }
 
     @Transactional(readOnly = true)
@@ -51,12 +51,12 @@ public class ItemService {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 상품입니다."));
 
-        List<ItemDto.MainImgList> mainImgUrl = s3FileRepository.findMainImg_UrlByItemId(item);
-        List<ItemDto.SubImaList> subImgUrl = s3FileRepository.findSubImg_UrlByItemId(item);
+        List<S3FileDto.GetS3File> mainImgUrl = s3FileRepository.findMainImgList_UrlByItemId(item);
+        List<S3FileDto.GetS3File> subImgUrl = s3FileRepository.findSubImgList_UrlByItemId(item);
 
         ItemDto.ItemDetResponse itemDetResponse = new ItemDto.ItemDetResponse(item);
         itemDetResponse.setMainImg(mainImgUrl);
-        itemDetResponse.setServeImg(subImgUrl);
+        itemDetResponse.setSubImg(subImgUrl);
 
         return itemDetResponse;
     }

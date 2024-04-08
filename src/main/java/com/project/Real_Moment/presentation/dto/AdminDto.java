@@ -1,6 +1,7 @@
 package com.project.Real_Moment.presentation.dto;
 
 import com.project.Real_Moment.domain.entity.Admin;
+import com.project.Real_Moment.domain.enumuration.AdminAuthority;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,7 +41,7 @@ public class AdminDto {
             loginId = admin.getLoginId();
             email = admin.getEmail();
             name = admin.getName();
-            roles = String.valueOf(admin.getRoles());
+            roles = AdminAuthority.getDescription(String.valueOf(admin.getRoles()));
         }
     }
 

@@ -21,8 +21,7 @@ public class ItemQAController {
     public ResponseEntity<ItemQADto.ItemQAListPage> getItemQAList(
             @RequestParam("itemId") Long itemId,
             @RequestParam(value = "isAnswer", required = false) Boolean isAnswer,
-            @RequestParam("nowPage") int nowPage) {
-
+            @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         CondDto.QAListCond dto = new CondDto.QAListCond(itemId, isAnswer, nowPage);
         return ResponseEntity.ok().body(itemQAService.getItemQAList(dto));
     }

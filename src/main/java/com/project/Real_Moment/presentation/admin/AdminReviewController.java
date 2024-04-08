@@ -20,7 +20,7 @@ public class AdminReviewController {
     @GetMapping("/admin/reviewList")
     public ResponseEntity<ReviewDto.ItemDetReviewResponse> getReviewList(@RequestParam("itemId") Long itemId,
                                                                          @RequestParam("star") Integer star,
-                                                                         @RequestParam("nowPage") int nowPage) {
+                                                                         @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         CondDto.ReviewListCond dto = new CondDto.ReviewListCond(itemId, star, nowPage);
         return ResponseEntity.ok().body(adminReviewService.getReviewList(dto));
     }
