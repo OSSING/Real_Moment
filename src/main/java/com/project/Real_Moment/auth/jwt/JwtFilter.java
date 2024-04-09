@@ -41,13 +41,15 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
 
         String requestURI = request.getRequestURI();
 
+        // AccessToken과 RefreshToken 둘 다 들어온 경우
         if (StringUtils.hasText(accessToken) && StringUtils.hasText(refreshToken) && tokenProvider.validateToken(accessToken) && tokenProvider.validateToken(refreshToken)) {
+            // 블랙 리스트 등록
             authService.addBlacklist(refreshToken);
 
             Authentication authentication = tokenProvider.getAuthentication(accessToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // access token만 들어온 경우
+        // AccessToken만 들어온 경우
         } else if (!StringUtils.hasText(refreshToken) && StringUtils.hasText(accessToken) && tokenProvider.validateToken(accessToken)) {
             log.info("====== Access Token 요청 받음!! ======");
             log.info("요청받은 Access : {}", request.getHeader(ACCESSTOKEN_HEADER));

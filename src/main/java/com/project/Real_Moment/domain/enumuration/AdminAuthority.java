@@ -1,6 +1,7 @@
 package com.project.Real_Moment.domain.enumuration;
 
 public enum AdminAuthority {
+    ROLE_ADMIN("관리자"),
     ROLE_CUSTOMER("고객관리"),
     ROLE_OPERATOR("운영관리"),
     ROLE_REPRESENTATIVE("대표");

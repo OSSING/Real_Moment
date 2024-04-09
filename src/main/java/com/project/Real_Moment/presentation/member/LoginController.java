@@ -57,6 +57,7 @@ public class LoginController {
         // 현재 사용자의 인증 정보를 설정
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
+        // 토큰 생성
         String accessToken = tokenProvider.createAccessToken(authentication);
         String refreshToken = tokenProvider.createRefreshToken(authentication);
 

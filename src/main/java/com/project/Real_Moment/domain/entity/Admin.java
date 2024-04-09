@@ -7,6 +7,7 @@ import lombok.*;
 
 @Entity
 @Getter
+@Builder
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
@@ -26,6 +27,7 @@ public class Admin extends BaseTimeEntity {
 
     private String name;
 
+    @Builder.Default
     private boolean isDelete = false;
 
     @Enumerated(EnumType.STRING)

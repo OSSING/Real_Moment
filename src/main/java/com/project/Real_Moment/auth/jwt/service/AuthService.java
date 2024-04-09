@@ -28,7 +28,7 @@ public class AuthService {
 
         blacklistCheck(refreshToken);
 
-        // Refresh Token 에서 User 객체 받아 옴
+        // Refresh Token 에서 authentication 객체 받아 옴
         Authentication authentication = tokenProvider.getAuthentication(refreshToken);
 
         String redisRefreshToken = redisTemplate.opsForValue().get(authentication.getName());
@@ -36,7 +36,7 @@ public class AuthService {
         // Redis 저장된 refresh, 요청받은 refresh 동일한지 체크
         if (redisRefreshToken == null || !redisRefreshToken.equals(refreshToken)) {
             log.info("일치하는 refreshToken이 없습니다!!!");
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("일치하는 refreshToken이 없습니다.");
         }
 
         // RefreshToken 과 갱신한 AccessToken Header 담아 반환
@@ -57,7 +57,7 @@ public class AuthService {
 
         if (isBlacklisted) {
             log.info("블랙리스트에 등록된 refreshToken 입니다!!!");
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("블랙리스트에 등록된 refreshToken 입니다!!!");
 
         } else {
             log.info("블랙리스트 체크 완료!!!");

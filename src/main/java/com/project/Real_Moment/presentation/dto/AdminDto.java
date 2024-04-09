@@ -60,4 +60,20 @@ public class AdminDto {
         private Long adminId;
         private String roles;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class AdminJoin {
+        private String loginId;
+        private String loginPassword;
+
+        public Admin toEntity() {
+            return Admin.builder()
+                    .loginId(loginId)
+                    .loginPassword(loginPassword)
+                    .roles(AdminAuthority.ROLE_ADMIN)
+                    .build();
+        }
+    }
 }

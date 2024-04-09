@@ -73,4 +73,9 @@ public class AdminService {
         return adminRepository.findById(adminId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자입니다."));
     }
+
+    @Transactional
+    public void adminJoin(AdminDto.AdminJoin requestDto) {
+        adminRepository.save(requestDto.toEntity());
+    }
 }

@@ -32,6 +32,12 @@ public class AdminController {
         return ResponseEntity.ok().body(adminService.checkIdDuplicate(dto));
     }
 
+    @PostMapping("/adminJoin")
+    public ResponseEntity<Void> adminJoin(@RequestBody AdminDto.AdminJoin dto) {
+        adminService.adminJoin(dto);
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/adminLogin")
     public ResponseEntity<TokenDto> login(@RequestBody MemberDto.MemberLoginDto dto) {
 
