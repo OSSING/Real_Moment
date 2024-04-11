@@ -22,7 +22,7 @@ public class AdminItemController {
     private final AmazonS3Client amazonS3Client;
     private final AdminItemService adminItemService;
 
-    @GetMapping("/admin/itemList")
+    @GetMapping("/admin/itemList/view")
     public ResponseEntity<ItemDto.AdminItemListWrapper> getItemList(@RequestParam(value = "itemSort", required = false) String itemSort,
                                                                     @RequestParam(value = "categoryId", required = false) Long categoryId,
                                                                     @RequestParam(value = "itemName", required = false) String itemName,
@@ -32,7 +32,7 @@ public class AdminItemController {
         return ResponseEntity.ok().body(adminItemService.getItemList(dto));
     }
 
-    @GetMapping("/admin/item")
+    @GetMapping("/admin/item/view")
     public ResponseEntity<ItemDto.AdminItemDef> getItemDef(@RequestParam("itemId") Long itemId) {
         return ResponseEntity.ok().body(adminItemService.getItemDef(itemId));
     }

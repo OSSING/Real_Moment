@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Entity
 @Builder
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = "loginId")})
@@ -26,9 +27,6 @@ public class Member extends BaseTimeEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "grade_id")
     private Grade gradeId;
-
-    @OneToMany(mappedBy = "memberId")
-    private List<Order> orders;
 
     @Column(name = "login_id")
     private String loginId;

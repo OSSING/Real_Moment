@@ -23,7 +23,7 @@ public class AdminCategoryController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping
+    @GetMapping("/view")
     public ResponseEntity<List<CategoryDto.CategoryList>> getCategoryList() {
         return ResponseEntity.ok().body(adminCategoryService.getCategoryList());
     }

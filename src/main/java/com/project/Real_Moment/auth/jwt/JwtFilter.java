@@ -40,6 +40,7 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
 //        String jwt = resolveToken(request);
 
         String requestURI = request.getRequestURI();
+        log.info("requestURI : {}", requestURI);
 
         // AccessToken과 RefreshToken 둘 다 들어온 경우
         if (StringUtils.hasText(accessToken) && StringUtils.hasText(refreshToken) && tokenProvider.validateToken(accessToken) && tokenProvider.validateToken(refreshToken)) {
@@ -60,7 +61,7 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
 
             // AccessToken의 회원 ID와 URI의 회원 ID가 같은지 검증
             if (requestURI.startsWith("/member/")) {
-                validateMemberAuthorization(request, response, authentication);
+                validateMemberAuthorization(request, authentication);
             }
 
             // 받아온 유효 토큰의 authentication 객체를 SecurityContext에 등록
@@ -96,7 +97,7 @@ public class JwtFilter extends OncePerRequestFilter { // Custom Filter
     }
 
     // 회원 AccessToken을 통해 얻은 Authentication 객체로 URL에 담긴 회원ID와 비교하여 검증
-    private void validateMemberAuthorization(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+    private void validateMemberAuthorization(HttpServletRequest request, Authentication authentication) {
         String[] urlSegments = request.getRequestURI().split("/");
 
         String memberId = getMemberIdByAccessToken(authentication);

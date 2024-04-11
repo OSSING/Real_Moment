@@ -24,7 +24,6 @@ public class LoginController {
 
     private final MemberService memberService;
     private final TokenProvider tokenProvider;
-    private final MemberRepository memberRepository;
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     // 회원가입 도중 id 중복체크 (중복 o -> true, 중복 x -> false)

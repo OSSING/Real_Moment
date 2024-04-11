@@ -18,7 +18,7 @@ public class AdminOneOnOneController {
 
     private final AdminOneOnOneService adminOneOnOneService;
 
-    @GetMapping("/admin/oneOnOneList")
+    @GetMapping("/admin/oneOnOneList/view")
     public ResponseEntity<OneOnOneDto.OneOnOneWrapper> getOneOnOneList(@RequestParam(value = "loginId", required = false) String loginId,
                                                                        @RequestParam(value = "isAnswer", required = false) Boolean isAnswer,
                                                                        @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {

@@ -66,18 +66,18 @@ public class MemberService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 등급입니다."));
 
         if (!grade.getGradeName().equals("Moment")) {
-            throw new IllegalArgumentException("잘못된 등급입니다.");
+            throw new IllegalArgumentException("등급을 찾을 수 없습니다.");
         }
 
         // 2. 요청받은 dto -> Entity로 변환
-        Member member = dto.toEntity();
-
-        log.info("member.toString() = {}", member.toString());
+        Member member = dto.toEntity(grade);
 
         // 3. 저장한 회원 데이터를 Dto로 변환 후 반환
         Member savedMember = memberRepository.save(member);
 
-        return MemberDto.RegisterResponse.toDto(savedMember);
+        log.info("savedMember : {}", savedMember.toString());
+
+        return new MemberDto.RegisterResponse(member.getLoginId());
     }
 
     // 최근 로그인 시간 갱신

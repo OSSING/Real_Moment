@@ -65,58 +65,49 @@ public class SecurityConfig {
                                 "/announcementList",
                                 "/announcement",
                                 "/adminLogin",
-                                "/admin/logout",
-                                "/adminIdCheck",
                                 "/admin/reissue/accessToken",
                                 "/member/reissue/accessToken",
                                 "/upload").permitAll()
 
+                        // 모든 관리자 가능 (조회)
                         .requestMatchers(
-                                "/admin/orderList",
-                                "/admin/announcementList",
-                                "/admin/reviewList",
-                                "/admin/QAList",
-                                "/admin/oneOnOneList",
-                                "/admin/itemList",
-                                "/admin/memberList",
-                                "/admin/member",
-                                "/admin/gradeList"
-                                ).hasAnyRole("REPRESENTATIVE", "OPERATOR", "CUSTOMER")
-                        .requestMatchers(HttpMethod.GET, "/admin/order").hasAnyRole("REPRESENTATIVE", "OPERATOR", "CUSTOMER")
-                        .requestMatchers(HttpMethod.GET, "/admin/announcement").hasAnyRole("REPRESENTATIVE", "OPERATOR", "CUSTOMER")
-                        .requestMatchers(HttpMethod.GET, "/admin/item").hasAnyRole("REPRESENTATIVE", "OPERATOR", "CUSTOMER")
-                        .requestMatchers(HttpMethod.GET, "/admin/category").hasAnyRole("REPRESENTATIVE", "OPERATOR", "CUSTOMER")
+                                "/admin/main/view",
+                                "/admin/orderList/view",
+                                "/admin/order/view",
+                                "/admin/announcementList/view",
+                                "/admin/reviewList/view",
+                                "/admin/QAList/view",
+                                "/admin/oneOnOneList/view",
+                                "/admin/itemList/view",
+                                "/admin/item/view",
+                                "/admin/category/view",
+                                "/admin/memberList/view",
+                                "/admin/member/view",
+                                "/admin/{id}"
+                        ).hasAnyRole("REPRESENTATIVE", "OPERATOR", "CUSTOMER", "ADMIN")
 
+                        // 관리자 대표
                         .requestMatchers(
                                 "/adminJoin",
                                 "/adminIdCheck",
                                 "/admin/adminList",
-                                "/admin/admin",
-                                "/admin/{id}",
-                                "/admin/admin/roles",
+                                "/admin/admin/**",
                                 "/admin/grade"
                                 ).hasAnyRole("REPRESENTATIVE")
 
+                        // 고객 관리자
                         .requestMatchers(
-                                "/admin/announcement",
-                                "/admin/{id}/announcement",
-                                "/admin/{id}/announcement/data",
-                                "/admin/announcement",
-                                "/admin/{id}/QAComment/data",
-                                "/admin/{id}/QAComment",
-                                "/admin/QAComment",
+                                "/admin/{id}/announcement/**",
+                                "/admin/{id}/QAComment/**",
                                 "/admin/{id}/comment"
-                                ).hasAnyRole("CUSTOMER")
+                                ).hasAnyRole("CUSTOMER", "REPRESENTATIVE")
 
+                        // 운영 관리자
                         .requestMatchers(
-                                "/admin/order",
-                                "/admin/order/cancel",
-                                "/admin/item",
-                                "/admin/item/data",
-                                "/admin/item/mainImg/**",
-                                "/admin/item/subImg/**",
+                                "/admin/order/**",
+                                "/admin/item/**",
                                 "/admin/category"
-                        ).hasAnyRole("OPERATOR")
+                        ).hasAnyRole("OPERATOR", "REPRESENTATIVE")
 
                         .anyRequest().hasAnyRole("MEMBER")
                 )

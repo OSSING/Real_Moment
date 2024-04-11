@@ -17,7 +17,7 @@ public class AdminItemQAController {
 
     private final AdminItemQAService adminItemQAService;
 
-    @GetMapping("/admin/QAList")
+    @GetMapping("/admin/QAList/view")
     public ResponseEntity<ItemQADto.ItemQAListPage> getItemQAList(@RequestParam("itemId") Long itemId,
                                                                   @RequestParam("isAnswer") boolean isAnswer,
                                                                   @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {

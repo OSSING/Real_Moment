@@ -100,7 +100,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     public Long getAdminByLoginId(String loginId) {
         Admin admin = adminRepository.findByLoginId(loginId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 관리자입니다."));
 
         return admin.getId();
     }

@@ -14,12 +14,12 @@ public class AdminAnnouncementController {
 
     private final AdminAnnouncementService adminAnnouncementService;
 
-    @GetMapping("/admin/announcementList")
+    @GetMapping("/admin/announcementList/view")
     public ResponseEntity<AnnouncementDto.AnnouncementDefWrapper> getAnnouncementList(@RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {
         return ResponseEntity.ok().body(adminAnnouncementService.getAnnouncementList(nowPage));
     }
 
-    @GetMapping("/admin/announcement")
+    @GetMapping("/admin/announcement/view")
     public ResponseEntity<AnnouncementDto.AnnouncementDef> getAnnouncement(@RequestParam("announcementId") Long announcementId) {
         return ResponseEntity.ok().body(adminAnnouncementService.getAnnouncement(announcementId));
     }

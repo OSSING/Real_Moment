@@ -16,7 +16,7 @@ public class AdminGradeController {
 
     private final AdminGradeService adminGradeService;
 
-    @GetMapping("/admin/gradeList")
+    @GetMapping("/admin/gradeList/view")
     public ResponseEntity<List<GradeDto.GradeResponse>> getGradeList() {
         return ResponseEntity.ok().body(adminGradeService.getGradeList());
     }

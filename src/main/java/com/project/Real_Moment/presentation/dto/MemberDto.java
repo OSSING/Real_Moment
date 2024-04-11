@@ -1,6 +1,7 @@
 package com.project.Real_Moment.presentation.dto;
 
 
+import com.project.Real_Moment.domain.entity.Grade;
 import com.project.Real_Moment.domain.enumuration.Gender;
 import com.project.Real_Moment.domain.entity.Member;
 import jakarta.validation.constraints.Email;
@@ -26,6 +27,7 @@ public class MemberDto {
      * https://dev-coco.tistory.com/138
      */
     @Getter
+    @ToString
     @AllArgsConstructor
     @NoArgsConstructor(access = AccessLevel.PROTECTED)
     public static class RegisterRequest {
@@ -55,36 +57,26 @@ public class MemberDto {
         private String gender;
 
         // 회원가입 시 요청받은 Dto -> Entity 변환
-        public Member toEntity() {
+        public Member toEntity(Grade grade) {
             return Member.builder()
                     .loginId(loginId)
                     .email(email)
                     .loginPassword(loginPassword)
                     .name(name)
                     .tel(tel)
+                    .gradeId(grade)
                     .birthDate(birthDate)
                     .gender(Gender.getConstant(gender))
                     .build();
         }
     }
 
-    @Getter
-    @Builder
+    @Getter @Setter
     @AllArgsConstructor
-    @NoArgsConstructor(access = AccessLevel.PROTECTED)
-    // 회원가입 성공 시 응답할 JSON 데이터
+    @NoArgsConstructor
     public static class RegisterResponse {
 
         private String loginId;
-
-        // Entity -> Dto
-        public static RegisterResponse toDto(Member member) {
-            if (member == null) return null;
-
-            return RegisterResponse.builder()
-                    .loginId(member.getLoginId())
-                    .build();
-        }
     }
 
     @Getter

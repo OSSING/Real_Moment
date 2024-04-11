@@ -20,7 +20,7 @@ public class AdminOrderController {
 
     private final AdminOrderService adminOrderService;
 
-    @GetMapping("/admin/orderList")
+    @GetMapping("/admin/orderList/view")
     public ResponseEntity<OrderDto.OrderListPaging> getOrderList(@RequestParam(name = "itemName", required = false) String itemName,
                                                            @RequestParam(name = "loginId", required = false) String loginId,
                                                            @RequestParam(name = "merchantUid", required = false) String merchantUid,
@@ -32,7 +32,7 @@ public class AdminOrderController {
         return ResponseEntity.ok().body(adminOrderService.getOrderList(condDto));
     }
 
-    @GetMapping("/admin/order")
+    @GetMapping("/admin/order/view")
     public ResponseEntity<OrderDto.OrderDet> getOrderDet(@RequestParam("orderId") Long orderId) {
         return ResponseEntity.ok().body(adminOrderService.getOrderDet(orderId));
     }

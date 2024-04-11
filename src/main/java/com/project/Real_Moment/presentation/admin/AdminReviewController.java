@@ -17,7 +17,7 @@ public class AdminReviewController {
 
     private final AdminReviewService adminReviewService;
 
-    @GetMapping("/admin/reviewList")
+    @GetMapping("/admin/reviewList/view")
     public ResponseEntity<ReviewDto.ItemDetReviewResponse> getReviewList(@RequestParam("itemId") Long itemId,
                                                                          @RequestParam("star") Integer star,
                                                                          @RequestParam(value = "nowPage", required = false, defaultValue = "1") int nowPage) {

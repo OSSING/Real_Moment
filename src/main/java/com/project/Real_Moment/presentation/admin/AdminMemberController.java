@@ -17,7 +17,7 @@ public class AdminMemberController {
 
     private final AdminMemberService adminMemberService;
 
-    @GetMapping("/admin/memberList")
+    @GetMapping("/admin/memberList/view")
     public ResponseEntity<MemberDto.MemberListWrapper> getMemberList(@RequestParam(value = "memberSort", required = false) String memberSort,
                                                    @RequestParam(value = "loginId", required = false) String loginId,
                                                    @RequestParam(value = "gradeId", required = false) Long gradeId,
@@ -27,7 +27,7 @@ public class AdminMemberController {
         return ResponseEntity.ok().body(adminMemberService.getMemberList(dto));
     }
 
-    @GetMapping("/admin/member")
+    @GetMapping("/admin/member/view")
     public ResponseEntity<MemberDto.memberDet> getMemberDet(@RequestParam("memberId") Long memberId) {
         return ResponseEntity.ok().body(adminMemberService.getMemberDet(memberId));
     }
