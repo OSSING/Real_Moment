@@ -1,9 +1,12 @@
 package com.project.Real_Moment.auth.jwt;
 
+import com.project.Real_Moment.auth.jwt.service.AuthService;
 import com.project.Real_Moment.auth.jwt.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
@@ -22,7 +25,6 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -30,14 +32,20 @@ import java.util.stream.Collectors;
 public class TokenProvider implements InitializingBean {
 
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private TokenCache tokenCache;
+
+//    private final RedisTemplate<String, String> redisTemplate;
     private static final String AUTHORITIES_KEY = "AUTH";
+
+    private final String blacklistKey = AuthService.blacklistKey;
+
     private final String secretKey;
+
     private final long tokenValidityInMilliseconds;
+
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
     private Key key;
-
 
     public TokenProvider(
             // application.yml에서 지정한 secret(64btye로 암호화)과 토큰 유지 시간을 가져옴
@@ -93,15 +101,18 @@ public class TokenProvider implements InitializingBean {
                 .setExpiration(validity)
                 .compact();
 
-        // 생성된 Refresh Token을 Redis에 저장
-        redisTemplate.opsForValue().set(
-                authentication.getName(),
-                refreshToken,
-                tokenValidityInMilliseconds,
-                TimeUnit.MILLISECONDS
-        );
+//        // 생성된 Refresh Token을 Redis에 저장
+//        redisTemplate.opsForValue().set(
+//                authentication.getName(),
+//                refreshToken,
+//                tokenValidityInMilliseconds,
+//                TimeUnit.MILLISECONDS
+//        );
 
-        // 생성된 Refresh Token 반환
+        // 생성된 RefreshToken을 저장
+        tokenCache.setToken(authentication.getName(), refreshToken);
+
+        // 생성된 RefreshToken 반환
         return refreshToken;
 
     }

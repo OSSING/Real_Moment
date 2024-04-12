@@ -1,6 +1,7 @@
 package com.project.Real_Moment.auth.jwt.service;
 
 import com.project.Real_Moment.auth.jwt.JwtFilter;
+import com.project.Real_Moment.auth.jwt.TokenCache;
 import com.project.Real_Moment.auth.jwt.TokenProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -16,10 +17,10 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final TokenProvider tokenProvider;
-    private static final String blacklistKey = "blacklist";
+    private final TokenCache tokenCache;
+    public static final String blacklistKey = "blacklist";
 
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+//    private final RedisTemplate<String, String> redisTemplate;
 
     // refresh Token 받아 유효(만료시간 체크 등..)한지 확인하고 유효하다면 Access Token 재발급
     // refresh Token 유효하지 않다면, 클라이언트에게 새로운 로그인 요청
@@ -31,10 +32,12 @@ public class AuthService {
         // Refresh Token 에서 authentication 객체 받아 옴
         Authentication authentication = tokenProvider.getAuthentication(refreshToken);
 
-        String redisRefreshToken = redisTemplate.opsForValue().get(authentication.getName());
+//        String redisRefreshToken = redisTemplate.opsForValue().get(authentication.getName());
 
-        // Redis 저장된 refresh, 요청받은 refresh 동일한지 체크
-        if (redisRefreshToken == null || !redisRefreshToken.equals(refreshToken)) {
+        String findRefreshToken = tokenCache.getToken(authentication.getName());
+
+        // 저장된 refresh, 요청받은 refresh 동일한지 체크
+        if (findRefreshToken == null || !findRefreshToken.equals(refreshToken)) {
             log.info("일치하는 refreshToken이 없습니다!!!");
             throw new IllegalArgumentException("일치하는 refreshToken이 없습니다.");
         }
@@ -48,12 +51,17 @@ public class AuthService {
 
     public void addBlacklist(String refreshToken) {
 
-        redisTemplate.opsForSet().add(blacklistKey, refreshToken);
+//        redisTemplate.opsForSet().add(blacklistKey, refreshToken);
+
+        tokenCache.setBlackList(blacklistKey, refreshToken);
+
         log.info("refreshToken - 블랙 리스트 등록 완료!!!");
     }
 
     public void blacklistCheck(String refreshToken) {
-        boolean isBlacklisted = Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(blacklistKey, refreshToken));
+//        boolean isBlacklisted = Boolean.TRUE.equals(redisTemplate.opsForSet().isMember(blacklistKey, refreshToken));
+
+        boolean isBlacklisted = tokenCache.getBlackList(blacklistKey) != null;
 
         if (isBlacklisted) {
             log.info("블랙리스트에 등록된 refreshToken 입니다!!!");
