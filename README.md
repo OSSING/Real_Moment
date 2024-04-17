@@ -1,7 +1,22 @@
-# Real Moment 쇼핑몰 프로젝트
+# Real Moment
+Restful API 서버 프로젝트 / 화장품 판매 쇼핑몰
 
-나의 첫 프로젝트이다.
 
-아직 부족한 지식이 많지만, 한 걸음씩 성장하면서 기록하고 완성해보자.
+## ⏰ 개발 기간
+- 2024.01.01 ~ 
+
+
+## 🧑‍🤝‍🧑 참여 인원
+- FE 1명, BE 2명 
+
+
+## 🔍 기술 스택
+- Spring Boot
+- Spring Security
+- Spring Data JPA
+- Querydsl
+- PostgreSQL
+- JWT
+- AWS S3
 
 [ReadMe 작성법 참고 블로그](https://backendcode.tistory.com/165)
