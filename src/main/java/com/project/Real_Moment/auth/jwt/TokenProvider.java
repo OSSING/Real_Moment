@@ -92,7 +92,7 @@ public class TokenProvider implements InitializingBean {
 
         // 만료 시간 설정
         long now = (new Date()).getTime();
-        Date validity = new Date(now + this.tokenValidityInMilliseconds);
+        Date validity = new Date(now + this.tokenValidityInMilliseconds * 336);
 
         // Refresh Token 생성
         String refreshToken = Jwts.builder()

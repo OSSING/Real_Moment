@@ -46,7 +46,7 @@ public class LoginController {
 
         log.info("LoginDto = {}", dto.toString());
 
-        // 요청받은 id와 password를 가지고 Spring Security에서 인증을 위해 사용되는 객체 생성
+        // 요청받은 id와 password를 가지고 Spring Security에서 인증을 위해 사용되는 authenticationToken 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(dto.getLoginId(), dto.getLoginPassword());
 
