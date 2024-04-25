@@ -23,4 +23,6 @@ public interface OrderRepositoryCustom {
     void updatePaymentDone(Long orderId);
 
     void updateOrderStatus(OrderDto.UpdateOrderStatus dto);
+
+    void orderCancel(OrderDto.OrderCancel dto);
 }

@@ -234,4 +234,12 @@ public class OrderDto {
         private Long orderId;
         private String status;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class OrderCancel {
+        private Long orderId;
+        private String reasonText;
+    }
 }

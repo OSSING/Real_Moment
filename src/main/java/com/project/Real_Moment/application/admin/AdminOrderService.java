@@ -11,6 +11,11 @@ import com.project.Real_Moment.presentation.dto.CondDto;
 import com.project.Real_Moment.presentation.dto.ItemDto;
 import com.project.Real_Moment.presentation.dto.OrderDetailDto;
 import com.project.Real_Moment.presentation.dto.OrderDto;
+import com.siot.IamportRestClient.IamportClient;
+import com.siot.IamportRestClient.exception.IamportResponseException;
+import com.siot.IamportRestClient.request.CancelData;
+import com.siot.IamportRestClient.response.IamportResponse;
+import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -19,6 +24,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.List;
 
 @Slf4j
@@ -30,6 +37,7 @@ public class AdminOrderService {
     private final OrderDetailRepository orderDetailRepository;
     private final ItemRepository itemRepository;
     private final S3FileRepository s3FileRepository;
+    private final IamportClient iamportClient;
 
     @Transactional(readOnly = true)
     public OrderDto.OrderListPaging getOrderList(CondDto.AdminOrderListCond condDto) {
@@ -78,15 +86,40 @@ public class AdminOrderService {
                 .toList();
     }
 
-    private Order getOrderEntity(Long orderId) {
-        return orderRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("존재하는 주문이 아닙니다."));
-    }
-
     @Transactional
     public void updateOrderStatus(OrderDto.UpdateOrderStatus dto) {
-        orderRepository.findById(dto.getOrderId())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
+        getOrderEntity(dto.getOrderId());
 
         orderRepository.updateOrderStatus(dto);
+    }
+
+    public void orderCancel(OrderDto.OrderCancel dto) throws IamportResponseException, IOException {
+        Order order = getOrderEntity(dto.getOrderId());
+
+        // 결제 취소 요청
+        paymentCancel(order);
+
+        orderRepository.orderCancel(dto);
+    }
+
+    private void paymentCancel(Order order) throws IamportResponseException, IOException {
+        IamportResponse<Payment> iamportResponse = iamportClient.paymentByImpUid(order.getImpUid());
+
+        // 결제된 가격 조회
+        int iamportPrice = iamportResponse.getResponse().getAmount().intValue();
+
+        // 결제 취소 (포트원)
+        IamportResponse<Payment> cancelResponse =
+                iamportClient.cancelPaymentByImpUid(new CancelData(iamportResponse.getResponse().getImpUid(), true, new BigDecimal(iamportPrice)));
+
+        if (cancelResponse.getCode() == 0) {
+            orderRepository.updatePaymentCancel(order.getId());
+        } else {
+            throw new RuntimeException("결제 취소에 실패하였습니다. : " + cancelResponse.getMessage());
+        }
+    }
+
+    private Order getOrderEntity(Long orderId) {
+        return orderRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("존재하는 주문이 아닙니다."));
     }
 }

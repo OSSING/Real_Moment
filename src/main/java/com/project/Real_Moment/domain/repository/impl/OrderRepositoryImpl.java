@@ -81,6 +81,16 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     }
 
     @Override
+    public void orderCancel(OrderDto.OrderCancel dto) {
+        queryFactory
+                .update(order)
+                .set(order.status, PaymentStatus.CANCEL)
+                .set(order.reasonText, dto.getReasonText())
+                .where(order.id.eq(dto.getOrderId()))
+                .execute();
+    }
+
+    @Override
     public Page<Order> findByOrderListPage_Member(Long memberId, CondDto.MemberOrderListCond requestDto, Pageable pageable) {
         QOrder orderAlias = new QOrder("order2");
         List<Order> orderList = queryFactory

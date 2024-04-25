@@ -129,7 +129,6 @@ public class MemberService {
         }
     }
 
-
     @Transactional(readOnly = true)
     public AddressDto.AddressListPage findAddress(Long id, int nowPage) {
         Pageable pageable = PageRequest.of(nowPage - 1, 9);

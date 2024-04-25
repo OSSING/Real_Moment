@@ -3,11 +3,13 @@ package com.project.Real_Moment.presentation.admin;
 import com.project.Real_Moment.application.admin.AdminOrderService;
 import com.project.Real_Moment.presentation.dto.CondDto;
 import com.project.Real_Moment.presentation.dto.OrderDto;
+import com.siot.IamportRestClient.exception.IamportResponseException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -38,6 +40,12 @@ public class AdminOrderController {
     @PatchMapping("/admin/order")
     public ResponseEntity<Void> updateOrderStatus(@RequestBody OrderDto.UpdateOrderStatus dto) {
         adminOrderService.updateOrderStatus(dto);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/admin/order/cancel")
+    public ResponseEntity<Void> orderCancel(@RequestBody OrderDto.OrderCancel dto) throws IamportResponseException, IOException {
+        adminOrderService.orderCancel(dto);
         return ResponseEntity.ok().build();
     }
 }
