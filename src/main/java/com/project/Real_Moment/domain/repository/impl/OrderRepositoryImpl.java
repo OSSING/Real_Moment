@@ -5,6 +5,7 @@ import com.project.Real_Moment.domain.entity.QOrder;
 import com.project.Real_Moment.domain.enumuration.PaymentStatus;
 import com.project.Real_Moment.domain.repository.custom.OrderRepositoryCustom;
 import com.project.Real_Moment.presentation.dto.CondDto;
+import com.project.Real_Moment.presentation.dto.OrderDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -67,6 +68,15 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                 .update(order)
                 .set(order.status, PaymentStatus.DONE)
                 .where(order.id.eq(orderId))
+                .execute();
+    }
+
+    @Override
+    public void updateOrderStatus(OrderDto.UpdateOrderStatus dto) {
+        queryFactory
+                .update(order)
+                .set(order.status, PaymentStatus.getStatus(dto.getStatus()))
+                .where(order.id.eq(dto.getOrderId()))
                 .execute();
     }
 

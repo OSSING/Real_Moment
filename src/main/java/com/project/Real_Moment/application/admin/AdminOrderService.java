@@ -81,4 +81,12 @@ public class AdminOrderService {
     private Order getOrderEntity(Long orderId) {
         return orderRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("존재하는 주문이 아닙니다."));
     }
+
+    @Transactional
+    public void updateOrderStatus(OrderDto.UpdateOrderStatus dto) {
+        orderRepository.findById(dto.getOrderId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문입니다."));
+
+        orderRepository.updateOrderStatus(dto);
+    }
 }

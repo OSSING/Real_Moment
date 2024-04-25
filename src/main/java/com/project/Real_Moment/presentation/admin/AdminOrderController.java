@@ -6,9 +6,7 @@ import com.project.Real_Moment.presentation.dto.OrderDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -35,5 +33,11 @@ public class AdminOrderController {
     @GetMapping("/admin/order/view")
     public ResponseEntity<OrderDto.OrderDet> getOrderDet(@RequestParam("orderId") Long orderId) {
         return ResponseEntity.ok().body(adminOrderService.getOrderDet(orderId));
+    }
+
+    @PatchMapping("/admin/order")
+    public ResponseEntity<Void> updateOrderStatus(@RequestBody OrderDto.UpdateOrderStatus dto) {
+        adminOrderService.updateOrderStatus(dto);
+        return ResponseEntity.ok().build();
     }
 }

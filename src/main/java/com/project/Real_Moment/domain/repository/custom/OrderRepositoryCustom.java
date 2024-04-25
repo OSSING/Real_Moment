@@ -2,6 +2,7 @@ package com.project.Real_Moment.domain.repository.custom;
 
 import com.project.Real_Moment.domain.entity.Order;
 import com.project.Real_Moment.presentation.dto.CondDto;
+import com.project.Real_Moment.presentation.dto.OrderDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -21,4 +22,5 @@ public interface OrderRepositoryCustom {
 
     void updatePaymentDone(Long orderId);
 
+    void updateOrderStatus(OrderDto.UpdateOrderStatus dto);
 }

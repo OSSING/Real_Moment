@@ -226,4 +226,12 @@ public class OrderDto {
     public static class OrderId {
         private Long orderId;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class UpdateOrderStatus {
+        private Long orderId;
+        private String status;
+    }
 }
