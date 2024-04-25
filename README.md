@@ -29,117 +29,41 @@ ERD와 FlowChart를 설계하고 작성된 API 명세에 따라 서로 다른 �
 
 
 ## 🤖 Architecture
+
+아직 프로젝트를 배포하지 못했기 때문에, 현재 구현된 기술들을 바탕으로 아키텍처를 제작했습니다.
+
 ![아키텍처 drawio](https://github.com/OSSING/Real_Moment/assets/98817068/1cf71af3-b925-430f-a73f-28b4fbba3aac)
 
-
 ## 📊 ERD
+
+- 상품의 가격이 수정될 경우 상품에 대한 주문의 결제 정보가 변경되는 상황을 대비하여 주문 상세에 상품의 금액 정보를 따로 저장했습니다.
+- 상품을 카테고리를 세분화 하기 위해 카테고리는 자기 참조를 통해 상위 카테고리와 하위 카테고리를 갖습니다.
+- 회원과 관리자, 상품은 삭제 시 연관된 데이터들도 같이 삭제되어야 하기 때문에 삭제 여부 Column을 통해 삭제 처리했습니다.
+- 결제 상태와 성별을 Enum 타입으로 관리하여 가독성과 유지보수성을 향상시켰습니다.
+- 배송지, 공지사항, 상품의 이미지에 대표 및 기본을 지정하는 칼럼을 추가하여 사용자 경험을 향상시켰습니다.
+
 ![쇼핑몰 erd](https://github.com/OSSING/Real_Moment/assets/98817068/71114233-90fd-46ae-a461-843093c247da)
 
+## API 명세서
+[프로젝트 API 명세서 링크](https://documenter.getpostman.com/view/26692471/2sA3BrZWNJ)
 
 ## 프로젝트 핵심 기능
-### JWT를 활용한 로그인 기능
+### JWT를 활용한 인증 및 인가
 
-AccessToken의 만료 기간은 30분이며, RefreshToken의 만료 기간은 1주일로 설정했습니다.
+- Spring Secutiry의 Filter Chain을 이용하여 JWT를 구현했습니다.
+- 로그인 시 사용자를 검증하고 AccessToken과 RefreshToken을 발급하여 응답합니다.
+- AccessToken의 만료 기간은 30분이며, RefreshToken의 만료 기간은 1주일로 설정했습니다.
+- 발급한 RefreshToken을 Redis에 저장하여, AccessToken 재발급 시 검증 과정을 거치도록 했습니다.
+- 회원 탈퇴 및 로그아웃 시 RefreshToken을 Redis의 BlackList에 등록하여 재접속되지 않도록 했습니다.
 
-- LoginController
-```
-@PostMapping("/login")
-public ResponseEntity<TokenDto> login(@RequestBody MemberDto.MemberLoginDto dto) {
+#### JWT를 사용한 이유
 
-    // 요청받은 id와 password를 가지고 Spring Security에서 인증을 위해 사용되는 authenticationToken 객체 생성
-    UsernamePasswordAuthenticationToken authenticationToken =
-            new UsernamePasswordAuthenticationToken(dto.getLoginId(), dto.getLoginPassword());
+- HTTP의 비상태성(Stateless)으로 Session에 비해 높은 확장성과 인증 및 인가 속도를 가질 수 있습니다.
+- Token은 클라이언트 측에 저장되기 때문에 서버 측에 저장되는 세션과 비교하여 서버의 부하를 줄일 수 있습니다.
 
-    // AuthenticationManager로 authenticationToken을 검증하고 유효한 경우 Authentication객체를 반환
-    Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+#### Redis를 Token 저장소로 사용한 이유
 
-    // 현재 사용자의 인증 정보를 설정
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-
-    // 토큰 생성
-    String accessToken = tokenProvider.createAccessToken(authentication);
-    String refreshToken = tokenProvider.createRefreshToken(authentication);
-
-    TokenDto tokenDto = new TokenDto(accessToken, refreshToken);
-
-    log.info("로그인 성공 후 생성된 Access: {}", accessToken);
-    log.info("로그인 성공 후 생성된 Refresh: {}", refreshToken);
-
-    HttpHeaders httpHeaders = new HttpHeaders();
-    httpHeaders.add(JwtFilter.ACCESSTOKEN_HEADER, "Bearer " + accessToken);
-    httpHeaders.add(JwtFilter.REFRESHTOKEN_HEADER, "Bearer " + refreshToken);
-
-    // 최근 로그인 시간 갱신
-    memberService.memberLogin(dto.getLoginId());
-
-    return new ResponseEntity<>(tokenDto, httpHeaders, HttpStatus.OK);
-}
-```
-
-먼저 application.yml에 작성된 인코딩된 Key를 Base64로 디코딩하여 HMAC 알고리즘에 적합한 Key Byte 배열을 얻습니다.
-
-Key Byte 배열을 HMAC-SHA256 알고리즘을 통해 암호화하여 토큰을 생성합니다.
-
-이로써 발급된 Token은 위조되지 않았음을 검증 할 수 있습니다.
-
-- Token 생성에 사용될 Key Byte 배열 생성
-```
-@Override
-public void afterPropertiesSet() throws Exception {
-    byte[] keyBytes = Decoders.BASE64.decode(this.secretKey);
-    this.key = Keys.hmacShaKeyFor(keyBytes);
-}
-```
-RefreshToken의 생성과 동시에 Redis에 저장하여 추후 AccessToken을 재발급할 때 사용합니다.
-
-- Token 생성 코드의 일부
-```
-// 토큰을 생성하는 메서드
-public String createAccessToken(Authentication authentication) {
-
-    // 권한 종류 가져오기
-    String authorities = authentication.getAuthorities().stream()
-            .map(GrantedAuthority::getAuthority)
-            .collect(Collectors.joining(","));
-
-    // application.yml에서 지정한 만료 시간 설정
-    long now = (new Date()).getTime();
-    Date validity = new Date(now + this.tokenValidityInMilliseconds);
-
-    // Access Token 생성 후 리턴
-    return Jwts.builder()
-            .setSubject(authentication.getName())
-            .claim(AUTHORITIES_KEY, authorities)
-            .signWith(this.key, SignatureAlgorithm.HS256)
-            .setExpiration(validity)
-            .compact();
-}
-
-public String createRefreshToken(Authentication authentication) {
-
-    // 만료 시간 설정
-    long now = (new Date()).getTime();
-    Date validity = new Date(now + this.tokenValidityInMilliseconds * 336);
-
-    // Refresh Token 생성
-    String refreshToken = Jwts.builder()
-            .setSubject(authentication.getName())
-            .signWith(this.key, SignatureAlgorithm.HS256)
-            .setExpiration(validity)
-            .compact();
-
-    // 생성된 Refresh Token을 Redis에 저장
-    redisTemplate.opsForValue().set(
-            authentication.getName(),
-            refreshToken,
-            tokenValidityInMilliseconds,
-            TimeUnit.MILLISECONDS
-    );
-
-    // 생성된 RefreshToken 반환
-    return refreshToken;
-}
-```
+- 
 
 ### 검색 조건를 활용한 검색 기능
 ### 회원 / 관리자 전용 페이지 분리
