@@ -54,7 +54,7 @@ ERD와 FlowChart를 설계하고 작성된 API 명세에 따라 서로 다른 �
 - 로그인 시 사용자를 검증하고 AccessToken과 RefreshToken을 발급하여 응답합니다.
 - AccessToken의 만료 기간은 30분이며, RefreshToken의 만료 기간은 1주일로 설정했습니다.
 - 발급한 RefreshToken을 Redis에 저장하여, AccessToken 재발급 시 검증 과정을 거치도록 했습니다.
-- 회원 탈퇴 및 로그아웃 시 RefreshToken을 Redis의 BlackList에 등록하여 재접속되지 않도록 했습니다.
+- 회원 탈퇴 및 로그아웃 시 RefreshToken을 Redis의 BlackList에 등록하여 재사용 할 수 없도록 했습니다.
 
 #### JWT를 사용한 이유
 
@@ -63,7 +63,8 @@ ERD와 FlowChart를 설계하고 작성된 API 명세에 따라 서로 다른 �
 
 #### Redis를 Token 저장소로 사용한 이유
 
-- 
+- 메모리 내에서 데이터를 저장하고 조회하기 때문에 인증 및 권한 부여 작업에 대 매우 빠른 응답 시간을 갖습니다.
+- JWT의 stateless의 특성을 최대한 살리면서 보안을 강화할 수 있습니다.
 
 ### 검색 조건를 활용한 검색 기능
 ### 회원 / 관리자 전용 페이지 분리
